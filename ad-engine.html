@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Ad Engine — Partner Brief</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #6b6b73;
+      --border: #e4e4e8;
+      --accent: #E54D2E;
+      --accent-hover: #c43d22;
+      --font-display: 'Bricolage Grotesque', system-ui, sans-serif;
+      --font-body: 'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-mono: 'Geist Mono', ui-monospace, monospace;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 17px;
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 4rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .top__brand {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+      letter-spacing: -0.01em;
+    }
+
+    .top__meta {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .doc__eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .doc__subtitle {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      margin-bottom: 3rem;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.4rem;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin: 3.25rem 0 1rem;
+    }
+
+    p {
+      margin: 1rem 0;
+      color: var(--text);
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.15s;
+    }
+    a:hover { border-bottom-color: var(--accent); }
+
+    ul, ol {
+      padding-left: 1.4rem;
+      margin: 1rem 0;
+    }
+    li {
+      margin: 0.5rem 0;
+      padding-left: 0.25rem;
+    }
+    li::marker { color: var(--text-muted); }
+
+    strong { font-weight: 600; color: var(--text); }
+
+    code {
+      font-family: var(--font-mono);
+      font-size: 0.9em;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 0.1em 0.4em;
+      border-radius: 4px;
+    }
+
+    .callout {
+      background: var(--surface);
+      border-left: 3px solid var(--accent);
+      padding: 1.25rem 1.5rem;
+      margin: 1.5rem 0;
+      border-radius: 4px;
+      font-size: 1.02rem;
+    }
+
+    .footer {
+      margin-top: 5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @media (max-width: 540px) {
+      .page { padding: 2.5rem 1.25rem 4rem; }
+      .top { margin-bottom: 2.5rem; }
+      h1 { font-size: 1.85rem; }
+      h2 { font-size: 1.2rem; margin-top: 2.5rem; }
+      .footer { flex-direction: column; gap: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="top">
+      <a href="/" class="top__brand">Fonz.sh</a>
+      <span class="top__meta">Internal · Partner Brief</span>
+    </header>
+
+    <p class="doc__eyebrow">Project Brief</p>
+    <h1>Ad Engine — Partner Brief</h1>
+    <p class="doc__subtitle">A weekly ad-ops tool for ecommerce clients. What it is, where we are, and what's left to build.</p>
+
+    <h2>What it is</h2>
+    <p>A weekly ad-ops tool we run for ecommerce clients. Every Monday it:</p>
+    <ol>
+      <li>Pulls the client's Shopify products + reviews + recent orders</li>
+      <li>Pulls last week's Meta Ads performance</li>
+      <li>Asks Claude to write 5 fresh Instagram video ad scripts based on what's selling and what customers are saying</li>
+      <li>Renders each script into a 15–30s MP4 via HeyGen (AI avatar talking head)</li>
+      <li>We review and upload approved videos to the client's Meta Ads Manager</li>
+      <li>The next week, it pulls performance for those new ads and emits an HTML report we send the client</li>
+    </ol>
+    <div class="callout">
+      The pitch to the client: <strong>"5 fresh ads a week, every week, with a performance report. You don't have to think about creative."</strong>
+    </div>
+
+    <h2>Where we are right now</h2>
+    <p>The backend is built and tested — all the data pipelines work, the AI integrations work, the report renders cleanly. <strong>It currently runs as a command-line tool</strong>, which is fine for me to operate but not something we can hand to a client or an account manager.</p>
+    <p>Next step is wrapping it in a simple web app so the workflow is "click three buttons and review the output," not "type commands into a terminal."</p>
+
+    <h2>What we need from each client <span style="color: var(--text-muted); font-weight: 500; font-size: 0.95rem;">(one-time, ~30 min)</span></h2>
+    <ul>
+      <li>A Shopify access token (they generate it in their store admin in ~5 min — they don't share their login)</li>
+      <li>An invite to their Meta Business Manager so we can pull ad performance and upload creatives</li>
+      <li>Their reviews platform API token (most likely Judge.me, but worth confirming)</li>
+      <li>Brand description, tone guidelines, things to avoid</li>
+      <li>Either a stock AI avatar pick or a 2-min video of their spokesperson if they want a custom one</li>
+    </ul>
+
+    <h2>What we set up on our side</h2>
+    <ul>
+      <li><strong>Anthropic</strong> account (Claude API) — ~$1–2/month per client in usage</li>
+      <li><strong>HeyGen</strong> account — ~$50–100/month per client for video render minutes</li>
+      <li><strong>Meta Developer App</strong> — free, one-time setup, takes a few days for app review</li>
+      <li><strong>Hosting</strong> — Vercel + Postgres for the web app, ~$20–50/month total</li>
+    </ul>
+    <p>So our marginal cost per client is roughly <strong>$50–150/month</strong> in API/render fees, plus our time.</p>
+
+    <h2>What's left to build</h2>
+    <p>About 2–3 days of focused work:</p>
+    <ul>
+      <li>Web app GUI so account managers (or the client themselves) can trigger pulls, review generated ads, paste in Meta ad IDs after uploading, and view the weekly report</li>
+      <li>Three small backend bugs caught in code review (one bug would crash the report on a fresh install)</li>
+      <li>Migrate from local SQLite to hosted Postgres so it can run as a real web service</li>
+      <li>Customer onboarding doc with screenshots of where to click in Shopify/Meta/Judge.me</li>
+    </ul>
+    <p>After that, onboarding a new client is "send them a one-page doc, get 3 tokens back, configure their HeyGen avatar in our admin, run first pull."</p>
+
+    <h2>Open questions for us to decide</h2>
+    <ul>
+      <li><strong>Pricing model for clients?</strong> The plan baked in "30% rev share + $5K monthly retainer" defaults, but we should sanity-check that.</li>
+      <li><strong>Approval workflow?</strong> Who at the client signs off on ads before we push to Meta — them in the app, us over Slack/email, or auto-publish on a delay?</li>
+      <li><strong>First test client?</strong> Plan was scoped for Secret Club. Are we still going there first, or pivoting?</li>
+      <li><strong>Account-manager play vs. self-serve?</strong> Big difference in the GUI: managed service (we operate, they review) is simpler; self-serve (they do everything) is bigger product surface but scales better.</li>
+    </ul>
+
+    <footer class="footer">
+      <span>fonz.sh/ad-engine</span>
+      <span>Internal · do not share</span>
+    </footer>
+  </div>
+</body>
+</html>
