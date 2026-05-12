@@ -54,13 +54,15 @@ function humanizeName(slug) {
 
 const REPO_OVERRIDES = {
   'invisblmail.cc': { homepage: 'https://invisblmail.cc' },
-  'thedelusion-backup': { homepage: 'https://ididntrealiseyouthoughtlikethat.com/' },
-  'dankland-market': { name: 'ReelMarket.win', homepage: 'http://reelmarket.win' },
+  'thedelusion-backup': { hidden: true, homepage: 'https://ididntrealiseyouthoughtlikethat.com/' },
+  'dankland-market': { name: 'ReelMarket.win', homepage: 'https://www.reelmarket.win' },
   'spicytake': { homepage: 'https://spicytake.xyz/' },
   'pulsepro-social': { status: 'shipped' },
   'pulsepro-adsmanager': { tags: ['TypeScript', 'Next.js', 'Meta API'] },
+  'pulsepro-converter': { hidden: true },
+  'pulsepro-flight-app': { hidden: true },
   'bcc-academy-lxp': { status: 'hidden' },
-  'bccacademy.io': { status: 'hidden' },
+  'bccacademy.io': { status: 'hidden', homepage: 'https://bccacademy.io' },
 };
 
 function effectiveHomepage(repo) {
@@ -101,7 +103,8 @@ function renderRepoCard(repo) {
   const status = classifyStatus(repo);
   const link = effectiveHomepage(repo) || repo.html_url;
   const tags = pickTags(repo);
-  const isClickable = status.mod !== 'soon' && status.mod !== 'hidden';
+  const hasPublicLink = effectiveHomepage(repo) || !repo.private;
+  const isClickable = status.mod !== 'soon' && status.mod !== 'hidden' && hasPublicLink;
   const article = document.createElement(isClickable ? 'a' : 'article');
   article.className = 'project-card fade-in is-visible';
   if (isClickable) {
