@@ -1,0 +1,2134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>How AI Is Reshaping Global Leadership — Fonz Morris</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --paper: #f5f5f7;
+    --accent: #e54d2e;
+    --accent-warm: #f0613e;
+    --muted-ink: rgba(26, 26, 26, 0.55);
+    --muted-paper: rgba(245, 245, 247, 0.55);
+    --hairline-ink: rgba(26, 26, 26, 0.12);
+    --hairline-paper: rgba(245, 245, 247, 0.18);
+    --font-display: "Bricolage Grotesque", ui-serif, Georgia, serif;
+    --font-body: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: var(--font-body);
+    background: var(--ink);
+    color: var(--paper);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ---------- Deck container ---------- */
+  .deck {
+    display: flex;
+    flex-direction: row;
+    width: 100vw;
+    height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+  .deck::-webkit-scrollbar { display: none; }
+
+  .slide {
+    flex: 0 0 100vw;
+    width: 100vw;
+    height: 100vh;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: clamp(28px, 4vw, 64px) clamp(40px, 6vw, 96px) clamp(56px, 7vw, 108px);
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .slide.light { background: var(--paper); color: var(--ink); }
+  .slide.dark  { background: var(--ink); color: var(--paper); }
+
+  /* ---------- Grain (animated noise overlay on every slide) ---------- */
+  .slide::after {
+    content: "";
+    position: absolute; inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    opacity: 0.07;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    background-size: 220px 220px;
+    animation: grainShift 1.6s steps(6) infinite;
+  }
+  @keyframes grainShift {
+    0%  { transform: translate(0, 0); }
+    20% { transform: translate(-10px, 6px); }
+    40% { transform: translate(8px, -12px); }
+    60% { transform: translate(-6px, -4px); }
+    80% { transform: translate(12px, 8px); }
+   100% { transform: translate(0, 0); }
+  }
+
+  /* ---------- Header & footer chrome ---------- */
+  .chrome-top, .chrome-bot {
+    position: relative; z-index: 6;
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 0.78vw, 12px);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+  .chrome-top { color: inherit; opacity: 0.65; }
+  /* Page number already lives in the progress pill — hide from chrome-top */
+  .chrome-top > span:last-child { display: none; }
+  .chrome-bot { color: inherit; opacity: 0.55; padding-top: 16px; }
+  .chrome-top .rule, .chrome-bot .rule {
+    flex: 1;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.18;
+    margin: 0 18px;
+  }
+
+  /* ---------- Slide body ---------- */
+  .body {
+    position: relative; z-index: 6;
+    display: flex; flex-direction: column; justify-content: center;
+    gap: clamp(18px, 2.2vw, 36px);
+    max-width: 1400px;
+  }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 0.85vw, 14px);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .slide.active .eyebrow { animation: rise 700ms 80ms cubic-bezier(.2,.7,.2,1) forwards; }
+
+  h1.display {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(56px, 9vw, 168px);
+    line-height: 0.92;
+    letter-spacing: -0.035em;
+    margin: 0;
+    max-width: 18ch;
+  }
+  h1.display .em { color: var(--accent); font-style: italic; font-weight: 500; }
+  h1.display .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.35em);
+    will-change: transform, opacity;
+  }
+  .slide.active h1.display .word {
+    animation: rise 700ms cubic-bezier(.2,.7,.2,1) forwards;
+  }
+
+  h2.sub {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: clamp(20px, 2vw, 34px);
+    line-height: 1.25;
+    max-width: 32ch;
+    margin: 0;
+    color: inherit;
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .slide.active h2.sub { animation: rise 800ms 380ms cubic-bezier(.2,.7,.2,1) forwards; }
+
+  p.body-line, ol.list, ul.list {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: clamp(20px, 1.8vw, 30px);
+    line-height: 1.45;
+    margin: 0;
+    max-width: 38ch;
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .slide.active p.body-line,
+  .slide.active ol.list,
+  .slide.active ul.list { animation: rise 800ms 480ms cubic-bezier(.2,.7,.2,1) forwards; }
+
+  ol.list, ul.list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: clamp(14px, 1.2vw, 22px); max-width: 44ch; }
+  ol.list li, ul.list li {
+    position: relative;
+    padding-left: 3.2em;
+    font-size: clamp(22px, 1.9vw, 34px);
+    line-height: 1.3;
+  }
+  ol.list li::before {
+    content: attr(data-n);
+    position: absolute;
+    left: 0; top: 0.15em;
+    font-family: var(--font-mono);
+    font-size: 0.6em;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    opacity: 0.95;
+  }
+  ul.list li::before {
+    content: "—";
+    position: absolute; left: 0; top: 0;
+    color: var(--accent);
+  }
+
+  /* ---------- Claim grid (productivity claims slide) ---------- */
+  .claim-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(16px, 1.6vw, 28px) clamp(20px, 2.2vw, 36px);
+    margin: clamp(22px, 2.4vw, 40px) 0 clamp(16px, 1.6vw, 28px);
+    max-width: 1200px;
+  }
+  .claim-card {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: clamp(16px, 1.6vw, 28px) clamp(18px, 1.8vw, 30px);
+    border: 1px solid currentColor;
+    border-radius: 14px;
+    border-color: rgba(245,245,247,0.16);
+    transition: all 700ms cubic-bezier(.2,.7,.2,1);
+    background: rgba(245,245,247,0.02);
+    opacity: 0.42;
+    transform: scale(1);
+  }
+  .slide.light .claim-card {
+    border-color: rgba(26,26,26,0.14);
+    background: rgba(26,26,26,0.018);
+  }
+  .claim-card.active {
+    opacity: 1;
+    transform: scale(1.04);
+    border-color: rgba(229,77,46,0.55);
+    background: rgba(229,77,46,0.07);
+    box-shadow: 0 20px 60px -10px rgba(229,77,46,0.18);
+  }
+  .slide.light .claim-card.active {
+    background: rgba(229,77,46,0.05);
+  }
+  .claim-val {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(36px, 4.6vw, 80px);
+    line-height: 0.94;
+    letter-spacing: -0.04em;
+    color: inherit;
+    transition: color 700ms cubic-bezier(.2,.7,.2,1);
+  }
+  .claim-card.active .claim-val { color: var(--accent); }
+  .claim-src {
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 0.78vw, 13px);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-top: clamp(8px, 0.8vw, 14px);
+    opacity: 0.6;
+    line-height: 1.4;
+  }
+  .claim-card.active .claim-src { opacity: 0.9; }
+
+  /* ---------- Proof stats (receipt slide) ---------- */
+  .proof-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(20px, 2.5vw, 48px);
+    margin-top: clamp(28px, 3vw, 56px);
+    padding-top: clamp(22px, 2.4vw, 40px);
+    border-top: 1px solid currentColor;
+  }
+  .slide.dark .proof-stats { border-top-color: rgba(245,245,247,0.18); }
+  .slide.light .proof-stats { border-top-color: rgba(26,26,26,0.14); }
+  .proof-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: clamp(8px, 0.7vw, 14px);
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .proof-stat-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(60px, 8vw, 140px);
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    color: var(--accent);
+  }
+  .proof-stat-num .unit {
+    font-size: 0.42em;
+    font-weight: 500;
+    font-style: italic;
+    margin-left: 0.04em;
+    letter-spacing: -0.02em;
+  }
+  .proof-stat-num .pre {
+    font-size: 0.6em;
+    font-weight: 500;
+    vertical-align: 0.18em;
+    margin-right: 0.02em;
+    opacity: 0.85;
+  }
+  .proof-stat-label {
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 0.82vw, 14px);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    max-width: 12ch;
+    line-height: 1.3;
+  }
+  .slide.active .proof-stat {
+    animation: rise 700ms cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .slide.active .proof-stat:nth-child(1) { animation-delay: 220ms; }
+  .slide.active .proof-stat:nth-child(2) { animation-delay: 340ms; }
+  .slide.active .proof-stat:nth-child(3) { animation-delay: 460ms; }
+  .slide.active .proof-stat:nth-child(4) { animation-delay: 580ms; }
+
+  /* ---------- Rotating word ---------- */
+  .rotator {
+    display: inline-block;
+    text-align: left;
+    will-change: opacity, transform, filter;
+  }
+  .rotator.swapping {
+    animation: rotateSwap 760ms cubic-bezier(.4, 0, .2, 1);
+  }
+  @keyframes rotateSwap {
+    0%   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    38%  { opacity: 0; transform: translateY(-0.34em) scale(0.98); filter: blur(4px); }
+    40%  { opacity: 0; transform: translateY(0.34em) scale(0.98); filter: blur(4px); }
+    100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+  }
+
+  /* ---------- Big stat ---------- */
+  .stat {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(96px, 18vw, 320px);
+    line-height: 0.86;
+    letter-spacing: -0.05em;
+    margin: 0;
+    color: inherit;
+  }
+  .stat .unit {
+    font-family: var(--font-display);
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.32em;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+    margin-left: 0.15em;
+  }
+  .stat .arrow {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 400;
+    margin: 0 0.1em;
+  }
+
+  /* ---------- Divider atmospheres (A) ---------- */
+  .divider .aurora {
+    background:
+      radial-gradient(40% 55% at 86% 14%, rgba(229,77,46,0.18) 0%, rgba(229,77,46,0) 60%),
+      radial-gradient(38% 50% at 8% 88%, rgba(229,77,46,0.10) 0%, rgba(229,77,46,0) 60%);
+  }
+  .divider .orb {
+    width: 50vmin; height: 50vmin;
+    top: -12vmin; right: -10vmin;
+    opacity: 0.42;
+  }
+  .divider .orb.small {
+    width: 28vmin; height: 28vmin;
+    top: auto; bottom: -6vmin; left: -4vmin;
+    opacity: 0.28;
+  }
+
+  /* ---------- Watermark glyph (B) ---------- */
+  .watermark {
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    user-select: none;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-style: italic;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--accent);
+    opacity: 0.17;
+    line-height: 0.78;
+    letter-spacing: -0.06em;
+    margin: 0;
+  }
+  .watermark.q {
+    font-size: clamp(280px, 60vw, 820px);
+    right: -2vw;
+    bottom: -16vh;
+  }
+  .watermark.arrow {
+    font-size: clamp(220px, 42vw, 580px);
+    right: -3vw;
+    bottom: -4vh;
+    -webkit-text-stroke: 2px var(--accent);
+  }
+  .watermark.agents {
+    font-size: clamp(120px, 19vw, 280px);
+    right: -2vw;
+    bottom: 8vh;
+    -webkit-text-stroke: 1.5px var(--accent);
+    font-weight: 600;
+    transform: rotate(-90deg);
+    transform-origin: right bottom;
+    opacity: 0.13;
+  }
+
+  /* ---------- Ambient glow (E) — subtle pulse on text slides ---------- */
+  .ambient-glow {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    background: radial-gradient(60% 70% at 92% 8%, rgba(229,77,46,0.07) 0%, rgba(229,77,46,0) 60%);
+    animation: ambientBreath 11s ease-in-out infinite alternate;
+  }
+  .ambient-glow.left {
+    background: radial-gradient(55% 70% at 6% 92%, rgba(229,77,46,0.06) 0%, rgba(229,77,46,0) 60%);
+    animation-duration: 14s;
+    animation-delay: -5s;
+  }
+  @keyframes ambientBreath {
+    0%, 100% { opacity: 0.55; transform: translate(0, 0); }
+    50%      { opacity: 1; transform: translate(-1.5%, 1%); }
+  }
+
+  /* ---------- Section divider (big numeral) ---------- */
+  .divider-num {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(220px, 38vw, 640px);
+    line-height: 0.82;
+    letter-spacing: -0.06em;
+    -webkit-text-stroke: 1.5px currentColor;
+    color: transparent;
+    margin: 0;
+    user-select: none;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .slide.active .divider-num { animation: rise 1100ms 120ms cubic-bezier(.2,.7,.2,1) forwards; }
+  .divider-num .fill { color: var(--accent); -webkit-text-stroke: 0; font-style: italic; font-weight: 500; }
+
+  .divider-title {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(40px, 5.5vw, 96px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    max-width: 18ch;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  .slide.active .divider-title { animation: rise 900ms 380ms cubic-bezier(.2,.7,.2,1) forwards; }
+
+  .divider-sub {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: clamp(18px, 1.5vw, 26px);
+    line-height: 1.45;
+    max-width: 40ch;
+    margin: 0;
+    opacity: 0;
+    transform: translateY(10px);
+    color: inherit;
+  }
+  .slide.active .divider-sub { animation: rise 900ms 540ms cubic-bezier(.2,.7,.2,1) forwards; }
+
+  /* ---------- Title-slide orb (slow drifting blob) ---------- */
+  .orb {
+    position: absolute;
+    width: 70vmin; height: 70vmin;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, var(--accent-warm) 0%, var(--accent) 38%, rgba(229,77,46,0) 70%);
+    filter: blur(60px);
+    mix-blend-mode: screen;
+    top: -10vmin; right: -12vmin;
+    z-index: 1;
+    opacity: 0.55;
+    animation: orbDrift 18s ease-in-out infinite alternate;
+  }
+  .orb.small {
+    width: 36vmin; height: 36vmin;
+    top: auto; right: auto;
+    bottom: -8vmin; left: -6vmin;
+    opacity: 0.4;
+    animation-duration: 22s;
+    animation-delay: -6s;
+  }
+  @keyframes orbDrift {
+    0%   { transform: translate(0, 0) scale(1); }
+    50%  { transform: translate(-6vmin, 8vmin) scale(1.08); }
+    100% { transform: translate(8vmin, -4vmin) scale(0.96); }
+  }
+
+  /* ---------- Aurora streak (for the thesis slide) ---------- */
+  .aurora {
+    position: absolute; inset: 0;
+    pointer-events: none; z-index: 1;
+    background:
+      radial-gradient(60% 80% at 80% 20%, rgba(229,77,46,0.18) 0%, rgba(229,77,46,0) 60%),
+      radial-gradient(50% 60% at 10% 90%, rgba(229,77,46,0.12) 0%, rgba(229,77,46,0) 60%);
+    animation: aurora 14s ease-in-out infinite alternate;
+  }
+  @keyframes aurora {
+    0%   { transform: translate(0,0); }
+    100% { transform: translate(-3%, 2%); }
+  }
+
+  /* ---------- Outline ticker (drifting label) ---------- */
+  .ticker {
+    position: absolute;
+    bottom: 48%;
+    left: 0; right: 0;
+    z-index: 2;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0.06;
+  }
+  .ticker-track {
+    display: inline-flex;
+    gap: 4vw;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(120px, 22vw, 360px);
+    letter-spacing: -0.04em;
+    -webkit-text-stroke: 1px currentColor;
+    color: transparent;
+    animation: tickerMove 40s linear infinite;
+  }
+  @keyframes tickerMove {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
+  /* ---------- Role line (intro slide) ---------- */
+  .role-line {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(34px, 4vw, 68px);
+    line-height: 1.02;
+    letter-spacing: -0.025em;
+    color: var(--accent);
+    margin: clamp(-8px, -0.6vw, -4px) 0 0;
+  }
+
+  /* ---------- Agenda time tags ---------- */
+  .agenda-list li {
+    grid-template-columns: clamp(56px, 4.5vw, 84px) 1fr auto !important;
+    align-items: baseline;
+  }
+  .agenda-list .time {
+    font-family: var(--font-mono);
+    font-size: clamp(12px, 0.95vw, 16px);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.75;
+    white-space: nowrap;
+    padding-left: clamp(16px, 1.4vw, 28px);
+  }
+
+  /* ---------- AI ecosystem wall (stack slide) ---------- */
+  .ai-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: clamp(10px, 1.1vw, 20px) clamp(20px, 2vw, 38px);
+    margin-top: clamp(20px, 2.4vw, 40px);
+    max-width: 100%;
+  }
+  .ai-cloud .c {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 0.96;
+    letter-spacing: -0.022em;
+    white-space: nowrap;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 200ms, transform 200ms;
+  }
+  .ai-cloud .c.s1 {
+    font-size: clamp(42px, 5.2vw, 92px);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+  }
+  .ai-cloud .c.s2 {
+    font-size: clamp(28px, 3.4vw, 58px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+  .ai-cloud .c.s3 {
+    font-size: clamp(20px, 2.2vw, 38px);
+    font-weight: 500;
+    opacity: 0.82;
+  }
+  .ai-cloud .c.s4 {
+    font-size: clamp(14px, 1.5vw, 26px);
+    font-weight: 400;
+    opacity: 0.55;
+  }
+  .ai-cloud .c.em {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 600;
+  }
+  .slide.active .ai-cloud .c {
+    animation: cloudRise 700ms cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  @keyframes cloudRise {
+    from { opacity: 0; transform: translateY(8px); filter: blur(4px); }
+    to   { opacity: var(--target-op, 1); transform: translateY(0); filter: blur(0); }
+  }
+
+  /* ---------- Sector map (legacy — retained) ---------- */
+  .sector-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: clamp(18px, 2vw, 36px);
+  }
+  .sector-row {
+    display: grid;
+    grid-template-columns: clamp(140px, 13vw, 220px) 1fr;
+    align-items: baseline;
+    gap: clamp(24px, 2.8vw, 52px);
+    padding: clamp(14px, 1.4vw, 24px) 0;
+    border-top: 1px solid var(--hairline-paper);
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .sector-row:last-child { border-bottom: 1px solid var(--hairline-paper); }
+  .slide.light .sector-row { border-top-color: var(--hairline-ink); }
+  .slide.light .sector-row:last-child { border-bottom-color: var(--hairline-ink); }
+  .sector-label {
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 0.9vw, 15px);
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .sector-names {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 2.3vw, 38px);
+    line-height: 1.18;
+    letter-spacing: -0.015em;
+  }
+  .sector-names em {
+    font-style: italic;
+    color: inherit;
+    opacity: 0.55;
+    font-size: 0.7em;
+    margin-left: 0.06em;
+    letter-spacing: 0.04em;
+  }
+  .sector-names .sep {
+    color: var(--accent);
+    opacity: 0.45;
+    margin: 0 0.22em;
+  }
+  .slide.active .sector-row {
+    animation: rise 700ms cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .slide.active .sector-row:nth-child(1) { animation-delay: 180ms; }
+  .slide.active .sector-row:nth-child(2) { animation-delay: 280ms; }
+  .slide.active .sector-row:nth-child(3) { animation-delay: 380ms; }
+  .slide.active .sector-row:nth-child(4) { animation-delay: 480ms; }
+  .slide.active .sector-row:nth-child(5) { animation-delay: 580ms; }
+
+  /* ---------- Logo wall (tools slide — legacy, retained) ---------- */
+  .logo-wall {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(28px, 4vw, 80px);
+    align-items: start;
+    margin-top: clamp(24px, 3vw, 56px);
+    position: relative;
+    padding-top: clamp(36px, 4vw, 64px);
+  }
+  .logo-wall::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 4%; right: 4%;
+    height: 1px;
+    background: currentColor;
+    opacity: 0.18;
+  }
+  .logo-wall::after {
+    content: "";
+    position: absolute;
+    top: -4px; left: 50%; transform: translateX(-50%);
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 24px rgba(229,77,46,0.7);
+  }
+  .logo-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: clamp(14px, 1.4vw, 22px);
+    opacity: 0;
+    transform: translateY(14px);
+    position: relative;
+  }
+  .logo-card::before {
+    content: "";
+    position: absolute;
+    top: calc(clamp(36px, 4vw, 64px) * -1);
+    left: 50%; transform: translateX(-50%);
+    width: 1px;
+    height: clamp(20px, 2.4vw, 36px);
+    background: currentColor;
+    opacity: 0.32;
+  }
+  .logo-card svg {
+    width: clamp(48px, 5.6vw, 88px);
+    height: clamp(48px, 5.6vw, 88px);
+    color: var(--paper);
+    transition: transform 1200ms cubic-bezier(.2,.7,.2,1);
+  }
+  .card-stat {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(64px, 8.2vw, 140px);
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+    color: var(--accent);
+    margin: clamp(4px, 0.5vw, 10px) 0 0;
+  }
+  .card-stat .unit {
+    font-size: 0.42em;
+    font-weight: 500;
+    font-style: italic;
+    margin-left: 0.04em;
+    letter-spacing: -0.02em;
+  }
+  .card-stat .pre {
+    font-size: 0.6em;
+    font-weight: 500;
+    vertical-align: 0.18em;
+    margin-right: 0.02em;
+    opacity: 0.85;
+  }
+  .card-stat-label {
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 0.78vw, 13px);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin: clamp(2px, 0.3vw, 6px) 0 0;
+  }
+  .card-meta {
+    font-family: var(--font-mono);
+    font-size: clamp(10px, 0.76vw, 12px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.45;
+    margin: clamp(6px, 0.7vw, 12px) 0 0;
+  }
+  .slide.light .logo-card svg { color: var(--ink); }
+  .slide.active .logo-card svg { animation: logoFloat 6s ease-in-out infinite alternate; }
+  .slide.active .logo-card:nth-child(2) svg { animation-delay: -2s; }
+  .slide.active .logo-card:nth-child(3) svg { animation-delay: -4s; }
+  @keyframes logoFloat {
+    0%   { transform: translateY(0); }
+    100% { transform: translateY(-6px); }
+  }
+  .logo-maker {
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 0.9vw, 14px);
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-top: clamp(6px, 0.6vw, 10px);
+  }
+  .logo-products {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(22px, 2.4vw, 40px);
+    line-height: 1.1;
+    letter-spacing: -0.015em;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .logo-products .secondary {
+    font-size: 0.7em;
+    opacity: 0.6;
+    font-style: italic;
+  }
+  .slide.active .logo-card {
+    animation: rise 800ms cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .slide.active .logo-card:nth-child(1) { animation-delay: 280ms; }
+  .slide.active .logo-card:nth-child(2) { animation-delay: 420ms; }
+  .slide.active .logo-card:nth-child(3) { animation-delay: 560ms; }
+
+  /* ---------- Toolkit grid (tools slide — legacy) ---------- */
+  .toolkit {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-top: clamp(12px, 1.6vw, 24px);
+  }
+  .tk-row {
+    display: grid;
+    grid-template-columns: clamp(120px, 11vw, 200px) 1fr;
+    align-items: baseline;
+    gap: clamp(20px, 2.5vw, 44px);
+    padding: clamp(14px, 1.4vw, 24px) 0;
+    border-top: 1px solid var(--hairline-paper);
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .slide.light .tk-row { border-top-color: var(--hairline-ink); }
+  .tk-row:last-child { border-bottom: 1px solid var(--hairline-paper); }
+  .slide.light .tk-row:last-child { border-bottom-color: var(--hairline-ink); }
+  .tk-label {
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 0.9vw, 14px);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.95;
+  }
+  .tk-names {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(28px, 3.6vw, 60px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+  }
+  .tk-names em { font-style: italic; color: inherit; }
+  .tk-names .dot { color: var(--accent); opacity: 0.6; margin: 0 0.18em; }
+  .slide.active .tk-row {
+    animation: rise 700ms cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .slide.active .tk-row:nth-child(1) { animation-delay: 220ms; }
+  .slide.active .tk-row:nth-child(2) { animation-delay: 340ms; }
+  .slide.active .tk-row:nth-child(3) { animation-delay: 460ms; }
+  .slide.active .tk-row:nth-child(4) { animation-delay: 580ms; }
+
+  /* ---------- Commitments (numbered) ---------- */
+  .commit-list {
+    list-style: none; padding: 0; margin: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(10px, 1.1vw, 18px);
+    counter-reset: c;
+  }
+  .commit-list li {
+    display: grid;
+    grid-template-columns: clamp(56px, 4.5vw, 84px) 1fr;
+    align-items: baseline;
+    gap: clamp(16px, 1.6vw, 28px);
+    padding: clamp(10px, 1vw, 18px) 0;
+    border-top: 1px solid var(--hairline-paper);
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  .slide.light .commit-list li { border-top-color: var(--hairline-ink); }
+  .commit-list li:last-child { border-bottom: 1px solid var(--hairline-paper); }
+  .slide.light .commit-list li:last-child { border-bottom-color: var(--hairline-ink); }
+  .commit-list .n {
+    font-family: var(--font-mono);
+    font-size: clamp(13px, 0.95vw, 16px);
+    letter-spacing: 0.15em;
+    color: var(--accent);
+  }
+  .commit-list .t {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: clamp(28px, 3.4vw, 56px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+  }
+  .slide.active .commit-list li {
+    animation: rise 700ms cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .slide.active .commit-list li:nth-child(1) { animation-delay: 140ms; }
+  .slide.active .commit-list li:nth-child(2) { animation-delay: 240ms; }
+  .slide.active .commit-list li:nth-child(3) { animation-delay: 340ms; }
+  .slide.active .commit-list li:nth-child(4) { animation-delay: 440ms; }
+  .slide.active .commit-list li:nth-child(5) { animation-delay: 540ms; }
+
+  /* ---------- QR slide ---------- */
+  .qr-wrap {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: clamp(40px, 5vw, 96px);
+    margin-top: clamp(20px, 2.4vw, 40px);
+  }
+  .qr-box {
+    width: clamp(220px, 26vw, 380px);
+    height: clamp(220px, 26vw, 380px);
+    padding: clamp(16px, 1.6vw, 26px);
+    background: var(--paper);
+    border-radius: 18px;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 0 0 1px rgba(245,245,247,0.08), 0 30px 80px -20px rgba(0,0,0,0.55);
+    position: relative;
+  }
+  .qr-box canvas, .qr-box img, .qr-box svg {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    image-rendering: pixelated;
+  }
+  .qr-aside {
+    display: flex; flex-direction: column;
+    gap: clamp(14px, 1.4vw, 24px);
+    max-width: 22ch;
+  }
+  .qr-handle {
+    font-family: var(--font-mono);
+    font-size: clamp(12px, 1vw, 16px);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.95;
+  }
+  .qr-cta {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(40px, 5.2vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin: 0;
+  }
+  .qr-cta .em { color: var(--accent); font-style: italic; font-weight: 500; }
+  .qr-note {
+    font-family: var(--font-body);
+    font-size: clamp(16px, 1.3vw, 22px);
+    line-height: 1.45;
+    opacity: 0.78;
+    margin: 0;
+  }
+  .qr-url {
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 0.85vw, 14px);
+    letter-spacing: 0.08em;
+    opacity: 0.55;
+    word-break: break-all;
+  }
+
+  /* ---------- Agent list (slide 21) ---------- */
+  .agent-list {
+    list-style: none;
+    padding: 0;
+    margin: clamp(20px, 2.4vw, 40px) 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .agent-list li {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    gap: clamp(20px, 2.6vw, 44px);
+    padding: clamp(14px, 1.4vw, 22px) 0;
+    border-top: 1px solid rgba(245,245,247,0.18);
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .agent-list li:last-child { border-bottom: 1px solid rgba(245,245,247,0.18); }
+  .slide.light .agent-list li { border-top-color: rgba(26,26,26,0.14); }
+  .slide.light .agent-list li:last-child { border-bottom-color: rgba(26,26,26,0.14); }
+  .agent-name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-style: italic;
+    font-size: clamp(34px, 4.4vw, 78px);
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--accent);
+  }
+  .agent-meta {
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 0.9vw, 15px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    white-space: nowrap;
+  }
+  .slide.active .agent-list li {
+    animation: rise 700ms cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .slide.active .agent-list li:nth-child(1) { animation-delay: 200ms; }
+  .slide.active .agent-list li:nth-child(2) { animation-delay: 300ms; }
+  .slide.active .agent-list li:nth-child(3) { animation-delay: 400ms; }
+  .slide.active .agent-list li:nth-child(4) { animation-delay: 500ms; }
+  .slide.active .agent-list li:nth-child(5) { animation-delay: 600ms; }
+
+  /* ---------- Inline callout (emphasize a line in body copy) ---------- */
+  .callout {
+    color: var(--accent);
+    font-style: italic;
+    font-weight: 600;
+  }
+  .callout em { font-style: italic; text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 4px; }
+
+  /* ---------- Closing slide ---------- */
+  .quote {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-style: italic;
+    font-size: clamp(40px, 5.8vw, 110px);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    max-width: 22ch;
+    margin: 0;
+  }
+  .quote .em { color: var(--accent); font-style: italic; }
+
+  /* ---------- Progress indicator ---------- */
+  .progress {
+    position: fixed;
+    bottom: clamp(18px, 2.2vh, 28px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 14px;
+    background: rgba(245,245,247,0.04);
+    border: 1px solid rgba(245,245,247,0.08);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 999px;
+    transition: opacity 250ms;
+  }
+  body.on-light .progress {
+    background: rgba(26,26,26,0.04);
+    border-color: rgba(26,26,26,0.08);
+  }
+  .progress .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.28;
+    transition: all 250ms cubic-bezier(.2,.7,.2,1);
+  }
+  body.on-light .progress { color: var(--ink); }
+  body:not(.on-light) .progress { color: var(--paper); }
+  .progress .dot.active {
+    opacity: 1;
+    width: 22px;
+    border-radius: 3px;
+    background: var(--accent);
+  }
+  .progress .num {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    margin-left: 10px;
+    opacity: 0.7;
+    min-width: 5.5ch;
+    text-align: right;
+  }
+
+  /* ---------- Common animation ---------- */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(0.35em); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- Slide-specific layouts ---------- */
+  .slide.title .body { gap: clamp(28px, 3vw, 48px); }
+  .slide.title .meta {
+    font-family: var(--font-mono);
+    font-size: clamp(11px, 0.82vw, 13px);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+
+  .slide.stat-slide .body { justify-content: center; align-items: flex-start; }
+  .slide.stat-slide .caption {
+    font-family: var(--font-body);
+    font-size: clamp(18px, 1.4vw, 24px);
+    line-height: 1.4;
+    max-width: 44ch;
+    opacity: 0.78;
+    margin-top: clamp(12px, 1.2vw, 22px);
+  }
+
+  .slide.divider .body { gap: clamp(8px, 1vw, 18px); }
+  .slide.divider .stack {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: end;
+    gap: clamp(20px, 3vw, 52px);
+  }
+  .slide.divider .stack-text {
+    display: flex; flex-direction: column; gap: clamp(12px, 1.4vw, 22px);
+    padding-bottom: clamp(20px, 3vw, 48px);
+  }
+
+  .slide.closing .body { justify-content: center; }
+  .slide.thanks .body { justify-content: center; align-items: center; text-align: center; gap: clamp(20px, 2vw, 36px); }
+  .slide.thanks .thanks-h {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(80px, 14vw, 240px);
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    margin: 0;
+  }
+  .slide.thanks .thanks-h .em { color: var(--accent); font-style: italic; font-weight: 500; }
+  .slide.thanks .contact {
+    font-family: var(--font-mono);
+    font-size: clamp(13px, 1vw, 16px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.65;
+  }
+
+  /* ---------- Hint at start ---------- */
+  .start-hint {
+    position: fixed;
+    bottom: clamp(60px, 7vh, 90px);
+    left: 50%; transform: translateX(-50%);
+    z-index: 60;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--paper);
+    opacity: 0;
+    pointer-events: none;
+    animation: hintFade 5s ease-out 600ms forwards;
+  }
+  body.on-light .start-hint { color: var(--ink); }
+  @keyframes hintFade {
+    0% { opacity: 0; transform: translate(-50%, 6px); }
+    20% { opacity: 0.55; transform: translate(-50%, 0); }
+    80% { opacity: 0.55; }
+    100% { opacity: 0; }
+  }
+
+  /* ---------- Reduce motion ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+    .slide::after { animation: none !important; opacity: 0.04; }
+    .orb, .aurora, .ticker-track { animation: none !important; }
+  }
+
+  /* ---------- Print (Cmd+P → PDF backup) ---------- */
+  @media print {
+    @page { size: 1920px 1080px; margin: 0; }
+    body, .deck { overflow: visible; height: auto; }
+    .deck { display: block; }
+    .slide { page-break-after: always; break-after: page; width: 1920px; height: 1080px; }
+    .progress, .start-hint { display: none; }
+    .slide::after { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<main class="deck" id="deck">
+
+  <!-- ========== 01 — TITLE ========== -->
+  <section class="slide dark title" data-bg="dark" data-slide="01" aria-label="Title">
+    <div class="orb"></div>
+    <div class="orb small"></div>
+    <header class="chrome-top">
+      <span>SVIC × NUS AIDF · Silicon Valley × Singapore</span>
+      <span class="rule"></span>
+      <span>01 / 15</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Keynote · 90 Minutes</p>
+      <h1 class="display"><span class="word">How</span> <span class="word">AI</span> <span class="word">is</span> <span class="word em"><span class="rotator" data-words="reshaping,rewiring,redefining">reshaping</span></span> <span class="word">global</span> <span class="word">leadership.</span></h1>
+      <h2 class="sub">An honest read on what AI is doing to the work of leading.</h2>
+      <p class="meta">Fonz Morris &nbsp;·&nbsp; Chief Product Officer &nbsp;·&nbsp; Beyond Code Collective &nbsp;+&nbsp; Black Girls Code</p>
+    </div>
+    <footer class="chrome-bot">
+      <span>Palo Alto · 2026</span>
+      <span class="rule"></span>
+      <span>← → · Space · Swipe</span>
+    </footer>
+  </section>
+
+  <!-- ========== 02 — FOLLOW ALONG ========== -->
+  <section class="slide light" data-bg="light" data-slide="follow-along" aria-label="Follow along on your phone">
+    <div class="ambient-glow"></div>
+    <header class="chrome-top">
+      <span>For the room</span>
+      <span class="rule"></span>
+      <span></span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Want to follow along on your phone?</p>
+      <div class="qr-wrap">
+        <div class="qr-box">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=640x640&amp;format=svg&amp;margin=10&amp;color=1A1A1A&amp;bgcolor=F5F5F7&amp;data=https%3A%2F%2Ffonz.sh%2Fsvic" alt="Scan to pull up the slides on your phone" />
+        </div>
+        <div class="qr-aside">
+          <span class="qr-handle">fonz.sh / svic</span>
+          <h2 class="qr-cta">Pull up <span class="em">the deck.</span></h2>
+          <p class="qr-note">Same slides, in your hand. Browse ahead, look back, screenshot whatever you want — the link stays live.</p>
+          <p class="qr-url">fonz.sh/svic</p>
+        </div>
+      </div>
+    </div>
+    <footer class="chrome-bot">
+      <span>Or just type fonz.sh/svic into your browser</span>
+      <span class="rule"></span>
+      <span>Follow along</span>
+    </footer>
+  </section>
+
+  <!-- ========== 03 — WHO'S TALKING ========== -->
+  <section class="slide light" data-bg="light" data-slide="02" aria-label="About Fonz">
+    <header class="chrome-top">
+      <span>Who's Talking</span>
+      <span class="rule"></span>
+      <span>02 / 18</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Quick context</p>
+      <h1 class="display"><span class="word">I'm</span> <span class="word">Fonz</span> <span class="word">Morris.</span></h1>
+      <p class="role-line">AI strategist.</p>
+      <h2 class="sub">Built at scale. Backing what's next.</h2>
+      <ol class="list">
+        <li data-n="01"><em>Netflix</em> — five years leading product.</li>
+        <li data-n="02"><em>Coursera</em> — two years leading.</li>
+        <li data-n="03">CPO — <em>Beyond Code Collective</em> + <em>Black Girls Code.</em></li>
+        <li data-n="04">Founder. One acquisition exit.</li>
+        <li data-n="05">VC at <em>Glenn Capital</em> — exits to <em>OpenAI</em> + <em>Palo Alto Networks.</em></li>
+      </ol>
+    </div>
+    <footer class="chrome-bot">
+      <span>A decade of leading product at scale</span>
+      <span class="rule"></span>
+      <span>Context</span>
+    </footer>
+  </section>
+
+  <!-- ========== 03 — AGENDA ========== -->
+  <section class="slide dark" data-bg="dark" data-slide="agenda" aria-label="Agenda">
+    <header class="chrome-top">
+      <span>The Next Ninety Minutes</span>
+      <span class="rule"></span>
+      <span>03 / 20</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Agenda</p>
+      <h1 class="display"><span class="word">What</span> <span class="word">we'll</span> <span class="word em">cover.</span></h1>
+      <ol class="commit-list">
+        <li><span class="n">01</span><span class="t">What your job actually is now.</span></li>
+        <li><span class="n">02</span><span class="t">Who decides — you, or the model?</span></li>
+        <li><span class="n">03</span><span class="t">What you have to be good at now.</span></li>
+        <li><span class="n">04</span><span class="t">Where it's going — agents.</span></li>
+        <li><span class="n">05</span><span class="t">What I'd actually tell you.</span></li>
+        <li><span class="n">Q&amp;A</span><span class="t">Open floor.</span></li>
+      </ol>
+    </div>
+    <footer class="chrome-bot">
+      <span>Three pillars, one honest take, your questions</span>
+      <span class="rule"></span>
+      <span>Agenda</span>
+    </footer>
+  </section>
+
+  <!-- ========== 04 — HOOK STAT ========== -->
+  <section class="slide light stat-slide" data-bg="light" data-slide="02" aria-label="Hook stat">
+    <header class="chrome-top">
+      <span>The Shift</span>
+      <span class="rule"></span>
+      <span>02 / 15</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">In two years</p>
+      <p class="stat"><span data-count="36" data-suffix="">0</span><span class="unit">hrs</span><span class="arrow"> → </span><span data-count="4" data-suffix="">0</span><span class="unit">min</span></p>
+      <p class="caption">In 2024, a managing director at a global bank waited 36 hours for a credit memo. In 2026, the memo writes itself in four minutes — and the 36 hours haven't disappeared. They've been redistributed to judgment, governance, and stakeholder management.</p>
+    </div>
+    <footer class="chrome-bot">
+      <span>Source · Industry composite</span>
+      <span class="rule"></span>
+      <span>Hook</span>
+    </footer>
+  </section>
+
+  <!-- ========== 04 — THE NEW TOOLKIT ========== -->
+  <section class="slide dark" data-bg="dark" data-slide="toolkit" aria-label="The new AI toolkit">
+    <header class="chrome-top">
+      <span>The Map</span>
+      <span class="rule"></span>
+      <span>04 / 19</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">The map, 2026</p>
+      <h1 class="display"><span class="word">AI</span> <span class="word">didn't</span> <span class="word">pick</span> <span class="word">a</span> <span class="word em">sector.</span></h1>
+      <h2 class="sub">Forty companies. Twenty-four months. Most of you only know ten of them.</h2>
+      <div class="ai-cloud" id="ai-cloud">
+        <span class="c s1 em">NVIDIA</span>
+        <span class="c s2">xAI</span>
+        <span class="c s1 em">OpenAI</span>
+        <span class="c s2 em">Hugging Face</span>
+        <span class="c s3">Perplexity</span>
+        <span class="c s1 em">Anthropic</span>
+        <span class="c s2">Mistral</span>
+        <span class="c s3">Sierra</span>
+        <span class="c s2">Cohere</span>
+        <span class="c s1">Google</span>
+        <span class="c s2">CoreWeave</span>
+        <span class="c s3">Decagon</span>
+        <span class="c s1">Microsoft</span>
+        <span class="c s2">Cursor</span>
+        <span class="c s3">Harvey</span>
+        <span class="c s1">Meta</span>
+        <span class="c s2">GitHub Copilot</span>
+        <span class="c s3">Replit</span>
+        <span class="c s2">TSMC</span>
+        <span class="c s3">Runway</span>
+        <span class="c s2">Salesforce</span>
+        <span class="c s3">ElevenLabs</span>
+        <span class="c s2">AMD</span>
+        <span class="c s3">Midjourney</span>
+        <span class="c s3">11x</span>
+        <span class="c s3">Artisan</span>
+        <span class="c s3">Vercel</span>
+        <span class="c s3">Adobe Firefly</span>
+        <span class="c s4">Notion</span>
+        <span class="c s4">ServiceNow</span>
+        <span class="c s4">Abridge</span>
+        <span class="c s4">Hippocratic</span>
+        <span class="c s4">Glean</span>
+        <span class="c s4">Suno</span>
+        <span class="c s4">Pika</span>
+        <span class="c s4">Glass Health</span>
+      </div>
+    </div>
+    <footer class="chrome-bot">
+      <span>Public companies + privately-held — sized roughly by reach</span>
+      <span class="rule"></span>
+      <span>The map</span>
+    </footer>
+  </section>
+
+  <!-- ========== 06 — THE MYTHICAL HOURS ========== -->
+  <section class="slide light stat-slide" data-bg="light" data-slide="myth" aria-label="The mythical hours AI claims to save">
+    <header class="chrome-top">
+      <span>Real Numbers</span>
+      <span class="rule"></span>
+      <span>06 / 23</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Peer-reviewed and publicly disclosed</p>
+      <h1 class="display"><span class="word">What's</span> <span class="word">actually</span> <span class="word em">been measured.</span></h1>
+      <div class="claim-grid" id="claim-grid">
+        <div class="claim-card"><span class="claim-val">+25%</span><span class="claim-src">Knowledge-worker task completion · MIT × BCG, 2023</span></div>
+        <div class="claim-card"><span class="claim-val">+55%</span><span class="claim-src">Developer task time · GitHub controlled trial, 2023</span></div>
+        <div class="claim-card"><span class="claim-val">+14%</span><span class="claim-src">Customer-service productivity · Stanford × MIT, 2023</span></div>
+        <div class="claim-card"><span class="claim-val">700+</span><span class="claim-src">FTE-equivalents on support · Klarna, publicly disclosed 2024</span></div>
+      </div>
+      <p class="caption">Not vendor decks. Controlled studies and disclosed deployments — every line is citable tomorrow morning.</p>
+    </div>
+    <footer class="chrome-bot">
+      <span>Sources · MIT, Stanford, BCG, GitHub, Klarna</span>
+      <span class="rule"></span>
+      <span>The real numbers</span>
+    </footer>
+  </section>
+
+  <!-- ========== 07 — THESIS ========== -->
+  <section class="slide dark" data-bg="dark" data-slide="03" aria-label="Thesis">
+    <div class="aurora"></div>
+    <div class="ticker"><div class="ticker-track">$20/MONTH · $20/MONTH · $20/MONTH · $20/MONTH · $20/MONTH · </div></div>
+    <header class="chrome-top">
+      <span>The Thesis</span>
+      <span class="rule"></span>
+      <span>05 / 20</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Here's the hard part</p>
+      <h1 class="display"><span class="word">What</span> <span class="word">got</span> <span class="word">you</span> <span class="word em">promoted</span> <span class="word">is</span> <span class="word">now</span> <span class="word">a</span> <span class="word">$20</span> <span class="word">subscription.</span></h1>
+      <h2 class="sub">Those skills are commodity now. The next twenty years pay for the leader who can still build something.</h2>
+    </div>
+    <footer class="chrome-bot">
+      <span>Knowing more · Deciding faster · Having access</span>
+      <span class="rule"></span>
+      <span>The thesis</span>
+    </footer>
+  </section>
+
+  <!-- ========== 07 — THE RECEIPT (proof of $20 thesis) ========== -->
+  <section class="slide light" data-bg="light" data-slide="receipt" aria-label="A receipt: built the LXP with Claude Code">
+    <header class="chrome-top">
+      <span>A Receipt</span>
+      <span class="rule"></span>
+      <span>07 / 22</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Built, not bought</p>
+      <h1 class="display"><span class="word">Control</span> <span class="word">is</span> <span class="word">the</span> <span class="word em">magic word.</span></h1>
+      <h2 class="sub">For two years, our learning community had outgrown the platform we were on. Off-the-shelf was slowing us down. So I learned the tool, made the call, and built our own — from the ground up, on code we own.</h2>
+      <div class="proof-stats">
+        <div class="proof-stat">
+          <span class="proof-stat-num">100<span class="unit">%</span></span>
+          <span class="proof-stat-label">Ownership of the code</span>
+        </div>
+        <div class="proof-stat">
+          <span class="proof-stat-num">0</span>
+          <span class="proof-stat-label">Vendor lock-in</span>
+        </div>
+        <div class="proof-stat">
+          <span class="proof-stat-num">0</span>
+          <span class="proof-stat-label">Off-the-shelf compromises</span>
+        </div>
+        <div class="proof-stat">
+          <span class="proof-stat-num">0</span>
+          <span class="proof-stat-label">Tech debt inherited</span>
+        </div>
+      </div>
+    </div>
+    <footer class="chrome-bot">
+      <span>Decide. Learn. Build. That's the job now.</span>
+      <span class="rule"></span>
+      <span>The thesis, applied</span>
+    </footer>
+  </section>
+
+  <!-- ========== 08 — PART ONE DIVIDER ========== -->
+  <section class="slide dark divider" data-bg="dark" data-slide="04" aria-label="Part One divider">
+    <div class="aurora"></div>
+    <div class="orb"></div>
+    <div class="orb small"></div>
+    <header class="chrome-top">
+      <span>Part One</span>
+      <span class="rule"></span>
+      <span>04 / 15</span>
+    </header>
+    <div class="body">
+      <div class="stack">
+        <p class="divider-num">0<span class="fill">1</span></p>
+        <div class="stack-text">
+          <h1 class="divider-title">What your job actually is now.</h1>
+          <p class="divider-sub">You used to make the call. Now you build the system that makes the call — and you still own the result.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="chrome-bot">
+      <span>Pillar 1 of 3</span>
+      <span class="rule"></span>
+      <span>Roles &amp; Expectations</span>
+    </footer>
+  </section>
+
+  <!-- ========== 05 — THREE SHIFTS ========== -->
+  <section class="slide light" data-bg="light" data-slide="05" aria-label="Three shifts">
+    <div class="ambient-glow"></div>
+    <p class="watermark arrow" aria-hidden="true">→</p>
+    <header class="chrome-top">
+      <span>Three Structural Shifts</span>
+      <span class="rule"></span>
+      <span>05 / 15</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">What changed under your feet</p>
+      <h1 class="display"><span class="word">Three</span> <span class="word em">shifts.</span></h1>
+      <ol class="list">
+        <li data-n="01">You used to make the calls. Now you <em>build the system</em> that makes them.</li>
+        <li data-n="02">Managing people was the job. <em>Orchestrating people and models</em> is the job now.</li>
+        <li data-n="03">Information was your edge. <em>Judgment</em> is the only edge left.</li>
+      </ol>
+    </div>
+    <footer class="chrome-bot">
+      <span>The retail-CEO who no longer approves credit policy</span>
+      <span class="rule"></span>
+      <span>Pillar 1</span>
+    </footer>
+  </section>
+
+  <!-- ========== 06 — STAT: ALADDIN ========== -->
+  <section class="slide dark stat-slide" data-bg="dark" data-slide="06" aria-label="Aladdin stat">
+    <header class="chrome-top">
+      <span>Proof Point</span>
+      <span class="rule"></span>
+      <span>06 / 15</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">BlackRock's Aladdin</p>
+      <p class="stat">~<span data-count="21" data-suffix="">0</span><span class="unit">trillion</span></p>
+      <p class="caption">Aladdin runs the analytical work behind more than $21 trillion. The argument about whether AI belongs in finance is over. The largest balance sheet in the world already answered it.</p>
+    </div>
+    <footer class="chrome-bot">
+      <span>Source · BlackRock, public filings</span>
+      <span class="rule"></span>
+      <span>Proof</span>
+    </footer>
+  </section>
+
+  <!-- ========== 07 — PART TWO DIVIDER ========== -->
+  <section class="slide dark divider" data-bg="dark" data-slide="07" aria-label="Part Two divider">
+    <div class="aurora"></div>
+    <div class="orb"></div>
+    <div class="orb small"></div>
+    <header class="chrome-top">
+      <span>Part Two</span>
+      <span class="rule"></span>
+      <span>07 / 15</span>
+    </header>
+    <div class="body">
+      <div class="stack">
+        <p class="divider-num">0<span class="fill">2</span></p>
+        <div class="stack-text">
+          <h1 class="divider-title">Who decides — you, or the model?</h1>
+          <p class="divider-sub">Every meeting now has a third participant. The hard part is knowing when to listen to it.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="chrome-bot">
+      <span>Pillar 2 of 3</span>
+      <span class="rule"></span>
+      <span>Decision-Making</span>
+    </footer>
+  </section>
+
+  <!-- ========== 08 — THE NEW QUESTION ========== -->
+  <section class="slide light" data-bg="light" data-slide="08" aria-label="The new question">
+    <div class="ambient-glow"></div>
+    <p class="watermark q" aria-hidden="true">?</p>
+    <header class="chrome-top">
+      <span>The New Question</span>
+      <span class="rule"></span>
+      <span>08 / 15</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">It isn't</p>
+      <h1 class="display"><span class="word">"What</span> <span class="word">do</span> <span class="word">I</span> <span class="word em">decide?"</span></h1>
+      <h2 class="sub">It's <em>"what do I delegate to the model — and what do I keep for myself?"</em></h2>
+    </div>
+    <footer class="chrome-bot">
+      <span>Judgment is the last unscalable resource</span>
+      <span class="rule"></span>
+      <span>Pillar 2</span>
+    </footer>
+  </section>
+
+  <!-- ========== 09 — WHAT I DON'T DELEGATE ========== -->
+  <section class="slide light" data-bg="light" data-slide="09" aria-label="What I don't delegate">
+    <div class="ambient-glow left"></div>
+    <header class="chrome-top">
+      <span>The Honest Bracket</span>
+      <span class="rule"></span>
+      <span>09 / 16</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">But —</p>
+      <h1 class="display"><span class="word">Some</span> <span class="word">things,</span> <span class="word">you</span> <span class="word em">don't</span> <span class="word">delegate.</span></h1>
+      <ol class="list">
+        <li data-n="01">The 1:1 where someone tells you they're struggling.</li>
+        <li data-n="02">The hard feedback — the kind that's about <em>them</em>, not the work.</li>
+        <li data-n="03">The apology. Public or private.</li>
+        <li data-n="04">The "well done" that lands because they know you actually saw it.</li>
+      </ol>
+      <h2 class="sub">You can't ChatGPT a human being.</h2>
+    </div>
+    <footer class="chrome-bot">
+      <span>Judgment · Presence · Care</span>
+      <span class="rule"></span>
+      <span>Pillar 2 · The other half</span>
+    </footer>
+  </section>
+
+  <!-- ========== WHAT YOU ABSOLUTELY DO DELEGATE ========== -->
+  <section class="slide light" data-bg="light" data-slide="do-delegate" aria-label="Everything else, delegate">
+    <div class="ambient-glow"></div>
+    <header class="chrome-top">
+      <span>The Other Half</span>
+      <span class="rule"></span>
+      <span>15 / 27</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">And —</p>
+      <h1 class="display"><span class="word">Everything</span> <span class="word">else?</span> <span class="word em">Delegate.</span></h1>
+      <ol class="list">
+        <li data-n="01">The first draft of any memo, brief, or doc.</li>
+        <li data-n="02">The forty pages your team would've read to find the one paragraph that matters.</li>
+        <li data-n="03">The Monday status report. The dashboard pull. The board pre-read.</li>
+        <li data-n="04">The customer ticket that has the same six answers, rotated.</li>
+      </ol>
+      <h2 class="sub">Stop being precious about work that wasn't valuable when you did it.</h2>
+    </div>
+    <footer class="chrome-bot">
+      <span>The fastest way to free your judgment is to stop spending it on the obvious</span>
+      <span class="rule"></span>
+      <span>Pillar 2 · What to let go of</span>
+    </footer>
+  </section>
+
+  <!-- ========== 10 — STAT: JPMORGAN ========== -->
+  <section class="slide dark stat-slide" data-bg="dark" data-slide="09" aria-label="JPMorgan stat">
+    <header class="chrome-top">
+      <span>Adoption at Scale</span>
+      <span class="rule"></span>
+      <span>09 / 15</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">JPMorgan's LLM Suite</p>
+      <p class="stat"><span data-count="200" data-suffix="K+">0</span></p>
+      <p class="caption">JPMorgan has deployed its in-house LLM Suite to more than 200,000 employees. DBS runs ~800 active AI use cases. Goldman's Devin-class agents now write production financial code. <span class="callout">Adoption isn't the question anymore. The question is who's responsible when the model is wrong. And whether you'd answer that question <em>on the record</em>.</span></p>
+    </div>
+    <footer class="chrome-bot">
+      <span>JPMorgan · DBS · Goldman Sachs</span>
+      <span class="rule"></span>
+      <span>Proof</span>
+    </footer>
+  </section>
+
+  <!-- ========== 10 — PART THREE DIVIDER ========== -->
+  <section class="slide dark divider" data-bg="dark" data-slide="10" aria-label="Part Three divider">
+    <div class="aurora"></div>
+    <div class="orb"></div>
+    <div class="orb small"></div>
+    <header class="chrome-top">
+      <span>Part Three</span>
+      <span class="rule"></span>
+      <span>10 / 15</span>
+    </header>
+    <div class="body">
+      <div class="stack">
+        <p class="divider-num">0<span class="fill">3</span></p>
+        <div class="stack-text">
+          <h1 class="divider-title">What you have to be good at now.</h1>
+          <p class="divider-sub">Four things that weren't on your performance review two years ago — and that your board is about to start asking about.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="chrome-bot">
+      <span>Pillar 3 of 3</span>
+      <span class="rule"></span>
+      <span>Skills</span>
+    </footer>
+  </section>
+
+  <!-- ========== 11 — THE NEW SKILLS ========== -->
+  <section class="slide light" data-bg="light" data-slide="11" aria-label="The new skills">
+    <header class="chrome-top">
+      <span>New Expectations on Senior Leaders</span>
+      <span class="rule"></span>
+      <span>11 / 15</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Not delegated to a chief AI officer</p>
+      <h1 class="display"><span class="word">The</span> <span class="word">new</span> <span class="word em">skills.</span></h1>
+      <ol class="list">
+        <li data-n="01">Personal AI fluency.</li>
+        <li data-n="02">Public defense of model decisions — to regulators, boards, clients.</li>
+        <li data-n="03">Faster strategic review. Annual planning is obsolete.</li>
+        <li data-n="04">Accountability for outcomes produced by systems you don't operate.</li>
+      </ol>
+    </div>
+    <footer class="chrome-bot">
+      <span>Pillar 3</span>
+      <span class="rule"></span>
+      <span>Skills</span>
+    </footer>
+  </section>
+
+  <!-- ========== PART FOUR DIVIDER — AGENTS ========== -->
+  <section class="slide dark divider" data-bg="dark" data-slide="agents-divider" aria-label="Part Four agents">
+    <div class="aurora"></div>
+    <div class="orb"></div>
+    <div class="orb small"></div>
+    <header class="chrome-top">
+      <span>Part Four · Where it's going</span>
+      <span class="rule"></span>
+      <span>19 / 27</span>
+    </header>
+    <div class="body">
+      <div class="stack">
+        <p class="divider-num">0<span class="fill">4</span></p>
+        <div class="stack-text">
+          <h1 class="divider-title">And then there's agents.</h1>
+          <p class="divider-sub">You just heard what to let go of. Here's who you're handing it to.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="chrome-bot">
+      <span>Where the next two years happen</span>
+      <span class="rule"></span>
+      <span>Agents</span>
+    </footer>
+  </section>
+
+  <!-- ========== AGENTS — WHAT'S DIFFERENT ========== -->
+  <section class="slide light" data-bg="light" data-slide="agents-shift" aria-label="Tools augment people. Agents replace functions.">
+    <div class="ambient-glow"></div>
+    <p class="watermark agents" aria-hidden="true">AGENTS</p>
+    <header class="chrome-top">
+      <span>Beyond Tools</span>
+      <span class="rule"></span>
+      <span>20 / 27</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">What's actually new</p>
+      <h1 class="display"><span class="word">Tools</span> <span class="word">augment</span> <span class="word">people.</span> <span class="word em">Agents</span> <span class="word">replace</span> <span class="word em">functions.</span></h1>
+      <h2 class="sub">The question isn't "how do I use AI?" anymore. It's <em>"what runs in my organization without me?"</em></h2>
+    </div>
+    <footer class="chrome-bot">
+      <span>Plan · Act · Persist · Coordinate</span>
+      <span class="rule"></span>
+      <span>What agents do</span>
+    </footer>
+  </section>
+
+  <!-- ========== AGENTS — ALREADY IN PRODUCTION ========== -->
+  <section class="slide dark" data-bg="dark" data-slide="agents-deployed" aria-label="Agents already in production">
+    <header class="chrome-top">
+      <span>Already in Production</span>
+      <span class="rule"></span>
+      <span>21 / 27</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Names you know — running in production today</p>
+      <h1 class="display"><span class="word">These</span> <span class="word">aren't</span> <span class="word em">demos.</span></h1>
+      <ol class="agent-list">
+        <li><span class="agent-name">Devin</span><span class="agent-meta">Cognition · code</span></li>
+        <li><span class="agent-name">Sierra</span><span class="agent-meta">Bret Taylor · CX</span></li>
+        <li><span class="agent-name">Operator</span><span class="agent-meta">OpenAI · browser</span></li>
+        <li><span class="agent-name">Computer Use</span><span class="agent-meta">Anthropic · desktop</span></li>
+        <li><span class="agent-name">Agentforce</span><span class="agent-meta">Salesforce · enterprise</span></li>
+      </ol>
+    </div>
+    <footer class="chrome-bot">
+      <span>Cognition · Sierra · OpenAI · Anthropic · Salesforce</span>
+      <span class="rule"></span>
+      <span>The proof</span>
+    </footer>
+  </section>
+
+  <!-- ========== 12 — PART FIVE DIVIDER (your voice) ========== -->
+  <section class="slide dark divider" data-bg="dark" data-slide="12" aria-label="Honest take divider">
+    <div class="aurora"></div>
+    <div class="orb"></div>
+    <div class="orb small"></div>
+    <header class="chrome-top">
+      <span>Part Five · The Honest Part</span>
+      <span class="rule"></span>
+      <span>12 / 15</span>
+    </header>
+    <div class="body">
+      <div class="stack">
+        <p class="divider-num">0<span class="fill">5</span></p>
+        <div class="stack-text">
+          <h1 class="divider-title">What I'd actually tell you.</h1>
+          <p class="divider-sub">Five things the slides won't say — the ones that matter on Monday morning, when nobody is taking notes anymore.</p>
+        </div>
+      </div>
+    </div>
+    <footer class="chrome-bot">
+      <span>Operator's notes</span>
+      <span class="rule"></span>
+      <span>Closing pillar</span>
+    </footer>
+  </section>
+
+  <!-- ========== 13 — FIVE COMMITMENTS ========== -->
+  <section class="slide dark" data-bg="dark" data-slide="13" aria-label="Five commitments">
+    <header class="chrome-top">
+      <span>Five Commitments</span>
+      <span class="rule"></span>
+      <span>13 / 15</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Honest, not theoretical</p>
+      <ol class="commit-list">
+        <li><span class="n">01</span><span class="t">Level-set your team. Out loud. Repeatedly.</span></li>
+        <li><span class="n">02</span><span class="t">Have a vision — one a 16-year-old could repeat back.</span></li>
+        <li><span class="n">03</span><span class="t">Educate yourself first. You can't inspire what you can't use.</span></li>
+        <li><span class="n">04</span><span class="t">Give them real space to play with the tools.</span></li>
+        <li><span class="n">05</span><span class="t">Empathize. This is changing their identity, not just their workflow.</span></li>
+      </ol>
+    </div>
+    <footer class="chrome-bot">
+      <span>From the operator's seat</span>
+      <span class="rule"></span>
+      <span>Pillar 4</span>
+    </footer>
+  </section>
+
+  <!-- ========== 14 — CLOSING ========== -->
+  <section class="slide light closing" data-bg="light" data-slide="14" aria-label="Closing">
+    <header class="chrome-top">
+      <span>Closing</span>
+      <span class="rule"></span>
+      <span>14 / 15</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">One sentence</p>
+      <p class="quote">The leaders who matter next will stay <span class="em">human</span> in the places that matter, and <span class="em">automated</span> in the places that don't. Figuring out which is which — that's the whole job.</p>
+    </div>
+    <footer class="chrome-bot">
+      <span>Thank you</span>
+      <span class="rule"></span>
+      <span>Close</span>
+    </footer>
+  </section>
+
+  <!-- ========== Q & A ========== -->
+  <section class="slide dark" data-bg="dark" data-slide="qa" aria-label="Questions">
+    <div class="orb"></div>
+    <div class="orb small"></div>
+    <header class="chrome-top">
+      <span>Open Floor</span>
+      <span class="rule"></span>
+      <span>17 / 18</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Your turn</p>
+      <h1 class="display"><span class="word em">Questions.</span></h1>
+      <h2 class="sub">Ask the ones you walked in with — and the ones you didn't know you had yet. Honest questions get honest answers.</h2>
+    </div>
+    <footer class="chrome-bot">
+      <span>~20 minutes</span>
+      <span class="rule"></span>
+      <span>Q &amp; A</span>
+    </footer>
+  </section>
+
+  <!-- ========== QR — LINKEDIN ========== -->
+  <section class="slide dark" data-bg="dark" data-slide="qr" aria-label="Stay in touch">
+    <div class="orb small"></div>
+    <header class="chrome-top">
+      <span>Stay In Touch</span>
+      <span class="rule"></span>
+      <span>18 / 20</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">Take this with you</p>
+      <div class="qr-wrap">
+        <div class="qr-box">
+          <img id="qr-img" src="https://api.qrserver.com/v1/create-qr-code/?size=640x640&amp;format=svg&amp;margin=10&amp;color=1A1A1A&amp;bgcolor=F5F5F7&amp;data=https%3A%2F%2Flinkedin.com%2Fin%2Ffonzmorris" alt="Scan to connect with Fonz Morris on LinkedIn" />
+        </div>
+        <div class="qr-aside">
+          <span class="qr-handle">in / fonzmorris</span>
+          <h2 class="qr-cta">Scan to <span class="em">connect.</span></h2>
+          <p class="qr-note">If anything in here landed — keep the conversation going. I read every note.</p>
+          <p class="qr-url">linkedin.com/in/fonzmorris</p>
+        </div>
+      </div>
+    </div>
+    <footer class="chrome-bot">
+      <span>Or visit fonz.sh</span>
+      <span class="rule"></span>
+      <span>LinkedIn</span>
+    </footer>
+  </section>
+
+  <!-- ========== 19 — THANK YOU ========== -->
+  <section class="slide dark thanks" data-bg="dark" data-slide="15" aria-label="Thank you">
+    <div class="orb"></div>
+    <header class="chrome-top">
+      <span>SVIC × NUS AIDF · Silicon Valley × Singapore</span>
+      <span class="rule"></span>
+      <span>15 / 15</span>
+    </header>
+    <div class="body">
+      <p class="eyebrow">That's all</p>
+      <h1 class="thanks-h"><span class="em">Thank</span> you.</h1>
+      <p class="contact">Fonz Morris &nbsp;·&nbsp; fonz.sh &nbsp;·&nbsp; CPO, Beyond Code Collective &nbsp;+&nbsp; Black Girls Code</p>
+    </div>
+    <footer class="chrome-bot">
+      <span>End of deck</span>
+      <span class="rule"></span>
+      <span>← back</span>
+    </footer>
+  </section>
+
+</main>
+
+<!-- QR code library (renders QR locally to canvas; cached after first load) -->
+<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+
+<!-- Progress + start hint -->
+<div class="progress" id="progress" aria-hidden="true"></div>
+<div class="start-hint">← → · Space · Scroll</div>
+
+<script>
+(() => {
+  const deck = document.getElementById("deck");
+  const slides = Array.from(deck.querySelectorAll(".slide"));
+  const progress = document.getElementById("progress");
+
+  // Auto-set chrome numbers ("NN / TT") so insertions don't drift labels
+  const total = String(slides.length).padStart(2, "0");
+  slides.forEach((s, i) => {
+    const idx = String(i + 1).padStart(2, "0");
+    const topSpans = s.querySelectorAll(".chrome-top > span");
+    if (topSpans.length) topSpans[topSpans.length - 1].textContent = `${idx} / ${total}`;
+  });
+
+  // Build progress dots
+  slides.forEach((s, i) => {
+    const dot = document.createElement("span");
+    dot.className = "dot";
+    dot.dataset.index = String(i);
+    dot.addEventListener("click", () => goTo(i));
+    progress.appendChild(dot);
+  });
+  const numEl = document.createElement("span");
+  numEl.className = "num";
+  numEl.textContent = "01 / " + String(slides.length).padStart(2, "0");
+  progress.appendChild(numEl);
+  const dots = Array.from(progress.querySelectorAll(".dot"));
+
+  let current = 0;
+
+  function setActive(i) {
+    if (i < 0 || i >= slides.length) return;
+    current = i;
+    slides.forEach((s, idx) => s.classList.toggle("active", idx === i));
+    dots.forEach((d, idx) => d.classList.toggle("active", idx === i));
+    numEl.textContent = String(i + 1).padStart(2, "0") + " / " + String(slides.length).padStart(2, "0");
+    const bg = slides[i].dataset.bg;
+    document.body.classList.toggle("on-light", bg === "light");
+    // restart count-ups
+    triggerCounts(slides[i]);
+  }
+
+  function goTo(i) {
+    i = Math.max(0, Math.min(slides.length - 1, i));
+    slides[i].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+  }
+
+  // Detect active slide via IntersectionObserver
+  const io = new IntersectionObserver((entries) => {
+    let best = null;
+    let bestRatio = 0;
+    entries.forEach((e) => {
+      if (e.intersectionRatio > bestRatio) {
+        best = e.target;
+        bestRatio = e.intersectionRatio;
+      }
+    });
+    if (best && bestRatio > 0.55) {
+      const idx = slides.indexOf(best);
+      if (idx !== -1 && idx !== current) setActive(idx);
+    }
+  }, { root: deck, threshold: [0, 0.25, 0.55, 0.8, 1] });
+  slides.forEach((s) => io.observe(s));
+
+  // Keyboard
+  window.addEventListener("keydown", (e) => {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (["ArrowRight", "PageDown", " ", "Spacebar"].includes(e.key)) {
+      e.preventDefault();
+      goTo(current + 1);
+    } else if (["ArrowLeft", "PageUp"].includes(e.key)) {
+      e.preventDefault();
+      goTo(current - 1);
+    } else if (e.key === "Home") {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === "End") {
+      e.preventDefault();
+      goTo(slides.length - 1);
+    } else if (e.key === "f" || e.key === "F") {
+      // toggle fullscreen
+      if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+      else document.exitFullscreen?.();
+    }
+  });
+
+  // Mouse wheel: horizontal mapping for trackpads that send vertical
+  let wheelLock = false;
+  deck.addEventListener("wheel", (e) => {
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX) && Math.abs(e.deltaY) > 30) {
+      if (wheelLock) return;
+      wheelLock = true;
+      setTimeout(() => (wheelLock = false), 450);
+      e.preventDefault();
+      goTo(current + (e.deltaY > 0 ? 1 : -1));
+    }
+  }, { passive: false });
+
+  // Stagger word reveal delays
+  slides.forEach((s) => {
+    s.querySelectorAll("h1.display .word").forEach((w, i) => {
+      w.style.animationDelay = (120 + i * 60) + "ms";
+    });
+  });
+
+  // Count-up
+  function triggerCounts(slide) {
+    slide.querySelectorAll("[data-count]").forEach((el) => {
+      const target = parseFloat(el.dataset.count);
+      const suffix = el.dataset.suffix || "";
+      const dur = 900;
+      const start = performance.now();
+      function step(now) {
+        const t = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const v = Math.round(target * eased);
+        el.textContent = v + suffix;
+        if (t < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  // Rotating words (title-slide headline swap)
+  function sizeRotator(el, words) {
+    // measure the widest word in the rotator's actual font and set min-width
+    const tester = document.createElement("span");
+    const cs = getComputedStyle(el);
+    tester.style.cssText =
+      "visibility:hidden;position:absolute;left:-9999px;top:-9999px;white-space:pre;";
+    tester.style.font = cs.font;
+    tester.style.fontStyle = cs.fontStyle;
+    tester.style.fontWeight = cs.fontWeight;
+    tester.style.letterSpacing = cs.letterSpacing;
+    document.body.appendChild(tester);
+    let maxW = 0;
+    for (const w of words) {
+      tester.textContent = w;
+      maxW = Math.max(maxW, tester.getBoundingClientRect().width);
+    }
+    document.body.removeChild(tester);
+    if (maxW > 0) el.style.minWidth = Math.ceil(maxW) + "px";
+  }
+  document.querySelectorAll(".rotator").forEach((el) => {
+    const words = (el.dataset.words || "")
+      .split(",")
+      .map((w) => w.trim())
+      .filter(Boolean);
+    if (words.length < 2) return;
+    // size after fonts load so measurement matches rendered width
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => sizeRotator(el, words));
+    } else {
+      sizeRotator(el, words);
+    }
+    window.addEventListener("resize", () => sizeRotator(el, words));
+    let i = 0;
+    function cycle() {
+      i = (i + 1) % words.length;
+      el.classList.remove("swapping");
+      void el.offsetWidth; // restart animation
+      el.classList.add("swapping");
+      setTimeout(() => { el.textContent = words[i]; }, 300);
+    }
+    setTimeout(() => setInterval(cycle, 2800), 2400);
+  });
+
+  // Claim grid — rotating vermillion highlight (only while slide is active)
+  document.querySelectorAll(".claim-grid").forEach((grid) => {
+    const cards = grid.querySelectorAll(".claim-card");
+    if (!cards.length) return;
+    const slide = grid.closest(".slide");
+    let i = 0;
+    let timer = null;
+    function step() {
+      cards.forEach((c) => c.classList.remove("active"));
+      cards[i].classList.add("active");
+      i = (i + 1) % cards.length;
+    }
+    function start() {
+      if (timer) return;
+      i = 0;
+      step();
+      timer = setInterval(step, 1800);
+    }
+    function stop() {
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+    const obs = new MutationObserver(() => {
+      if (slide.classList.contains("active")) start();
+      else stop();
+    });
+    obs.observe(slide, { attributes: true, attributeFilter: ["class"] });
+    if (slide.classList.contains("active")) start();
+  });
+
+  // Stagger the AI cloud reveal + preserve per-tier opacity
+  document.querySelectorAll(".ai-cloud .c").forEach((el, i) => {
+    let op = 1;
+    if (el.classList.contains("s3")) op = 0.82;
+    if (el.classList.contains("s4")) op = 0.55;
+    el.style.setProperty("--target-op", op);
+    el.style.animationDelay = (140 + i * 35) + "ms";
+  });
+
+  // Render QR codes once the QRCode library is available
+  function renderQRs() {
+    if (typeof QRCode === "undefined") return;
+    document.querySelectorAll("canvas[data-url]").forEach((canvas) => {
+      const url = canvas.dataset.url;
+      if (!url) return;
+      QRCode.toCanvas(canvas, url, {
+        width: 640,
+        margin: 1,
+        color: { dark: "#1a1a1a", light: "#f5f5f7" },
+        errorCorrectionLevel: "M",
+      }).catch(() => {});
+    });
+  }
+  if (typeof QRCode !== "undefined") {
+    renderQRs();
+  } else {
+    window.addEventListener("load", renderQRs);
+  }
+
+  // Initial state
+  setActive(0);
+
+  // Re-trigger active animations on resize (debounced)
+  let resizeTimer;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => goTo(current), 150);
+  });
+})();
+</script>
+</body>
+</html>
