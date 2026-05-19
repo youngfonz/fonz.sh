@@ -2,6 +2,8 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/ad-engine", "destination": "/ad-engine.html" }
+    { "source": "/ad-engine", "destination": "/ad-engine.html" },
+    { "source": "/markdown", "destination": "https://london-pi-dusky.vercel.app/markdown" },
+    { "source": "/markdown/:path*", "destination": "https://london-pi-dusky.vercel.app/markdown/:path*" }
   ]
 }
