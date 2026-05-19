@@ -3,7 +3,7 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/ad-engine", "destination": "/ad-engine.html" },
-    { "source": "/markdown", "destination": "https://london-pi-dusky.vercel.app/markdown" },
-    { "source": "/markdown/:path*", "destination": "https://london-pi-dusky.vercel.app/markdown/:path*" }
+    { "source": "/markdown", "destination": "https://pulsepro-markdown-preview.vercel.app/markdown" },
+    { "source": "/markdown/:path*", "destination": "https://pulsepro-markdown-preview.vercel.app/markdown/:path*" }
   ]
 }
