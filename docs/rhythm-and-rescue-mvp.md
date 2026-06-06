@@ -1,7 +1,7 @@
 # Rhythm & Rescue — MVP Spec
 
 **Realm 1: Rhythm Ruins** · YouTube Playables · Black Girls Code
-Owner: CPO · Status: Draft v2 · Target platform: YouTube Playables (web/HTML5)
+Owner: CPO · Status: Draft v3 · Target platform: YouTube Playables (web/HTML5)
 
 ---
 
@@ -31,20 +31,24 @@ A player finishes the MVP understanding, by *doing* it:
 2. **Rhythm & timing** — sounds land *on the beat*; where you place a hit changes the groove,
    and at 10+ we let timing *accuracy* count toward an optional "groove" score (real skill).
 
-Anchored on those two ideas. At 10+ we add a light **vocabulary layer** (the UI names the
-parts as you use them — layer, beat, tempo) and a **taste of song structure** (build a
-verse, then a chorus) — taught through play, never as a quiz and never a gate to progress.
+Anchored on those two ideas. At 10+ we add a **vocabulary task up front** — a short "Sound
+Check" that teaches the names of the parts (drums, bass, melody, vocals) *by having you
+unlock each one* (see §4.1) — plus a **taste of song structure** later (verse → chorus).
+Taught through play, never as a quiz and never a hard gate to progress.
 
 ## 4. Core loop (60–90 seconds, one screen)
 
 ```
 ARRIVE → the realm is gray/static, music is "frozen"
    │
-TAP   → tap instrument tiles onto a beat grid (4 rows × 8 steps)
+SOUND  → ECHO runs a 30–45s "Sound Check": hear a part, learn its name, tap to claim it.
+CHECK    learning the word UNLOCKS that instrument into Nova's kit  (vocabulary first → §4.1)
+   │
+TAP   → tap the now-unlocked instruments onto a beat grid (4 rows × 16 steps)
    │     each layer you add restores color + motion to part of the scene
 GROOVE→ a playhead loops the grid; your pattern plays back instantly
    │
-ECHO  → scripted companion nudges: "try adding the drums" / lifeline hint if stuck
+ECHO  → scripted companion nudges: "try adding the bass" / lifeline hint if stuck
    │
 RESCUE→ when the song has all its layers locked to the beat, the realm "comes alive":
          a short celebratory playback — Nova dances, the world animates to YOUR beat
@@ -52,8 +56,55 @@ RESCUE→ when the song has all its layers locked to the beat, the realm "comes 
 KEEP  → free-play / remix the same groove, or move to the next rescue
 ```
 
-The reward is **the world reacting to the music the child made**. Cause → effect must be
+The reward is **the world reacting to the music the player made**. Cause → effect must be
 visible on every single tap.
+
+## 4.1 Opening — the Sound Check (vocabulary first)
+
+The MVP opens with a short vocabulary moment, **before** free building. The rule that keeps
+it from feeling like a quiz: **learning the word is how you unlock the instrument.** Vocab is
+the key, the beat-builder is the door.
+
+**Flow (~30–45s, ECHO-led):**
+
+1. The realm is silent/static. ECHO: *"To rebuild the song we need its parts. Listen…"*
+2. ECHO plays one part in isolation (e.g. just the kick + snare) and the word appears with
+   an icon: **DRUMS — the pulse that keeps time.** Player taps the glowing tile to *claim* it;
+   it lights up in Nova's kit and a piece of the world flickers back to color.
+3. Repeat for **BASS** (the low groove), **MELODY** (the hook/tune), **VOCALS** (Nova's voice).
+4. Tiny **listen-and-match check** (not graded, just confirming): ECHO plays one part, player
+   taps the matching word from the four they just learned. Right = sparkle; "not quite" =
+   ECHO replays it and points — *no fail, no score, you can't get stuck.*
+5. Hand-off: *"You've got the parts — now build the beat!"* → straight into the grid (§5),
+   with the four words now living as the row labels (constant reinforcement).
+
+**Terms taught in the MVP (kept tight — 4 core + 2 ambient):**
+
+| Term | Taught as | When |
+|------|-----------|------|
+| **Drums / Bass / Melody / Vocals** | the four instrument layers | Sound Check (unlocks each) |
+| **Beat** | the pulse the playhead follows | named on first grid tap |
+| **Tempo** | how fast the beat goes | named when the tempo slider is touched |
+
+*(Verse / Chorus are introduced later, in Rescue 3 — see §8. We resist front-loading all
+vocabulary at once.)*
+
+**Design guardrails (non-negotiable for Playables retention):**
+
+- **Skippable after first completion** — returning players tap "Skip to build." Never make a
+  kid sit through the lesson twice.
+- **Under ~45 seconds** to first free sound-making. If it grows past that, cut terms, don't
+  cut the build.
+- **Hands-on, never a worksheet** — every term is *heard and tapped*, never just read.
+- **No failure, no timer, no score** in the Sound Check. The optional skill/score lives later
+  in the groove challenge (§5), not here.
+- **Accessibility:** every term = word + icon + sound, so it's not reading-only or audio-only.
+
+> **CPO note / open call:** placing a learning beat *before* play is the right instinct for
+> the "real education" claim, but it's also the highest-bounce spot in any kids' game. The
+> unlock-the-instrument framing + the <45s + skippable rules are what protect retention.
+> A/B worth running post-launch: Sound Check first vs. one-tap-of-sound first, *then* the
+> Sound Check. Flagging so we measure it rather than guess.
 
 ## 5. The mechanic, concretely
 
@@ -83,8 +134,9 @@ A **step sequencer**, simplified for small hands:
 - ECHO is a **scripted character** — a small script of pre-written, branching lines. **No
   live model talks to a child.** This is a feature, not a limitation: it's the safest answer
   to YouTube/COPPA kids-safety review, and it lets us *teach about AI from inside the story*.
-- Roles: welcomes Nova, names each layer as it's added, offers a **lifeline hint** after N
-  seconds of inactivity, and celebrates the rescue.
+- Roles: welcomes Nova, **runs the opening Sound Check** (§4.1) — playing each part, naming
+  it, prompting the claim tap — names each layer as it's added, offers a **lifeline hint**
+  after N seconds of inactivity, and celebrates the rescue.
 - Voice/personality lines are content, version-controlled like art — easy to expand later.
 
 ## 7. Narrative wrapper (keep it thin for MVP)
@@ -157,7 +209,7 @@ slider). Realms 2 & 3 ship as updates (out of MVP scope).
 
 - **M0 — Spec & assets lock (this doc + audio/art brief).** Stems, palette, Nova/ECHO art.
 - **M1 — Playable core:** sequencer grid + Web Audio playback + playhead. *Internal: it's fun to noodle.*
-- **M2 — Rescue loop:** layer-restores-world feedback + 3-rescue progression + ECHO scripted lines.
+- **M2 — Rescue loop + onboarding:** the Sound Check vocabulary opener (§4.1) + layer-restores-world feedback + 3-rescue progression + ECHO scripted lines.
 - **M3 — Polish & wrap:** Nova reaction animation, celebration moment, accessibility pass.
 - **M4 — Submission build:** package to Playables format, safety/COPPA checklist, QA on phones.
 
@@ -184,8 +236,9 @@ slider). Realms 2 & 3 ship as updates (out of MVP scope).
 
 ## 16. Definition of done (MVP)
 
-- A player 10+ can, with minimal help, tap to build a 4-layer two-bar beat that plays back
-  in time, optionally chase the groove timing score, watch the realm come alive, and finish
-  all three rescues including the verse → chorus arrangement.
+- A player 10+ can, with minimal help, learn the four part names in the Sound Check, tap to
+  build a 4-layer two-bar beat that plays back in time, optionally chase the groove timing
+  score, watch the realm come alive, and finish all three rescues including the verse →
+  chorus arrangement.
 - Loads instantly, runs offline, collects nothing, no live AI.
 - Passes the kids-safety checklist and the Playables submission requirements.
