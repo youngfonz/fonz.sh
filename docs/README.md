@@ -11,6 +11,7 @@ them) → *Create* your own (build it on a grid). The world comes alive to the m
 
 | # | Doc | For | Read it to understand… |
 |---|-----|-----|------------------------|
+| 0 | [One-Pager](./one-pager.md) | anyone, fast | the whole thing on one page — share this first |
 | 1 | [Game Design](./rhythm-and-rescue-game-design.md) | everyone | the whole vision: world, why/how you play, 3 realms, how you win, the ending |
 | 2 | [MVP Spec](./rhythm-and-rescue-mvp.md) | product + design | Realm 1 in mechanical detail — the first shippable slice |
 | 3 | [Engineering Brief](./engineering-brief.md) | dev team | how the parts connect (shared systems), the phased roadmap, scope cut-lines |
