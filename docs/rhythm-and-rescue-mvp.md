@@ -2,6 +2,7 @@
 
 **Realm 1: Rhythm Ruins** · YouTube Playables · Black Girls Code
 Owner: CPO · Status: Draft v4 · Target platform: YouTube Playables (web/HTML5)
+Part of: [Full Game Design](./rhythm-and-rescue-game-design.md) · Music: [Stem Brief](./stem-brief.md)
 
 ---
 
