@@ -5,6 +5,7 @@
     { "source": "/ad-engine", "destination": "/ad-engine.html" },
     { "source": "/rhythm-rescue", "destination": "/rhythm-rescue.html" },
     { "source": "/pitch", "destination": "/pitch/index.html" },
+    { "source": "/game-breakdown", "destination": "/docs/game-breakdown.html" },
     { "source": "/markdown", "destination": "https://pulsepro-markdown-preview.vercel.app/markdown" },
     { "source": "/markdown/:path*", "destination": "https://pulsepro-markdown-preview.vercel.app/markdown/:path*" }
   ]

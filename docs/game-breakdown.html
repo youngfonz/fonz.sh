@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Rhythm &amp; Rescue — Game Breakdown</title>
+  <meta name="description" content="5-section game breakdown for developer meeting. Each section unlocks one instrument layer. All five come together in the finale.">
+  <meta name="robots" content="noindex">
+  <style>
+    :root {
+      --bg: #080810;
+      --bg2: #0f0f1e;
+      --card: #131325;
+      --card2: #1a1a30;
+      --line: #2a2a4a;
+      --ink: #f0eeff;
+      --muted: #9090b8;
+
+      --orange: #FF9200;
+      --magenta: #FF009C;
+      --teal: #00F0A5;
+      --yellow: #FFEF00;
+      --pink: #FF69C1;
+      --lilac: #AC9CF2;
+      --green: #00B830;
+
+      --s1: #FF9200;
+      --s2: #00F0A5;
+      --s3: #AC9CF2;
+      --s4: #FF009C;
+      --s5: #FFEF00;
+      --finale: #FF69C1;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+      -webkit-font-smoothing: antialiased;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+
+    .wrap { max-width: 720px; margin: 0 auto; padding: 0 20px 80px; }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 56px 20px 44px;
+      margin: 0 -20px 0;
+      background:
+        radial-gradient(100% 80% at 20% 0%, rgba(255,146,0,.2), transparent 55%),
+        radial-gradient(80% 60% at 80% 0%, rgba(255,0,156,.18), transparent 50%),
+        radial-gradient(60% 40% at 50% 100%, rgba(0,240,165,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg2), var(--bg));
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border: 1px solid var(--line);
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 22px;
+      background: rgba(255,255,255,.04);
+    }
+    .eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+
+    .hero h1 {
+      font-size: clamp(36px, 10vw, 60px);
+      line-height: 1;
+      letter-spacing: -.025em;
+      font-weight: 800;
+      background: linear-gradient(100deg, var(--orange), var(--magenta) 55%, var(--teal));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero .amp { font-weight: 400; -webkit-text-fill-color: var(--muted); opacity: .6; }
+
+    .hero .sub {
+      color: var(--muted);
+      font-size: 15px;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+    .hero .sub b { color: var(--ink); }
+
+    /* ── OVERVIEW STRIP ── */
+    .overview {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 28px 0 4px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .overview::-webkit-scrollbar { display: none; }
+
+    .pill {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 14px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+    .pill .n {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--bg);
+    }
+
+    /* ── FLOW LABEL ── */
+    .flow-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding: 32px 0 12px;
+      text-align: center;
+    }
+    .flow-label span { color: var(--orange); }
+
+    /* ── SECTION CARDS ── */
+    .section-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 18px 20px 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-num {
+      flex: 0 0 auto;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      font-size: 22px;
+      font-weight: 900;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--line);
+    }
+
+    .section-title-group { flex: 1; min-width: 0; }
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      margin-bottom: 2px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -.01em;
+    }
+    .section-instrument {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .unlock-badge {
+      flex: 0 0 auto;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 8px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--line);
+    }
+
+    .section-body { padding: 18px 20px; }
+
+    .section-story {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.55;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+    .section-story b { color: var(--ink); font-style: normal; }
+
+    /* mechanic / detail rows */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .detail-row {
+      background: var(--card2);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 14px;
+    }
+    .detail-row .label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+    .detail-row .value {
+      font-size: 14.5px;
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    .detail-row .value em {
+      font-style: normal;
+      color: var(--muted);
+    }
+
+    .echo-line {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: rgba(172,156,242,.08);
+      border: 1px solid rgba(172,156,242,.2);
+      border-radius: 12px;
+      font-size: 14px;
+      color: var(--lilac);
+      line-height: 1.5;
+    }
+    .echo-line .who {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      opacity: .7;
+      margin-bottom: 4px;
+    }
+
+    .unlock-result {
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .unlock-result .icon { font-size: 20px; flex: 0 0 auto; }
+
+    /* ── CONNECTOR ── */
+    .connector {
+      text-align: center;
+      padding: 4px 0;
+      font-size: 20px;
+      color: var(--line);
+    }
+
+    /* ── FINALE ── */
+    .finale-card {
+      background: var(--card);
+      border: 2px solid rgba(255,105,193,.3);
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .finale-header {
+      background: linear-gradient(135deg, rgba(255,105,193,.12), rgba(255,146,0,.08));
+      padding: 22px 20px;
+      text-align: center;
+      border-bottom: 1px solid rgba(255,105,193,.2);
+    }
+    .finale-header .label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 6px;
+    }
+    .finale-header h2 {
+      font-size: clamp(24px, 6vw, 36px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      background: linear-gradient(100deg, var(--orange), var(--pink), var(--teal));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+    }
+    .finale-header p {
+      color: var(--muted);
+      font-size: 14px;
+      margin-top: 8px;
+    }
+
+    .finale-body { padding: 20px; }
+
+    .layer-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 18px;
+    }
+    .layer-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card2);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 14px;
+    }
+    .layer-row .bar {
+      height: 4px;
+      flex: 1;
+      border-radius: 2px;
+      opacity: .8;
+    }
+    .layer-row .lname { font-weight: 600; color: var(--ink); min-width: 60px; }
+    .layer-row .ldesc { font-size: 12px; color: var(--muted); margin-left: auto; }
+
+    .perform-btn {
+      display: block;
+      width: 100%;
+      padding: 18px;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, var(--orange), var(--magenta));
+      color: var(--bg);
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      margin-bottom: 14px;
+    }
+
+    .finale-echo {
+      padding: 14px;
+      background: rgba(172,156,242,.07);
+      border: 1px solid rgba(172,156,242,.18);
+      border-radius: 12px;
+      color: var(--lilac);
+      font-size: 14px;
+      line-height: 1.55;
+      text-align: center;
+      font-style: italic;
+    }
+    .finale-echo b { font-style: normal; color: var(--ink); }
+
+    /* ── DEV NOTES SECTION ── */
+    .dev-notes {
+      margin-top: 40px;
+      padding-top: 32px;
+      border-top: 1px solid var(--line);
+    }
+    .dev-notes h2 {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--orange);
+      margin-bottom: 14px;
+    }
+
+    .note-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 480px) {
+      .note-grid { grid-template-columns: 1fr; }
+    }
+
+    .note-card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .note-card b { display: block; font-size: 13px; color: var(--ink); margin-bottom: 4px; }
+    .note-card span { font-size: 13px; color: var(--muted); line-height: 1.45; }
+
+    /* ── MVP SCOPE BOX ── */
+    .scope-box {
+      margin-top: 16px;
+      padding: 16px;
+      background: rgba(0,240,165,.05);
+      border: 1px solid rgba(0,240,165,.2);
+      border-radius: 14px;
+    }
+    .scope-box h3 {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 10px;
+    }
+    .scope-box ul { list-style: none; }
+    .scope-box li {
+      font-size: 13.5px;
+      color: var(--muted);
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+      display: flex;
+      gap: 8px;
+    }
+    .scope-box li:last-child { border-bottom: 0; }
+    .scope-box li .check { color: var(--teal); flex: 0 0 auto; }
+    .scope-box li b { color: var(--ink); }
+
+    /* ── FOOTER ── */
+    .foot {
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 48px;
+      line-height: 1.8;
+    }
+    .foot .dot { opacity: .4; margin: 0 6px; }
+
+    /* color variants per section */
+    .s1 .section-label, .s1 .section-title { color: var(--s1); }
+    .s1 .unlock-badge { color: var(--s1); border-color: rgba(255,146,0,.3); background: rgba(255,146,0,.07); }
+    .s1 .unlock-result { border-color: rgba(255,146,0,.3); background: rgba(255,146,0,.06); color: var(--s1); }
+    .s1 .pill .n { background: var(--s1); }
+
+    .s2 .section-label, .s2 .section-title { color: var(--s2); }
+    .s2 .unlock-badge { color: var(--s2); border-color: rgba(0,240,165,.3); background: rgba(0,240,165,.06); }
+    .s2 .unlock-result { border-color: rgba(0,240,165,.3); background: rgba(0,240,165,.05); color: var(--s2); }
+    .s2 .pill .n { background: var(--s2); }
+
+    .s3 .section-label, .s3 .section-title { color: var(--s3); }
+    .s3 .unlock-badge { color: var(--s3); border-color: rgba(172,156,242,.3); background: rgba(172,156,242,.07); }
+    .s3 .unlock-result { border-color: rgba(172,156,242,.3); background: rgba(172,156,242,.06); color: var(--s3); }
+    .s3 .pill .n { background: var(--s3); }
+
+    .s4 .section-label, .s4 .section-title { color: var(--s4); }
+    .s4 .unlock-badge { color: var(--s4); border-color: rgba(255,0,156,.3); background: rgba(255,0,156,.07); }
+    .s4 .unlock-result { border-color: rgba(255,0,156,.3); background: rgba(255,0,156,.05); color: var(--s4); }
+    .s4 .pill .n { background: var(--s4); }
+
+    .s5 .section-label, .s5 .section-title { color: var(--s5); }
+    .s5 .unlock-badge { color: var(--s5); border-color: rgba(255,239,0,.3); background: rgba(255,239,0,.06); }
+    .s5 .unlock-result { border-color: rgba(255,239,0,.3); background: rgba(255,239,0,.05); color: var(--s5); }
+    .s5 .pill .n { background: var(--s5); color: #111; }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="eyebrow"><span class="dot"></span> Black Girls Code × YouTube Playables</div>
+    <h1>Rhythm <span class="amp">&amp;</span> Rescue</h1>
+    <p class="sub"><b>5-Section Game Breakdown</b> — Developer Reference<br>June 2026 · Built for Wednesday</p>
+  </header>
+
+  <main class="wrap">
+
+    <!-- QUICK OVERVIEW -->
+    <div class="overview">
+      <div class="pill s1"><span class="n">1</span> Drums</div>
+      <div class="pill s2"><span class="n">2</span> Bass</div>
+      <div class="pill s3"><span class="n">3</span> Chords</div>
+      <div class="pill s4"><span class="n">4</span> Melody</div>
+      <div class="pill s5"><span class="n">5</span> Vocals</div>
+      <div class="pill" style="border-color: rgba(255,105,193,.3)"><span class="n" style="background:var(--pink);color:#111">★</span> Finale</div>
+    </div>
+
+    <p class="flow-label">Each section = one mechanic → one instrument unlocked → <span>world comes alive</span></p>
+
+    <!-- ═══════════════════════════════ SECTION 1 ═══════════════════════════════ -->
+    <div class="section-card s1">
+      <div class="section-header">
+        <div class="section-num">🥁</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 1</div>
+          <div class="section-title">The Pulse</div>
+          <div class="section-instrument">Drums — kick + snare</div>
+        </div>
+        <div class="unlock-badge">+Drums</div>
+      </div>
+      <div class="section-body">
+        <p class="section-story">
+          The Wizard of Static erased everything. The world is gray and silent. Nova enters the Rhythm Ruins — an ancient stage where the <b>drum machine sits broken</b>. To bring the pulse back, she has to play it.
+        </p>
+
+        <div class="detail-grid">
+          <div class="detail-row">
+            <div class="label">Mechanic</div>
+            <div class="value"><b>Beat Run</b> — falling tile rhythm game (Magic Tiles style)<br><em>4 lanes: Kick · Snare · Kick · Snare</em></div>
+          </div>
+          <div class="detail-row">
+            <div class="label">What the player does</div>
+            <div class="value">Tap the falling tiles in time. Visual column lights up when tapped. Drum sound plays on each hit.</div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Win condition</div>
+            <div class="value">Complete the phrase — reach the end of the pattern. <em>No fail state. Missing tiles just don't sound.</em></div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Dev spec</div>
+            <div class="value">Canvas or DOM tiles. One 2-bar loop. 4 columns. Tiles timed to BPM grid. ~90 BPM. Kick one-shot + snare one-shot on tap.</div>
+          </div>
+        </div>
+
+        <div class="echo-line">
+          <div class="who">ECHO says —</div>
+          "The world needs a heartbeat before it can feel anything else. You just gave it one."
+        </div>
+
+        <div class="unlock-result">
+          <span class="icon">🔓</span>
+          <span>Drum loop unlocked. World background gets a <b>pulse animation</b> — a slow rhythmic glow that beats in time with the drums now playing.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">↓</div>
+
+    <!-- ═══════════════════════════════ SECTION 2 ═══════════════════════════════ -->
+    <div class="section-card s2">
+      <div class="section-header">
+        <div class="section-num">🎸</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 2</div>
+          <div class="section-title">The Groove</div>
+          <div class="section-instrument">Bass — low-end foundation</div>
+        </div>
+        <div class="unlock-badge">+Bass</div>
+      </div>
+      <div class="section-body">
+        <p class="section-story">
+          The world has a heartbeat now but it feels <b>hollow</b>. Nova finds a bass amp buried in rubble. The Wizard sealed the bass away — she has to build a bassline to break it free.
+        </p>
+
+        <div class="detail-grid">
+          <div class="detail-row">
+            <div class="label">Mechanic</div>
+            <div class="value"><b>Beat Builder (bass only)</b> — 8-step grid, one row<br><em>Drums play automatically underneath while player builds</em></div>
+          </div>
+          <div class="detail-row">
+            <div class="label">What the player does</div>
+            <div class="value">Tap any of the 8 steps to place a bass note. Hear the pattern loop in real time as they build it. Each tapped step plays a pentatonic bass note.</div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Win condition</div>
+            <div class="value">Fill at least 4 of the 8 steps. No wrong notes (pentatonic = everything sounds good). <em>ECHO then plays the "rescued" bass stem on top.</em></div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Dev spec</div>
+            <div class="value">8 tappable cells, one row. Toggle on/off. 2-bar loop playback at BPM. Bass one-shots mapped to pentatonic scale. Playhead sweeps across. Drums loop continues from Section 1.</div>
+          </div>
+        </div>
+
+        <div class="echo-line">
+          <div class="who">ECHO says —</div>
+          "That's YOUR bassline. That's what you made. Now hear what the Wizard tried to erase."
+          <br><em style="font-size:13px;opacity:.7">[Full bass stem fades in on top of player's pattern]</em>
+        </div>
+
+        <div class="unlock-result">
+          <span class="icon">🔓</span>
+          <span>Bass stem unlocked. World visual gets <b>depth</b> — shadows and ground appear. Drums + bass now play together.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">↓</div>
+
+    <!-- ═══════════════════════════════ SECTION 3 ═══════════════════════════════ -->
+    <div class="section-card s3">
+      <div class="section-header">
+        <div class="section-num">🎹</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 3</div>
+          <div class="section-title">The Color</div>
+          <div class="section-instrument">Chords — harmonic warmth</div>
+        </div>
+        <div class="unlock-badge">+Chords</div>
+      </div>
+      <div class="section-body">
+        <p class="section-story">
+          Pulse. Groove. But still <b>gray and cold</b>. Nova finds a keyboard half-buried in static. Harmony is what gives music its <em>emotion</em> — to bring color back to the world, she has to find the right chord.
+        </p>
+
+        <div class="detail-grid">
+          <div class="detail-row">
+            <div class="label">Mechanic</div>
+            <div class="value"><b>Chord Rescue</b> — press and hold combinations of 3 color-coded buttons (Low · Mid · High)<br><em>Like finding a lock combination by feel</em></div>
+          </div>
+          <div class="detail-row">
+            <div class="label">What the player does</div>
+            <div class="value">Three large buttons on screen (Low / Mid / High). Press any combo — a chord plays over the drums + bass. When they find the "resonant" chord, the world reacts with color and warmth.</div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Win condition</div>
+            <div class="value">Land on any one of the 3 pre-set resonant chords. All combos sound musical (pentatonic). Some just "light up the world" — visual + audio reward. <em>Can't lose, just exploring.</em></div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Dev spec</div>
+            <div class="value">3 buttons. 7 possible presses (3 singles + 3 pairs + 1 all-three). Map these to 7 pentatonic chord voicings. Mark 3 as "resonant" = trigger world animation. No timer. Pure feel.</div>
+          </div>
+        </div>
+
+        <div class="echo-line">
+          <div class="who">ECHO says —</div>
+          "Chords are the colors of music. Same notes. Different order. Completely different feeling. You just felt that."
+        </div>
+
+        <div class="unlock-result">
+          <span class="icon">🔓</span>
+          <span>Chord stem unlocked. World gets <b>color and light</b> — warm gradients flood in. Drums + bass + chords now all play.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">↓</div>
+
+    <!-- ═══════════════════════════════ SECTION 4 ═══════════════════════════════ -->
+    <div class="section-card s4">
+      <div class="section-header">
+        <div class="section-num">🎺</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 4</div>
+          <div class="section-title">The Melody</div>
+          <div class="section-instrument">Trumpet / Lead — the part you hum</div>
+        </div>
+        <div class="unlock-badge">+Melody</div>
+      </div>
+      <div class="section-body">
+        <p class="section-story">
+          The world has rhythm, groove, and warmth — but still no <b>melody</b>. No hook. No song. Nova finds a trumpet that hasn't made a sound since the Static arrived. The melody is the part that gets stuck in your head. She has to play it to remember it.
+        </p>
+
+        <div class="detail-grid">
+          <div class="detail-row">
+            <div class="label">Mechanic</div>
+            <div class="value"><b>Melody Run</b> — Beat Run variant with 5 color-coded columns (one per pentatonic note)<br><em>Every column = a real note. Any tile you tap plays music.</em></div>
+          </div>
+          <div class="detail-row">
+            <div class="label">What the player does</div>
+            <div class="value">Tiles fall across 5 lanes (colored by pitch: low → high). Tap in time to hit the melody. Even if they miss, tapping any lane plays a pentatonic note — nothing sounds wrong.</div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Win condition</div>
+            <div class="value">Reach the end of the melodic phrase. Hit rate shown as a score (optional, not required to advance). <em>Full trumpet stem plays as reward regardless.</em></div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Dev spec</div>
+            <div class="value">Same tile engine as Beat Run (Section 1) — reuse it, change column count from 4 → 5. Map lanes to pentatonic pitches. Tile sequence encodes the melody. Trumpet one-shots per pitch on tap.</div>
+          </div>
+        </div>
+
+        <div class="echo-line">
+          <div class="who">ECHO says —</div>
+          "That's the melody — the part you'll be humming tomorrow. The Wizard tried to make you forget it. You remembered it."
+        </div>
+
+        <div class="unlock-result">
+          <span class="icon">🔓</span>
+          <span>Lead melody unlocked. World gets <b>movement and life</b> — leaves, particles, animated characters. Drums + bass + chords + trumpet now play.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">↓</div>
+
+    <!-- ═══════════════════════════════ SECTION 5 ═══════════════════════════════ -->
+    <div class="section-card s5">
+      <div class="section-header">
+        <div class="section-num">🎤</div>
+        <div class="section-title-group">
+          <div class="section-label">Section 5</div>
+          <div class="section-title">The Voice</div>
+          <div class="section-instrument">Vocals — the human story</div>
+        </div>
+        <div class="unlock-badge">+Vocals</div>
+      </div>
+      <div class="section-body">
+        <p class="section-story">
+          Everything is there — but still <b>no words</b>. No voice. The Wizard scattered the lyrics across the world. Words are what turn a beat into a <em>song</em>. Nova has to find them and put them back together.
+        </p>
+
+        <div class="detail-grid">
+          <div class="detail-row">
+            <div class="label">Mechanic</div>
+            <div class="value"><b>Lyric Rescue</b> — fragments of the vocal hook drift/fall across the screen<br><em>Tap each word in the right order to rebuild the lyric line</em></div>
+          </div>
+          <div class="detail-row">
+            <div class="label">What the player does</div>
+            <div class="value">4–6 word tiles float around the screen (example: "Let · the · music · find · you"). Tap them in order to assemble the line. Each correct tap plays that syllable of the vocal. Completion plays the full hook.</div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Win condition</div>
+            <div class="value">Assemble all lyric fragments in order. Wrong taps just don't register (no punishment). Full beat plays when the last word clicks into place. <em>This is the first time the player hears all 5 layers together.</em></div>
+          </div>
+          <div class="detail-row">
+            <div class="label">Dev spec</div>
+            <div class="value">Floating/drifting word elements (CSS animation or Canvas). Tap-to-collect. Order validation. On completion: play full 5-stem mix for first time. ECHO's "you did it" transition. Advance to Finale.</div>
+          </div>
+        </div>
+
+        <div class="echo-line">
+          <div class="who">ECHO says —</div>
+          "Words make music into stories. You didn't just find those words — you chose to put them back together. That's what creators do."
+        </div>
+
+        <div class="unlock-result">
+          <span class="icon">🔓</span>
+          <span>Vocal stem unlocked. <b>Full song plays for the first time.</b> All 5 layers. The world is almost fully restored. Finale triggers.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">★</div>
+
+    <!-- ═══════════════════════════════ FINALE ═══════════════════════════════ -->
+    <div class="finale-card">
+      <div class="finale-header">
+        <div class="label">Finale</div>
+        <h2>Nova Performs</h2>
+        <p>All 5 layers. Player in control. World fully restored.</p>
+      </div>
+      <div class="finale-body">
+
+        <p style="font-size:14px;color:var(--muted);margin-bottom:16px;line-height:1.55">
+          The Beat Builder opens with all 5 rows unlocked for the first time. Every layer Nova rescued is visible. She can remix — mute, unmute, hear how each piece changes the song. Then she hits <strong style="color:var(--ink)">Perform</strong>.
+        </p>
+
+        <div class="layer-stack">
+          <div class="layer-row">
+            <span class="lname" style="color:var(--s1)">Drums</span>
+            <div class="bar" style="background:var(--s1)"></div>
+            <span class="ldesc">Section 1</span>
+          </div>
+          <div class="layer-row">
+            <span class="lname" style="color:var(--s2)">Bass</span>
+            <div class="bar" style="background:var(--s2)"></div>
+            <span class="ldesc">Section 2</span>
+          </div>
+          <div class="layer-row">
+            <span class="lname" style="color:var(--s3)">Chords</span>
+            <div class="bar" style="background:var(--s3)"></div>
+            <span class="ldesc">Section 3</span>
+          </div>
+          <div class="layer-row">
+            <span class="lname" style="color:var(--s4)">Melody</span>
+            <div class="bar" style="background:var(--s4)"></div>
+            <span class="ldesc">Section 4</span>
+          </div>
+          <div class="layer-row">
+            <span class="lname" style="color:var(--s5)">Vocals</span>
+            <div class="bar" style="background:var(--s5)"></div>
+            <span class="ldesc">Section 5</span>
+          </div>
+        </div>
+
+        <div class="perform-btn">▶ PERFORM</div>
+
+        <div style="font-size:13.5px;color:var(--muted);margin-bottom:14px;line-height:1.55">
+          On tap: <strong style="color:var(--ink)">cinematic sequence</strong> — static dissolves in waves, color floods back to every corner of the world, Nova walks to center stage, the song plays in full. No interaction needed — just watch it happen.
+        </div>
+
+        <div class="finale-echo">
+          <b>ECHO's final line:</b><br>
+          "I only echoed what was already in you.<br>You rescued the music. But you made it yours."
+        </div>
+
+        <div style="margin-top:14px;padding:12px 14px;background:rgba(0,240,165,.05);border:1px solid rgba(0,240,165,.2);border-radius:12px">
+          <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:6px">After the credits</div>
+          <div style="font-size:13.5px;color:var(--muted)"><strong style="color:var(--ink)">Studio unlocks</strong> — free-play mode with all 5 instruments available, all one-shots, full Beat Builder. Make whatever you want. This is the reward for finishing.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══════════════════════════════ DEV NOTES ═══════════════════════════════ -->
+    <div class="dev-notes">
+      <h2>Developer Notes</h2>
+
+      <div class="note-grid">
+        <div class="note-card">
+          <b>One shared engine</b>
+          <span>Single clock drives all sections. Beat Run tiles, Beat Builder playhead, and Lyric Rescue all sync to the same BPM transport. Build the transport first — everything plugs into it.</span>
+        </div>
+        <div class="note-card">
+          <b>Sections 1 + 4 reuse the same tile engine</b>
+          <span>Beat Run (Section 1) uses 4 lanes. Melody Run (Section 4) uses 5 lanes. Same renderer, different column count and audio map.</span>
+        </div>
+        <div class="note-card">
+          <b>Audio layers accumulate</b>
+          <span>Each section's stem stays playing after unlock. By Section 5, all 5 stems are looping simultaneously. Web Audio API gain nodes — each stem gets its own GainNode for mute/unmute in the finale.</span>
+        </div>
+        <div class="note-card">
+          <b>No fail states anywhere</b>
+          <span>Players advance by completing the activity, not by accuracy. Drums: reach the end. Bass: fill 4+ steps. Chords: find any resonant combo. Melody: reach the end. Vocals: assemble in order.</span>
+        </div>
+        <div class="note-card">
+          <b>Pentatonic = no wrong notes</b>
+          <span>Every tap in every section plays a pentatonic pitch. Impossible to sound bad. Players can smash randomly and it will still be musical. This is intentional — removes fear, increases experimentation.</span>
+        </div>
+        <div class="note-card">
+          <b>All you need from audio production</b>
+          <span>One BPM, one key. Four stems (drums / bass / chords / lead / vocals) as 2-bar WAV loops. One-shots per instrument (kick, snare, hat, 3–5 bass notes, 5 lead pitches, lyric syllables).</span>
+        </div>
+      </div>
+
+      <div class="scope-box">
+        <h3>MVP = Section 1 + 2 + Finale stub</h3>
+        <ul>
+          <li><span class="check">✓</span><span><b>Phase 1 (ship first):</b> Beat Run engine, drum one-shots, BPM transport, basic world state</span></li>
+          <li><span class="check">✓</span><span><b>Phase 2:</b> Beat Builder (bass row), audio mixing, stem accumulation</span></li>
+          <li><span class="check">✓</span><span><b>Phase 3:</b> Chord Rescue, world visual transitions</span></li>
+          <li><span class="check">✓</span><span><b>Phase 4:</b> Melody Run (reuse tile engine, 5 lanes)</span></li>
+          <li><span class="check">✓</span><span><b>Phase 5:</b> Lyric Rescue, Finale sequence, Studio mode</span></li>
+          <li><span class="check">✗</span><span><b>Not in MVP:</b> accounts, live AI, multiple songs, hard fail states, native app</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="foot">
+      Rhythm &amp; Rescue <span class="dot">·</span> Black Girls Code <span class="dot">·</span> YouTube Playables<br>
+      Game breakdown for developer meeting <span class="dot">·</span> June 2026
+    </p>
+
+  </main>
+</body>
+</html>
