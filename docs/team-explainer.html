@@ -4,584 +4,617 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Rhythm &amp; Rescue — Team Explainer</title>
-  <meta name="description" content="What we're building, why it matters, and how it works. For the Black Girls Code team.">
   <meta name="robots" content="noindex">
   <style>
     :root {
       --bg: #080810;
-      --bg2: #0f0f1e;
       --card: #131325;
-      --card2: #1a1a30;
       --line: #2a2a4a;
       --ink: #f0eeff;
-      --muted: #9090b8;
+      --muted: #8888b0;
       --orange: #FF9200;
       --magenta: #FF009C;
       --teal: #00F0A5;
       --yellow: #FFEF00;
       --pink: #FF69C1;
       --lilac: #AC9CF2;
-      --green: #00B830;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; }
     html { -webkit-text-size-adjust: 100%; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: var(--bg);
       color: var(--ink);
-      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
-      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
     }
 
-    .wrap { max-width: 680px; margin: 0 auto; padding: 0 20px 80px; }
+    /* ── SCROLL CONTAINER ── */
+    .slider {
+      height: 100dvh;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .slider::-webkit-scrollbar { display: none; }
 
-    /* HERO */
-    .hero {
+    /* ── EACH SCREEN ── */
+    .screen {
+      height: 100dvh;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 48px 28px;
       text-align: center;
-      padding: 56px 20px 48px;
-      margin: 0 -20px;
-      background:
-        radial-gradient(100% 80% at 20% 0%, rgba(255,146,0,.2), transparent 55%),
-        radial-gradient(80% 60% at 80% 0%, rgba(255,0,156,.18), transparent 50%),
-        radial-gradient(60% 40% at 50% 100%, rgba(0,240,165,.12), transparent 60%),
-        linear-gradient(180deg, var(--bg2), var(--bg));
+      position: relative;
+      overflow: hidden;
     }
 
-    .badge {
-      display: inline-block;
+    /* ── PROGRESS DOTS ── */
+    .dots {
+      position: fixed;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      z-index: 100;
+    }
+    .dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--line);
+      transition: background .2s, transform .2s;
+      cursor: pointer;
+    }
+    .dot.active {
+      background: var(--orange);
+      transform: scale(1.5);
+    }
+
+    /* ── SWIPE HINT ── */
+    .hint {
+      position: absolute;
+      bottom: max(24px, env(safe-area-inset-bottom));
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: .5;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+    }
+
+    /* ── SLIDE NUMBER ── */
+    .slide-num {
+      position: absolute;
+      top: max(20px, env(safe-area-inset-top));
+      left: 24px;
       font-size: 11px;
       font-weight: 700;
-      letter-spacing: .09em;
-      text-transform: uppercase;
+      letter-spacing: .1em;
       color: var(--muted);
-      border: 1px solid var(--line);
-      padding: 6px 14px;
-      border-radius: 999px;
-      margin-bottom: 22px;
-      background: rgba(255,255,255,.04);
+      opacity: .5;
     }
 
-    .hero h1 {
-      font-size: clamp(40px, 12vw, 68px);
+    /* ── TYPOGRAPHY UTILS ── */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .big {
+      font-size: clamp(36px, 11vw, 64px);
+      font-weight: 800;
       line-height: 1;
       letter-spacing: -.025em;
-      font-weight: 800;
-      background: linear-gradient(100deg, var(--orange), var(--magenta) 50%, var(--teal));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-      margin-bottom: 14px;
     }
-    .hero .amp { font-weight: 400; -webkit-text-fill-color: var(--muted); opacity: .6; }
 
-    .hero .tagline {
-      font-size: clamp(16px, 4vw, 20px);
+    .grad-orange { background: linear-gradient(100deg, var(--orange), var(--magenta)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .grad-full   { background: linear-gradient(100deg, var(--orange), var(--magenta) 50%, var(--teal)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .grad-teal   { background: linear-gradient(100deg, var(--teal), var(--lilac)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .sub {
+      font-size: clamp(15px, 4vw, 18px);
       color: var(--muted);
-      font-weight: 500;
+      line-height: 1.55;
       max-width: 480px;
-      margin: 0 auto;
-      line-height: 1.45;
+      margin: 14px auto 0;
     }
-    .hero .tagline b { color: var(--ink); }
+    .sub b, .sub strong { color: var(--ink); }
 
-    /* SECTION HEADERS */
-    h2 {
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--orange);
-      margin: 40px 0 14px;
+    .quote {
+      font-size: clamp(22px, 6vw, 32px);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: -.015em;
+      max-width: 520px;
     }
+    .quote span { color: var(--orange); }
 
-    p {
-      color: var(--muted);
-      font-size: 16px;
-      line-height: 1.65;
-    }
-    p + p { margin-top: 12px; }
-    strong { color: var(--ink); }
-    em { color: var(--teal); font-style: normal; }
-
-    /* CARDS */
+    /* ── CARD UTIL ── */
     .card {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 12px;
+      border-radius: 20px;
+      padding: 22px;
+      width: 100%;
+      max-width: 480px;
+      text-align: left;
     }
 
-    /* BIG QUOTE */
-    .big-quote {
-      text-align: center;
-      font-size: clamp(20px, 5.5vw, 28px);
-      font-weight: 700;
-      line-height: 1.3;
-      letter-spacing: -.01em;
-      padding: 32px 8px 8px;
-      color: var(--ink);
-    }
-    .big-quote span { color: var(--orange); }
+    .card-icon { font-size: 36px; margin-bottom: 12px; display: block; }
+    .card-title { font-size: 22px; font-weight: 800; letter-spacing: -.01em; margin-bottom: 6px; }
+    .card-role { font-size: 12px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .card-body { font-size: 15px; color: var(--muted); line-height: 1.6; }
+    .card-body b { color: var(--ink); }
 
-    /* STAT ROW */
-    .stat-row {
+    /* ── STAT GRID ── */
+    .stat-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-top: 4px;
+      width: 100%;
+      max-width: 480px;
     }
-    @media (max-width: 400px) { .stat-row { grid-template-columns: 1fr; } }
-
     .stat {
       background: var(--card);
       border: 1px solid var(--line);
       border-radius: 14px;
-      padding: 16px;
+      padding: 16px 14px;
       text-align: center;
     }
     .stat .num {
-      font-size: 28px;
+      font-size: 32px;
       font-weight: 800;
       letter-spacing: -.02em;
-      background: linear-gradient(135deg, var(--orange), var(--magenta));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
       display: block;
       margin-bottom: 4px;
     }
-    .stat .desc { font-size: 13px; color: var(--muted); line-height: 1.4; }
+    .stat .desc { font-size: 12px; color: var(--muted); line-height: 1.4; }
 
-    /* CHARACTER CARDS */
-    .char-card {
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 20px;
-      margin-bottom: 12px;
-    }
-    .char-header {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 12px;
-    }
-    .char-icon {
-      width: 52px;
-      height: 52px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      font-size: 26px;
-      flex: 0 0 auto;
-      border: 1px solid var(--line);
-    }
-    .char-name { font-size: 20px; font-weight: 800; letter-spacing: -.01em; }
-    .char-role { font-size: 13px; color: var(--muted); margin-top: 2px; }
-
-    /* JOURNEY STEPS */
-    .journey {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .journey-step {
-      display: flex;
-      gap: 16px;
-      align-items: flex-start;
-      position: relative;
-      padding-bottom: 4px;
-    }
-
-    .step-left {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 0 0 auto;
-    }
-
-    .step-num {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--bg);
-      flex: 0 0 auto;
-      z-index: 1;
-    }
-
-    .step-line {
-      width: 2px;
-      flex: 1;
-      min-height: 24px;
-      background: var(--line);
-      margin: 4px 0;
-    }
-
-    .step-body {
-      padding: 10px 0 20px;
-      flex: 1;
-    }
-    .step-label {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      margin-bottom: 3px;
-    }
-    .step-title {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -.01em;
-      margin-bottom: 6px;
-    }
-    .step-body p {
-      font-size: 14.5px;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-    .step-unlock {
+    /* ── SECTION STEP ── */
+    .step-screen { justify-content: flex-start; padding-top: 64px; }
+    .step-wrap { width: 100%; max-width: 480px; text-align: left; }
+    .step-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      margin-top: 8px;
+      gap: 8px;
       font-size: 12px;
       font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 8px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid;
+      margin-bottom: 18px;
+    }
+    .step-num-big {
+      font-size: clamp(52px, 16vw, 80px);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -.04em;
+      margin-bottom: 4px;
+    }
+    .step-title-big {
+      font-size: clamp(28px, 8vw, 42px);
+      font-weight: 800;
+      letter-spacing: -.02em;
+      line-height: 1.05;
+      margin-bottom: 14px;
+    }
+    .step-mechanic {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+    }
+    .step-mechanic .label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .step-mechanic .val {
+      font-size: 15px;
+      color: var(--ink);
+      line-height: 1.45;
+    }
+    .step-mechanic .val em { font-style: normal; color: var(--muted); }
+    .unlock {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 14px;
+      border-radius: 10px;
       background: rgba(255,255,255,.05);
       border: 1px solid var(--line);
       color: var(--muted);
+      margin-top: 4px;
     }
 
-    /* WHY IT MATTERS */
+    /* ── WHY GRID ── */
     .why-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
+      gap: 9px;
+      width: 100%;
+      max-width: 480px;
     }
-    @media (max-width: 420px) { .why-grid { grid-template-columns: 1fr; } }
-
-    .why-card {
+    .why {
       background: var(--card);
       border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 16px;
+      border-radius: 13px;
+      padding: 14px 12px;
+      text-align: left;
     }
-    .why-card .icon { font-size: 22px; margin-bottom: 8px; display: block; }
-    .why-card b { display: block; font-size: 14px; color: var(--ink); margin-bottom: 4px; }
-    .why-card span { font-size: 13px; color: var(--muted); line-height: 1.45; }
+    .why .icon { font-size: 20px; margin-bottom: 6px; display: block; }
+    .why b { display: block; font-size: 13px; color: var(--ink); margin-bottom: 3px; }
+    .why span { font-size: 12px; color: var(--muted); line-height: 1.4; }
 
-    /* ENDING MOMENT */
-    .ending {
-      background: linear-gradient(135deg, rgba(255,146,0,.08), rgba(255,0,156,.07), rgba(0,240,165,.06));
-      border: 1px solid rgba(255,105,193,.25);
-      border-radius: 20px;
-      padding: 24px;
-      text-align: center;
-      margin-top: 4px;
-    }
-    .ending .icon { font-size: 40px; margin-bottom: 12px; display: block; }
-    .ending h3 {
-      font-size: clamp(18px, 5vw, 24px);
-      font-weight: 800;
-      letter-spacing: -.015em;
-      margin-bottom: 10px;
-      background: linear-gradient(100deg, var(--orange), var(--pink));
-      -webkit-background-clip: text;
-      background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .ending p { font-size: 15px; max-width: 460px; margin: 0 auto; }
-    .ending .echo-final {
-      margin-top: 16px;
-      font-size: 15px;
-      font-style: italic;
-      color: var(--lilac);
-      padding: 12px;
-      border: 1px solid rgba(172,156,242,.2);
-      border-radius: 12px;
-      background: rgba(172,156,242,.05);
-      line-height: 1.55;
-    }
-    .ending .echo-final b { font-style: normal; color: var(--ink); }
-
-    /* WHAT'S NEXT */
-    .next-list { list-style: none; }
-    .next-list li {
+    /* ── NEXT LIST ── */
+    .next-list { width: 100%; max-width: 480px; text-align: left; }
+    .next-item {
       display: flex;
       gap: 12px;
       align-items: flex-start;
       padding: 13px 0;
       border-bottom: 1px solid var(--line);
-      font-size: 15px;
     }
-    .next-list li:last-child { border-bottom: 0; }
-    .next-list .mark { font-size: 18px; flex: 0 0 auto; margin-top: 1px; }
-    .next-list b { color: var(--ink); }
-    .next-list span { color: var(--muted); }
+    .next-item:last-child { border-bottom: 0; }
+    .next-item .mark { font-size: 20px; flex: 0 0 auto; }
+    .next-item .text b { display: block; font-size: 15px; color: var(--ink); }
+    .next-item .text span { font-size: 13.5px; color: var(--muted); }
 
-    /* FOOTER */
-    .foot {
-      text-align: center;
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 48px;
-      line-height: 1.8;
+    /* ── ECHO QUOTE ── */
+    .echo-quote {
+      max-width: 460px;
+      padding: 20px 22px;
+      background: rgba(172,156,242,.07);
+      border: 1px solid rgba(172,156,242,.2);
+      border-radius: 18px;
+      color: var(--lilac);
+      font-size: clamp(16px, 4.5vw, 20px);
+      font-style: italic;
+      line-height: 1.55;
     }
-    .foot .dot { opacity: .4; margin: 0 6px; }
-    .foot b { color: var(--ink); }
+    .echo-quote b { font-style: normal; color: var(--ink); }
+    .echo-who {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      font-style: normal;
+    }
+
+    /* ── BG GLOWS per screen ── */
+    .glow-orange::before {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(40% 40% at 30% 20%, rgba(255,146,0,.18), transparent 60%),
+                  radial-gradient(30% 30% at 70% 80%, rgba(255,0,156,.12), transparent 60%);
+      pointer-events: none;
+    }
+    .glow-teal::before {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(40% 40% at 70% 20%, rgba(0,240,165,.15), transparent 60%),
+                  radial-gradient(30% 30% at 30% 80%, rgba(172,156,242,.1), transparent 60%);
+      pointer-events: none;
+    }
+    .glow-magenta::before {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(40% 40% at 60% 30%, rgba(255,0,156,.18), transparent 60%),
+                  radial-gradient(30% 30% at 30% 70%, rgba(255,105,193,.1), transparent 60%);
+      pointer-events: none;
+    }
+    .glow-pink::before {
+      content: '';
+      position: absolute;
+      inset: -50%;
+      background: radial-gradient(50% 50% at 50% 30%, rgba(255,105,193,.2), transparent 65%),
+                  radial-gradient(30% 30% at 20% 80%, rgba(255,146,0,.1), transparent 60%);
+      pointer-events: none;
+    }
+
+    .content { position: relative; z-index: 1; display: contents; }
   </style>
 </head>
 <body>
 
-  <header class="hero">
-    <div class="badge">Black Girls Code × YouTube Playables</div>
-    <h1>Rhythm <span class="amp">&amp;</span> Rescue</h1>
-    <p class="tagline">A music game where <b>kids don't learn about music</b> — they <b>make it</b>. And the learning happens because they did.</p>
-  </header>
+<nav class="dots" id="dots"></nav>
 
-  <main class="wrap">
+<div class="slider" id="slider">
 
-    <!-- THE BIG IDEA -->
-    <h2>The Big Idea</h2>
+  <!-- ══ 0. COVER ══ -->
+  <div class="screen glow-orange" data-label="Cover">
+    <div class="slide-num">1 / 14</div>
+    <div class="eyebrow">Black Girls Code × YouTube Playables</div>
+    <h1 class="big grad-full">Rhythm<br>&amp; Rescue</h1>
+    <p class="sub">A music game where kids don't learn about music.<br>They <b>make it</b> — and learning happens because they did.</p>
+    <div class="hint">↓ scroll to explore</div>
+  </div>
 
-    <p>YouTube selected <strong>Black Girls Code</strong> to build a game for YouTube Playables — their in-app gaming platform that reaches hundreds of millions of people. We're building <strong>Rhythm & Rescue</strong>, a music education game where you rescue music from a villain called the Wizard of Static.</p>
+  <!-- ══ 1. THE OPPORTUNITY ══ -->
+  <div class="screen glow-orange" data-label="The Opportunity">
+    <div class="slide-num">2 / 14</div>
+    <div class="eyebrow">The Opportunity</div>
+    <p class="quote">YouTube chose <span>Black Girls Code</span> to build a music education game for their gaming platform.</p>
+    <p class="sub" style="margin-top:20px">YouTube Playables runs inside the YouTube app — <b>no download, no account, instant play.</b> Our game reaches kids where they already are.</p>
+    <div class="hint">↓</div>
+  </div>
 
-    <p>The whole game is built around one idea: <strong>you learn by doing, not by being taught.</strong> Kids don't sit through a lesson and then get to play. They play first. The music teaches them while they're making it.</p>
-
-    <div class="big-quote">
-      "Kids don't learn music here.<br>They <span>make</span> it — and learning<br>happens because they did."
-    </div>
-
-    <!-- WHY YOUTUBE PLAYABLES -->
-    <h2>Why YouTube Playables</h2>
-
-    <p>YouTube Playables is a platform inside YouTube — no download, no account, just tap and play. The games run instantly in the browser. That means <strong>our game reaches kids where they already are</strong>, not somewhere they have to go.</p>
-
-    <div class="stat-row">
+  <!-- ══ 2. BY THE NUMBERS ══ -->
+  <div class="screen" data-label="By the Numbers">
+    <div class="slide-num">3 / 14</div>
+    <div class="eyebrow">By the Numbers</div>
+    <div class="stat-grid">
       <div class="stat">
-        <span class="num">2B+</span>
+        <span class="num grad-orange">2B+</span>
         <div class="desc">Monthly YouTube users — our potential reach</div>
       </div>
       <div class="stat">
-        <span class="num">0</span>
-        <div class="desc">Downloads, accounts, or installs required</div>
+        <span class="num grad-orange">0</span>
+        <div class="desc">Downloads, accounts, or installs required to play</div>
       </div>
       <div class="stat">
-        <span class="num">10+</span>
-        <div class="desc">Target age — old enough to read, love music, feel ownership</div>
+        <span class="num grad-orange">10+</span>
+        <div class="desc">Target age — old enough to feel real creative ownership</div>
       </div>
       <div class="stat">
-        <span class="num">∞</span>
+        <span class="num grad-orange">∞</span>
         <div class="desc">Times Nova can be reused across BGC media</div>
       </div>
     </div>
+    <div class="hint">↓</div>
+  </div>
 
-    <!-- THE CHARACTERS -->
-    <h2>Meet the Characters</h2>
-
-    <div class="char-card">
-      <div class="char-header">
-        <div class="char-icon" style="background: rgba(255,146,0,.1); border-color: rgba(255,146,0,.3)">🎤</div>
-        <div>
-          <div class="char-name" style="color: var(--orange)">Nova</div>
-          <div class="char-role">Young Black girl producer. Our hero. BGC's owned IP.</div>
-        </div>
-      </div>
-      <p style="font-size:15px">Nova is a young Black girl who makes music. She's not a sidekick. She's not rescued by someone else. <strong>She is the creator.</strong> When the Wizard of Static erases all music from the world, Nova goes section by section to bring it back — using her skills as a producer. She looks like the kids playing this game. That's intentional and it matters.</p>
-      <p style="font-size:15px;margin-top:10px">Nova doesn't belong to YouTube. <strong>Nova belongs to BGC.</strong> She's a character we build once and use across everything we make — events, curriculum, media, future games.</p>
-    </div>
-
-    <div class="char-card">
-      <div class="char-header">
-        <div class="char-icon" style="background: rgba(172,156,242,.1); border-color: rgba(172,156,242,.3)">🤖</div>
-        <div>
-          <div class="char-name" style="color: var(--lilac)">ECHO</div>
-          <div class="char-role">Nova's companion. Scripted AI character (not live AI).</div>
-        </div>
-      </div>
-      <p style="font-size:15px">ECHO is a companion who lives inside the game world and quietly teaches kids what AI <em>actually</em> is — a tool that helps, not something that replaces you. ECHO is scripted. Pre-written lines. No live AI, no generation. This is a deliberate design choice: it keeps the game safe for kids and keeps the focus on Nova as the creator.</p>
-      <p style="font-size:15px;margin-top:10px">ECHO never solves anything for Nova. ECHO echoes — asks questions, names what Nova just did, celebrates the choice she made. The player is always the one making music.</p>
-    </div>
-
-    <!-- THE STORY IN ONE PARAGRAPH -->
-    <h2>The Story</h2>
-
+  <!-- ══ 3. NOVA ══ -->
+  <div class="screen glow-magenta" data-label="Nova">
+    <div class="slide-num">4 / 14</div>
     <div class="card">
-      <p style="font-size:15.5px">The <strong>Wizard of Static</strong> has erased all music. The world has gone gray and silent — no rhythm, no melody, no voice. Nova enters five broken sections of this world: the Rhythm Ruins, the Groove River, the Chord Fields, the Melody Heights, and the Static Citadel. In each section, she finds one missing piece of music, completes a challenge to rescue it, and adds it to the song she's building. When all five pieces are back, she performs the complete song — and music, color, and life flood back into the world.</p>
-    </div>
-
-    <!-- HOW YOU PLAY — THE 5 SECTIONS -->
-    <h2>How You Play — The 5 Sections</h2>
-
-    <p style="margin-bottom:20px">Each section gives you one new piece of the song. At the end, you put all five together and perform it. Here's what happens in each one:</p>
-
-    <div class="journey">
-
-      <div class="journey-step">
-        <div class="step-left">
-          <div class="step-num" style="background: var(--orange)">1</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-label" style="color:var(--orange)">Section 1 — Rhythm Ruins</div>
-          <div class="step-title">The Pulse</div>
-          <p>You tap falling tiles in time to a drum beat — like a rhythm game. Four lanes: kick, snare, kick, snare. The world is completely silent when you arrive. Every tap you hit makes a drum sound. By the end of the section, you've performed the drum pattern and rescued it. The world gets its first heartbeat.</p>
-          <div class="step-unlock">🔓 Drums unlocked — world starts to pulse</div>
-        </div>
-      </div>
-
-      <div class="journey-step">
-        <div class="step-left">
-          <div class="step-num" style="background: var(--teal)">2</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-label" style="color:var(--teal)">Section 2 — Groove River</div>
-          <div class="step-title">The Groove</div>
-          <p>You build a bassline on an 8-step grid. The drums are playing underneath you. You tap which beats you want the bass to hit. It loops back in real time so you hear what you're making. You can't go wrong — every note is in key. When you've filled enough steps, ECHO plays the full bass stem on top of yours. World gets depth.</p>
-          <div class="step-unlock">🔓 Bass unlocked — world gets foundations</div>
-        </div>
-      </div>
-
-      <div class="journey-step">
-        <div class="step-left">
-          <div class="step-num" style="background: var(--lilac)">3</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-label" style="color:var(--lilac)">Section 3 — Chord Fields</div>
-          <div class="step-title">The Color</div>
-          <p>You find three big buttons — Low, Mid, High — and press different combinations to make chords. Drums and bass are playing. You're feeling how different note combinations change the emotion of the music. When you land on a "resonant" chord, the world lights up with color. There's no wrong answer — you're just discovering what feels right.</p>
-          <div class="step-unlock">🔓 Chords unlocked — world fills with color</div>
-        </div>
-      </div>
-
-      <div class="journey-step">
-        <div class="step-left">
-          <div class="step-num" style="background: var(--magenta)">4</div>
-          <div class="step-line"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-label" style="color:var(--magenta)">Section 4 — Melody Heights</div>
-          <div class="step-title">The Melody</div>
-          <p>Back to falling tiles — but now five lanes, each a different musical pitch (color-coded). You're playing the melody on the trumpet. Any tile you hit plays a real note. Hit the tiles in time and you're playing the actual song. Even tapping randomly sounds musical because every lane is in key. This is the part that gets stuck in your head.</p>
-          <div class="step-unlock">🔓 Melody unlocked — world comes to life</div>
-        </div>
-      </div>
-
-      <div class="journey-step">
-        <div class="step-left">
-          <div class="step-num" style="background: var(--yellow); color: #111">5</div>
-          <div class="step-line" style="opacity:0"></div>
-        </div>
-        <div class="step-body">
-          <div class="step-label" style="color:var(--yellow)">Section 5 — Static Citadel</div>
-          <div class="step-title">The Voice</div>
-          <p>The Wizard scattered the lyrics across the citadel. Word tiles float across the screen — fragments of the hook. You tap them in order to rebuild the lyric. Each word you tap plays that syllable of the vocal. When you assemble the last word, the full song plays for the very first time — all five layers together. This is the first time you've heard the complete track.</p>
-          <div class="step-unlock">🔓 Vocals unlocked — full song plays for the first time</div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- THE FINALE -->
-    <h2>The Finale</h2>
-
-    <div class="ending">
-      <span class="icon">🎤</span>
-      <h3>Nova Takes the Stage</h3>
-      <p>All five layers appear in the Beat Builder — drums, bass, chords, melody, vocals. You can mute and unmute each one and hear how they stack. Then you tap <strong>Perform</strong>. The full song plays. The Static dissolves. Color floods back into every corner of the world. Nova walks to center stage. The music is back.</p>
-      <div class="echo-final">
-        <b>ECHO's final line:</b><br>
-        "I only echoed what was already in you.<br>You rescued the music. But you made it yours."
+      <span class="card-icon">🎤</span>
+      <div class="card-title" style="color:var(--orange)">Nova</div>
+      <div class="card-role">Our hero. Young Black girl producer. BGC-owned IP.</div>
+      <div class="card-body">
+        Nova makes music. She's not a sidekick — <b>she is the creator.</b> When the Wizard of Static erases all music from the world, Nova goes section by section to bring it back using her skills as a producer.
+        <br><br>
+        She looks like the kids playing this game. That's intentional and it matters.
+        <br><br>
+        <b>Nova belongs to BGC.</b> We build her once and use her everywhere — events, curriculum, media, future games.
       </div>
     </div>
+    <div class="hint">↓</div>
+  </div>
 
-    <div class="card" style="margin-top:12px;text-align:center">
-      <p style="font-size:15px">After the credits — <strong>Studio Mode unlocks.</strong> Free-play with all five instruments, all sounds, no instructions. Make whatever you want. This is the reward for finishing: creative freedom you earned.</p>
+  <!-- ══ 4. ECHO ══ -->
+  <div class="screen glow-teal" data-label="ECHO">
+    <div class="slide-num">5 / 14</div>
+    <div class="card">
+      <span class="card-icon">🤖</span>
+      <div class="card-title" style="color:var(--lilac)">ECHO</div>
+      <div class="card-role">Nova's companion. Scripted — not live AI.</div>
+      <div class="card-body">
+        ECHO lives in the game world and quietly teaches kids what AI <b>actually is</b> — a tool that helps, not something that replaces you.
+        <br><br>
+        ECHO never solves anything for Nova. ECHO <em>echoes</em> — names what Nova just did, celebrates her choices. <b>The player is always the one making music.</b>
+        <br><br>
+        No live AI. No generation. Pre-written lines only. Safe for kids, safe for YouTube.
+      </div>
     </div>
+    <div class="hint">↓</div>
+  </div>
 
-    <!-- WHY IT MATTERS -->
-    <h2>Why This Game Matters</h2>
+  <!-- ══ 5. THE STORY ══ -->
+  <div class="screen glow-orange" data-label="The Story">
+    <div class="slide-num">6 / 14</div>
+    <div class="eyebrow">The Story</div>
+    <p class="quote" style="font-size:clamp(18px,5vw,26px);font-weight:600;max-width:500px;text-align:center">The <span>Wizard of Static</span> erased all music. The world is gray and silent. Nova must travel through five broken sections of the world, rescue one piece of music from each, and put them all together to bring music back.</p>
+    <div class="hint">↓</div>
+  </div>
 
+  <!-- ══ 6. SECTION 1 — DRUMS ══ -->
+  <div class="screen step-screen" data-label="Section 1: Drums">
+    <div class="slide-num">7 / 14</div>
+    <div class="step-wrap">
+      <div class="step-badge" style="color:var(--orange);border-color:rgba(255,146,0,.3);background:rgba(255,146,0,.07)">
+        Section 1 — Rhythm Ruins
+      </div>
+      <div class="step-num-big" style="color:var(--orange)">01</div>
+      <div class="step-title-big">The Pulse<br><span style="color:var(--muted);font-size:.6em;font-weight:600">Drums</span></div>
+      <div class="step-mechanic">
+        <div class="label">What you do</div>
+        <div class="val"><b>Beat Run</b> — tap falling tiles in time to the drum beat. <em>Like Magic Tiles. Four lanes: kick · snare · kick · snare.</em></div>
+      </div>
+      <div class="unlock">🔓 Drums unlocked — world gets a heartbeat</div>
+    </div>
+    <div class="hint">↓</div>
+  </div>
+
+  <!-- ══ 7. SECTION 2 — BASS ══ -->
+  <div class="screen step-screen glow-teal" data-label="Section 2: Bass">
+    <div class="slide-num">8 / 14</div>
+    <div class="step-wrap">
+      <div class="step-badge" style="color:var(--teal);border-color:rgba(0,240,165,.3);background:rgba(0,240,165,.06)">
+        Section 2 — Groove River
+      </div>
+      <div class="step-num-big" style="color:var(--teal)">02</div>
+      <div class="step-title-big">The Groove<br><span style="color:var(--muted);font-size:.6em;font-weight:600">Bass</span></div>
+      <div class="step-mechanic">
+        <div class="label">What you do</div>
+        <div class="val"><b>Beat Builder</b> — tap an 8-step grid to place bass notes. Drums play underneath. <em>Hear your pattern loop in real time. Can't sound bad — every note is in key.</em></div>
+      </div>
+      <div class="unlock">🔓 Bass unlocked — world gets foundations</div>
+    </div>
+    <div class="hint">↓</div>
+  </div>
+
+  <!-- ══ 8. SECTION 3 — CHORDS ══ -->
+  <div class="screen step-screen" data-label="Section 3: Chords">
+    <div class="slide-num">9 / 14</div>
+    <div class="step-wrap">
+      <div class="step-badge" style="color:var(--lilac);border-color:rgba(172,156,242,.3);background:rgba(172,156,242,.07)">
+        Section 3 — Chord Fields
+      </div>
+      <div class="step-num-big" style="color:var(--lilac)">03</div>
+      <div class="step-title-big">The Color<br><span style="color:var(--muted);font-size:.6em;font-weight:600">Chords</span></div>
+      <div class="step-mechanic">
+        <div class="label">What you do</div>
+        <div class="val"><b>Chord Rescue</b> — press combinations of three buttons (Low · Mid · High) to make chords over the beat. <em>When you land on the right chord, the world fills with color.</em></div>
+      </div>
+      <div class="unlock">🔓 Chords unlocked — world fills with color</div>
+    </div>
+    <div class="hint">↓</div>
+  </div>
+
+  <!-- ══ 9. SECTION 4 — MELODY ══ -->
+  <div class="screen step-screen glow-magenta" data-label="Section 4: Melody">
+    <div class="slide-num">10 / 14</div>
+    <div class="step-wrap">
+      <div class="step-badge" style="color:var(--magenta);border-color:rgba(255,0,156,.3);background:rgba(255,0,156,.07)">
+        Section 4 — Melody Heights
+      </div>
+      <div class="step-num-big" style="color:var(--magenta)">04</div>
+      <div class="step-title-big">The Melody<br><span style="color:var(--muted);font-size:.6em;font-weight:600">Trumpet</span></div>
+      <div class="step-mechanic">
+        <div class="label">What you do</div>
+        <div class="val"><b>Melody Run</b> — falling tiles, 5 lanes, each a different pitch. <em>Every tap plays a real note. Even tapping randomly sounds musical.</em></div>
+      </div>
+      <div class="unlock">🔓 Melody unlocked — world comes to life</div>
+    </div>
+    <div class="hint">↓</div>
+  </div>
+
+  <!-- ══ 10. SECTION 5 — VOCALS ══ -->
+  <div class="screen step-screen" data-label="Section 5: Vocals">
+    <div class="slide-num">11 / 14</div>
+    <div class="step-wrap">
+      <div class="step-badge" style="color:var(--yellow);border-color:rgba(255,239,0,.3);background:rgba(255,239,0,.06)">
+        Section 5 — Static Citadel
+      </div>
+      <div class="step-num-big" style="color:var(--yellow)">05</div>
+      <div class="step-title-big">The Voice<br><span style="color:var(--muted);font-size:.6em;font-weight:600">Vocals</span></div>
+      <div class="step-mechanic">
+        <div class="label">What you do</div>
+        <div class="val"><b>Lyric Rescue</b> — word fragments drift across the screen. Tap them in order to rebuild the vocal hook. <em>When the last word clicks — the full song plays for the first time.</em></div>
+      </div>
+      <div class="unlock">🔓 Vocals unlocked — full song plays</div>
+    </div>
+    <div class="hint">↓</div>
+  </div>
+
+  <!-- ══ 11. FINALE ══ -->
+  <div class="screen glow-pink" data-label="Finale">
+    <div class="slide-num">12 / 14</div>
+    <div class="eyebrow" style="color:var(--pink)">The Finale</div>
+    <h2 class="big" style="font-size:clamp(32px,9vw,56px);margin-bottom:14px">Nova<br>Performs</h2>
+    <p class="sub">All 5 layers appear. You can remix — mute and unmute each one. Then you hit <b>Perform</b>. The Static dissolves. Color floods back. Nova takes the stage. Music is back.</p>
+    <div class="echo-quote" style="margin-top:20px;text-align:center">
+      <div class="echo-who">ECHO's final line</div>
+      "I only echoed what was already in you.<br>You rescued the music. But you made it yours."
+    </div>
+    <div class="hint">↓</div>
+  </div>
+
+  <!-- ══ 12. WHY IT MATTERS ══ -->
+  <div class="screen" data-label="Why It Matters">
+    <div class="slide-num">13 / 14</div>
+    <div class="eyebrow">Why It Matters</div>
     <div class="why-grid">
-      <div class="why-card">
-        <span class="icon">🎵</span>
-        <b>Real music education</b>
-        <span>Rhythm, timing, harmony, melody, arrangement — taught through doing. Not explained. Experienced.</span>
-      </div>
-      <div class="why-card">
-        <span class="icon">✊🏾</span>
-        <b>Representation</b>
-        <span>A young Black girl who makes music and runs the show. Not a sidekick. Not a token. The hero.</span>
-      </div>
-      <div class="why-card">
-        <span class="icon">💡</span>
-        <b>AI literacy</b>
-        <span>ECHO quietly teaches kids what AI really is — a tool that helps. You are still the creator.</span>
-      </div>
-      <div class="why-card">
-        <span class="icon">🧩</span>
-        <b>Built to grow</b>
-        <span>Nova is BGC-owned IP. One engine powers the whole game. We build once, use everywhere.</span>
-      </div>
-      <div class="why-card">
-        <span class="icon">🛡️</span>
-        <b>Safe by design</b>
-        <span>No accounts, no live AI, no data collection, no hard fail states. Built to pass kids-safety review.</span>
-      </div>
-      <div class="why-card">
-        <span class="icon">🌍</span>
-        <b>Massive reach</b>
-        <span>YouTube Playables means instant access for anyone with the YouTube app. Zero friction.</span>
-      </div>
+      <div class="why"><span class="icon">🎵</span><b>Real music ed</b><span>Rhythm, harmony, melody, arrangement — learned by doing, not being taught.</span></div>
+      <div class="why"><span class="icon">✊🏾</span><b>Representation</b><span>A young Black girl who makes music and runs the show.</span></div>
+      <div class="why"><span class="icon">💡</span><b>AI literacy</b><span>ECHO shows kids what AI really is — a helper. You're still the creator.</span></div>
+      <div class="why"><span class="icon">🧩</span><b>BGC-owned IP</b><span>Nova is ours. Build once, use everywhere.</span></div>
+      <div class="why"><span class="icon">🛡️</span><b>Safe by design</b><span>No accounts, no live AI, no data. Kids-safety ready.</span></div>
+      <div class="why"><span class="icon">🚫</span><b>No Game Over</b><span>You cannot fail. Challenge is opt-in. Everyone finishes.</span></div>
     </div>
+    <div class="hint">↓</div>
+  </div>
 
-    <!-- ONE THING TO KNOW -->
-    <h2>The One Thing to Remember</h2>
-
-    <div class="card" style="border-color: rgba(255,146,0,.3); background: rgba(255,146,0,.04)">
-      <p style="font-size:16px;line-height:1.65"><strong>This game has no Game Over.</strong> You cannot fail. You cannot lose. Every section is designed so that any kid, at any skill level, completes it and moves forward. Challenge is opt-in — there's a score if you want one — but progress never stops. We believe kids learn more when they're not afraid of getting it wrong. The whole game is designed around that belief.</p>
-    </div>
-
-    <!-- WHAT'S NEXT -->
-    <h2>Where We Are Now</h2>
-
-    <ul class="next-list">
-      <li>
+  <!-- ══ 13. WHAT'S NEXT ══ -->
+  <div class="screen glow-orange" data-label="What's Next">
+    <div class="slide-num">14 / 14</div>
+    <div class="eyebrow">Where We Are</div>
+    <div class="next-list">
+      <div class="next-item">
         <span class="mark">✅</span>
-        <div><b>Done</b> — <span>Full game design, 5-section breakdown, engineering plan, character work, and this explainer.</span></div>
-      </li>
-      <li>
+        <div class="text"><b>Done</b><span>Full game design, 5-section breakdown, engineering plan, all docs.</span></div>
+      </div>
+      <div class="next-item">
         <span class="mark">⏳</span>
-        <div><b>Waiting on the beat</b> — <span>We need stems from a music producer: separated tracks for drums, bass, chords, melody, and vocals. The producer brief is ready to go.</span></div>
-      </li>
-      <li>
+        <div class="text"><b>Waiting on the beat</b><span>Need stems from a producer: drums, bass, chords, melody, vocals — separated tracks.</span></div>
+      </div>
+      <div class="next-item">
         <span class="mark">📅</span>
-        <div><b>Wednesday</b> — <span>Developer meeting. Walking the team through exactly what we're building and how.</span></div>
-      </li>
-      <li>
+        <div class="text"><b>Wednesday</b><span>Developer meeting. Walking the team through what we're building and how.</span></div>
+      </div>
+      <div class="next-item">
         <span class="mark">▶</span>
-        <div><b>Next build</b> — <span>Section 1: Beat Run — the falling-tile drum game. First playable. The hook that proves the concept.</span></div>
-      </li>
-    </ul>
+        <div class="text"><b>First build</b><span>Beat Run — the falling-tile drum game. Section 1. The hook that proves the concept.</span></div>
+      </div>
+    </div>
+    <p style="font-size:12px;color:var(--muted);margin-top:20px;opacity:.6">Questions? Talk to Fonz.</p>
+  </div>
 
-    <p class="foot">
-      Rhythm &amp; Rescue <span class="dot">·</span> <b>Black Girls Code</b> <span class="dot">·</span> YouTube Playables<br>
-      Team explainer <span class="dot">·</span> June 2026<br>
-      Questions? Talk to Fonz.
-    </p>
+</div>
 
-  </main>
+<script>
+  const slider = document.getElementById('slider');
+  const screens = [...document.querySelectorAll('.screen')];
+  const dotsNav = document.getElementById('dots');
+
+  // Build dots
+  screens.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => screens[i].scrollIntoView({ behavior: 'smooth' }));
+    dotsNav.appendChild(d);
+  });
+
+  const dots = [...document.querySelectorAll('.dot')];
+
+  // Update active dot on scroll
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const i = screens.indexOf(entry.target);
+        dots.forEach((d, j) => d.classList.toggle('active', j === i));
+        // Hide hint on last screen
+        entry.target.querySelector('.hint') && (entry.target.querySelector('.hint').style.opacity = i === screens.length - 1 ? '0' : '');
+      }
+    });
+  }, { threshold: 0.6 });
+
+  screens.forEach(s => observer.observe(s));
+</script>
+
 </body>
 </html>
