@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Rhythm &amp; Rescue — Stage Mockups</title>
+  <meta name="robots" content="noindex">
+  <style>
+    :root {
+      --bg: #0c0c14;
+      --panel: #15151f;
+      --ink: #1a1a22;
+      --line: #e6e6ee;
+      --muted: #6b6b80;
+      --orange: #FF9200;
+      --magenta: #FF009C;
+      --teal: #00B88A;
+      --yellow: #E6B800;
+      --lilac: #7C6AD0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f4f4f8;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      padding: 40px 20px 80px;
+    }
+    .head {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 40px;
+    }
+    .head .kicker {
+      font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px;
+    }
+    .head h1 { font-size: 30px; font-weight: 800; letter-spacing: -.02em; }
+    .head p { font-size: 15px; color: var(--muted); margin-top: 10px; line-height: 1.5; }
+
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 32px;
+      justify-content: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .stage { width: 280px; }
+
+    /* phone frame */
+    .phone {
+      width: 280px;
+      height: 560px;
+      background: var(--bg);
+      border-radius: 36px;
+      border: 8px solid #1a1a26;
+      box-shadow: 0 20px 50px rgba(0,0,0,.18);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .notch {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 110px; height: 24px; background: #1a1a26;
+      border-radius: 0 0 16px 16px; z-index: 20;
+    }
+
+    /* screen top bar */
+    .screen-top {
+      padding: 30px 18px 12px;
+      text-align: center;
+      flex: 0 0 auto;
+    }
+    .screen-section {
+      font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      opacity: .7;
+    }
+    .screen-title { font-size: 17px; font-weight: 800; color: #fff; margin-top: 2px; }
+    .echo {
+      margin: 10px 14px 0;
+      font-size: 11px; line-height: 1.4;
+      color: #cfc7f0;
+      background: rgba(124,106,208,.16);
+      border: 1px solid rgba(124,106,208,.3);
+      border-radius: 10px; padding: 7px 10px;
+    }
+    .echo b { color: #fff; }
+
+    .play-area { flex: 1; position: relative; padding: 12px; }
+
+    /* progress bar of unlocked layers */
+    .layers {
+      display: flex; gap: 4px; padding: 10px 14px 14px;
+      flex: 0 0 auto;
+    }
+    .layers .lyr {
+      flex: 1; height: 4px; border-radius: 2px; background: rgba(255,255,255,.12);
+    }
+    .layers .lyr.on { background: currentColor; }
+
+    .caption {
+      margin-top: 14px;
+      font-size: 13px; line-height: 1.5; color: var(--ink);
+    }
+    .caption b { font-weight: 700; }
+    .caption .num {
+      display: inline-grid; place-items: center;
+      width: 22px; height: 22px; border-radius: 6px;
+      color: #fff; font-size: 12px; font-weight: 800; margin-right: 6px;
+      vertical-align: middle;
+    }
+    .caption .mech {
+      display: block; color: var(--muted); margin-top: 4px; font-size: 12.5px;
+    }
+
+    /* ===== STAGE 1 — falling tiles drums ===== */
+    .lanes { display: flex; gap: 6px; height: 100%; }
+    .lane { flex: 1; background: rgba(255,255,255,.03); border-radius: 8px; position: relative; }
+    .tile {
+      position: absolute; left: 5px; right: 5px; height: 46px; border-radius: 6px;
+    }
+    .hitline {
+      position: absolute; left: 0; right: 0; bottom: 64px; height: 3px;
+      background: rgba(255,255,255,.5);
+    }
+    .hitlabels {
+      position: absolute; left: 0; right: 0; bottom: 30px;
+      display: flex; gap: 6px;
+    }
+    .hitlabels span {
+      flex: 1; text-align: center; font-size: 9px; font-weight: 700; letter-spacing: .06em;
+      color: rgba(255,255,255,.5); text-transform: uppercase;
+    }
+
+    /* ===== STAGE 2 — bass grid ===== */
+    .seq-wrap { display: flex; flex-direction: column; height: 100%; justify-content: center; gap: 16px; }
+    .seq-label { font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+    .seq { display: grid; grid-template-columns: repeat(8, 1fr); gap: 5px; }
+    .cell {
+      aspect-ratio: 1; border-radius: 7px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08);
+    }
+    .cell.on { background: var(--teal); border-color: var(--teal); box-shadow: 0 0 12px rgba(0,184,138,.5); }
+    .cell.play { outline: 2px solid #fff; outline-offset: 1px; }
+    .seq.drums .cell.on { background: var(--orange); border-color: var(--orange); box-shadow: none; opacity: .55; }
+
+    /* ===== STAGE 3 — chord buttons ===== */
+    .chords { display: flex; flex-direction: column; justify-content: center; height: 100%; gap: 12px; }
+    .chord-btn {
+      border-radius: 14px; padding: 18px; text-align: center;
+      font-size: 14px; font-weight: 800; letter-spacing: .04em;
+      border: 2px solid;
+    }
+    .cb-low  { color: #8fd6ff; border-color: rgba(143,214,255,.5); background: rgba(143,214,255,.1); }
+    .cb-mid  { color: var(--lilac); border-color: rgba(124,106,208,.6); background: rgba(124,106,208,.22); box-shadow: 0 0 18px rgba(124,106,208,.4); }
+    .cb-high { color: #ff9ed8; border-color: rgba(255,158,216,.5); background: rgba(255,158,216,.1); }
+    .chord-hint { text-align: center; font-size: 10px; color: rgba(255,255,255,.4); }
+
+    /* ===== STAGE 4 — melody 5 lanes ===== */
+    .lane.l1 { background: rgba(255,146,0,.06); }
+    .lane.l2 { background: rgba(230,184,0,.06); }
+    .lane.l3 { background: rgba(0,184,138,.06); }
+    .lane.l4 { background: rgba(124,106,208,.06); }
+    .lane.l5 { background: rgba(255,0,156,.06); }
+
+    /* ===== STAGE 5 — lyric words ===== */
+    .lyrics { position: relative; height: 100%; }
+    .word {
+      position: absolute; padding: 8px 12px; border-radius: 999px;
+      font-size: 13px; font-weight: 700; color: #fff;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.06);
+    }
+    .word.placed { background: var(--yellow); color: #1a1a22; border-color: var(--yellow); }
+    .lyric-line {
+      position: absolute; bottom: 16px; left: 12px; right: 12px;
+      display: flex; gap: 5px; flex-wrap: wrap; justify-content: center;
+    }
+    .slot {
+      min-width: 40px; height: 26px; border-radius: 6px;
+      border: 1px dashed rgba(255,255,255,.25);
+      display: grid; place-items: center;
+      font-size: 11px; font-weight: 700; color: #1a1a22;
+    }
+    .slot.filled { background: var(--yellow); border-style: solid; border-color: var(--yellow); }
+    .slot.empty { color: transparent; }
+
+    .footer { text-align: center; color: var(--muted); font-size: 12px; margin-top: 50px; }
+  </style>
+</head>
+<body>
+
+  <div class="head">
+    <div class="kicker">Rhythm &amp; Rescue · Black Girls Code</div>
+    <h1>The Five Stages</h1>
+    <p>One screen per stage. Each one adds a layer to the beat. These are interface mockups to show the team what playing each stage looks like.</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- ════ STAGE 1 ════ -->
+    <div class="stage">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen-top">
+          <div class="screen-section" style="color:var(--orange)">Stage 1 · Rhythm Ruins</div>
+          <div class="screen-title">The Pulse</div>
+          <div class="echo"><b>ECHO:</b> Tap the tiles when they hit the line. Give the world a heartbeat.</div>
+        </div>
+        <div class="play-area">
+          <div class="lanes">
+            <div class="lane">
+              <div class="tile" style="top:40px;background:var(--orange)"></div>
+              <div class="tile" style="top:300px;background:var(--orange)"></div>
+            </div>
+            <div class="lane">
+              <div class="tile" style="top:140px;background:#ffb44d"></div>
+            </div>
+            <div class="lane">
+              <div class="tile" style="top:90px;background:var(--orange)"></div>
+              <div class="tile" style="top:360px;background:var(--orange)"></div>
+            </div>
+            <div class="lane">
+              <div class="tile" style="top:210px;background:#ffb44d"></div>
+            </div>
+            <div class="hitline"></div>
+            <div class="hitlabels">
+              <span>Kick</span><span>Snare</span><span>Kick</span><span>Snare</span>
+            </div>
+          </div>
+        </div>
+        <div class="layers" style="color:var(--orange)">
+          <div class="lyr on"></div><div class="lyr"></div><div class="lyr"></div><div class="lyr"></div><div class="lyr"></div>
+        </div>
+      </div>
+      <div class="caption">
+        <span class="num" style="background:var(--orange)">1</span><b>The Pulse — Drums</b>
+        <span class="mech">Falling tiles, 4 lanes (kick/snare). Tap in time. Same idea as Magic Tiles. Unlocks the drums.</span>
+      </div>
+    </div>
+
+    <!-- ════ STAGE 2 ════ -->
+    <div class="stage">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen-top">
+          <div class="screen-section" style="color:var(--teal)">Stage 2 · Groove River</div>
+          <div class="screen-title">The Groove</div>
+          <div class="echo"><b>ECHO:</b> Tap the buttons to build a bassline. The drums keep playing under you.</div>
+        </div>
+        <div class="play-area">
+          <div class="seq-wrap">
+            <div>
+              <div class="seq-label" style="margin-bottom:6px">Drums (playing)</div>
+              <div class="seq drums">
+                <div class="cell on"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+                <div class="cell on"></div><div class="cell"></div><div class="cell"></div><div class="cell"></div>
+              </div>
+            </div>
+            <div>
+              <div class="seq-label" style="margin-bottom:6px;color:var(--teal)">Bass (you tap)</div>
+              <div class="seq">
+                <div class="cell on"></div><div class="cell"></div><div class="cell on"></div><div class="cell play"></div>
+                <div class="cell on"></div><div class="cell"></div><div class="cell on"></div><div class="cell"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="layers" style="color:var(--teal)">
+          <div class="lyr on" style="color:var(--orange)"></div><div class="lyr on"></div><div class="lyr"></div><div class="lyr"></div><div class="lyr"></div>
+        </div>
+      </div>
+      <div class="caption">
+        <span class="num" style="background:var(--teal)">2</span><b>The Groove — Bass</b>
+        <span class="mech">Row of 8 buttons. Tap to drop in bass notes; a marker sweeps across and your pattern loops. Every note is in key. Unlocks the bass.</span>
+      </div>
+    </div>
+
+    <!-- ════ STAGE 3 ════ -->
+    <div class="stage">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen-top">
+          <div class="screen-section" style="color:var(--lilac)">Stage 3 · Chord Fields</div>
+          <div class="screen-title">The Color</div>
+          <div class="echo"><b>ECHO:</b> Press the pads together. Find the chord that lights up the world.</div>
+        </div>
+        <div class="play-area">
+          <div class="chords">
+            <div class="chord-hint">Press one or more</div>
+            <div class="chord-btn cb-high">HIGH</div>
+            <div class="chord-btn cb-mid">MID &nbsp;✦</div>
+            <div class="chord-btn cb-low">LOW</div>
+            <div class="chord-hint">Mid + Low = a warm chord ✦</div>
+          </div>
+        </div>
+        <div class="layers" style="color:var(--lilac)">
+          <div class="lyr on" style="color:var(--orange)"></div><div class="lyr on" style="color:var(--teal)"></div><div class="lyr on"></div><div class="lyr"></div><div class="lyr"></div>
+        </div>
+      </div>
+      <div class="caption">
+        <span class="num" style="background:var(--lilac)">3</span><b>The Color — Chords</b>
+        <span class="mech">Three pads: Low, Mid, High. Press combos to play chords over the beat. The right one floods the world with color. Unlocks the chords.</span>
+      </div>
+    </div>
+
+    <!-- ════ STAGE 4 ════ -->
+    <div class="stage">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen-top">
+          <div class="screen-section" style="color:var(--magenta)">Stage 4 · Melody Heights</div>
+          <div class="screen-title">The Melody</div>
+          <div class="echo"><b>ECHO:</b> Five notes now. Tap the tiles and play the part you'll be humming later.</div>
+        </div>
+        <div class="play-area">
+          <div class="lanes">
+            <div class="lane l1"><div class="tile" style="top:60px;background:var(--orange)"></div></div>
+            <div class="lane l2"><div class="tile" style="top:180px;background:var(--yellow)"></div></div>
+            <div class="lane l3"><div class="tile" style="top:30px;background:var(--teal)"></div><div class="tile" style="top:280px;background:var(--teal)"></div></div>
+            <div class="lane l4"><div class="tile" style="top:130px;background:var(--lilac)"></div></div>
+            <div class="lane l5"><div class="tile" style="top:230px;background:var(--magenta)"></div></div>
+            <div class="hitline"></div>
+            <div class="hitlabels">
+              <span>do</span><span>re</span><span>mi</span><span>so</span><span>la</span>
+            </div>
+          </div>
+        </div>
+        <div class="layers" style="color:var(--magenta)">
+          <div class="lyr on" style="color:var(--orange)"></div><div class="lyr on" style="color:var(--teal)"></div><div class="lyr on" style="color:var(--lilac)"></div><div class="lyr on"></div><div class="lyr"></div>
+        </div>
+      </div>
+      <div class="caption">
+        <span class="num" style="background:var(--magenta)">4</span><b>The Melody — Trumpet</b>
+        <span class="mech">Falling tiles again, but 5 lanes — each a different note. Every tap is a real note, so it always sounds musical. Unlocks the melody.</span>
+      </div>
+    </div>
+
+    <!-- ════ STAGE 5 ════ -->
+    <div class="stage">
+      <div class="phone">
+        <div class="notch"></div>
+        <div class="screen-top">
+          <div class="screen-section" style="color:var(--yellow)">Stage 5 · Static Citadel</div>
+          <div class="screen-title">The Voice</div>
+          <div class="echo"><b>ECHO:</b> The words are scattered. Tap them in order to put the hook back together.</div>
+        </div>
+        <div class="play-area">
+          <div class="lyrics">
+            <div class="word placed" style="top:20px;left:18px">Let</div>
+            <div class="word" style="top:70px;right:24px">music</div>
+            <div class="word" style="top:140px;left:30px">find</div>
+            <div class="word" style="top:110px;right:40px">the</div>
+            <div class="word" style="top:190px;left:60px">you</div>
+            <div class="lyric-line">
+              <div class="slot filled">Let</div>
+              <div class="slot empty">·</div>
+              <div class="slot empty">·</div>
+              <div class="slot empty">·</div>
+              <div class="slot empty">·</div>
+            </div>
+          </div>
+        </div>
+        <div class="layers" style="color:var(--yellow)">
+          <div class="lyr on" style="color:var(--orange)"></div><div class="lyr on" style="color:var(--teal)"></div><div class="lyr on" style="color:var(--lilac)"></div><div class="lyr on" style="color:var(--magenta)"></div><div class="lyr on"></div>
+        </div>
+      </div>
+      <div class="caption">
+        <span class="num" style="background:var(--yellow);color:#1a1a22">5</span><b>The Voice — Vocals</b>
+        <span class="mech">Words drift across the screen. Tap them in order to rebuild the hook. The last word triggers the full song. Unlocks the vocals.</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    Interface mockups · Rhythm &amp; Rescue · for the developer walkthrough
+  </div>
+
+</body>
+</html>

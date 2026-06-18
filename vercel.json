@@ -7,6 +7,7 @@
     { "source": "/pitch", "destination": "/pitch/index.html" },
     { "source": "/game-breakdown", "destination": "/docs/game-breakdown.html" },
     { "source": "/team", "destination": "/docs/team-explainer.html" },
+    { "source": "/stages", "destination": "/docs/stage-mockups.html" },
     { "source": "/markdown", "destination": "https://pulsepro-markdown-preview.vercel.app/markdown" },
     { "source": "/markdown/:path*", "destination": "https://pulsepro-markdown-preview.vercel.app/markdown/:path*" }
   ]
