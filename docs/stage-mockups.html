@@ -315,19 +315,32 @@
         <div class="screen-top">
           <div class="screen-section" style="color:var(--magenta)">Stage 4 · Melody Heights</div>
           <div class="screen-title">The Melody</div>
-          <div class="echo"><b>ECHO:</b> Five notes now. Tap the tiles and play the part you'll be humming later.</div>
+          <div class="echo"><b>ECHO:</b> I'll play a little phrase. Listen, then play it back to me.</div>
         </div>
         <div class="play-area">
-          <div class="lanes">
-            <div class="lane l1"><div class="tile" style="top:60px;background:var(--orange)"></div></div>
-            <div class="lane l2"><div class="tile" style="top:180px;background:var(--yellow)"></div></div>
-            <div class="lane l3"><div class="tile" style="top:30px;background:var(--teal)"></div><div class="tile" style="top:280px;background:var(--teal)"></div></div>
-            <div class="lane l4"><div class="tile" style="top:130px;background:var(--lilac)"></div></div>
-            <div class="lane l5"><div class="tile" style="top:230px;background:var(--magenta)"></div></div>
-            <div class="hitline"></div>
-            <div class="hitlabels">
-              <span>do</span><span>re</span><span>mi</span><span>so</span><span>la</span>
+          <div style="display:flex;flex-direction:column;height:100%;justify-content:center;gap:14px">
+            <div>
+              <div class="seq-label" style="margin-bottom:8px">ECHO plays this</div>
+              <div style="display:flex;align-items:center;justify-content:center;gap:14px;background:rgba(255,255,255,.04);border-radius:12px;padding:16px 0">
+                <span style="width:42px;height:42px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-weight:800">1</span>
+                <span style="color:rgba(255,255,255,.3)">›</span>
+                <span style="width:42px;height:42px;border-radius:50%;background:var(--teal);color:#fff;display:grid;place-items:center;font-weight:800">2</span>
+                <span style="color:rgba(255,255,255,.3)">›</span>
+                <span style="width:42px;height:42px;border-radius:50%;background:var(--magenta);color:#fff;display:grid;place-items:center;font-weight:800">3</span>
+              </div>
             </div>
+            <div style="text-align:center;color:var(--magenta);font-size:12px;font-weight:800;letter-spacing:.04em">↓ NOW PLAY IT BACK ↓</div>
+            <div>
+              <div class="seq-label" style="margin-bottom:8px">Your trumpet pads</div>
+              <div style="display:flex;gap:8px">
+                <div style="flex:1;height:96px;border-radius:10px;background:rgba(143,214,255,.85);display:grid;place-items:end center;padding-bottom:8px;font-size:11px;font-weight:700;color:#0c0c14">do</div>
+                <div style="flex:1;height:96px;border-radius:10px;background:rgba(255,146,0,.85);display:grid;place-items:end center;padding-bottom:8px;font-size:11px;font-weight:700;color:#0c0c14">re</div>
+                <div style="flex:1;height:96px;border-radius:10px;background:rgba(0,184,138,.85);display:grid;place-items:end center;padding-bottom:8px;font-size:11px;font-weight:700;color:#0c0c14">mi</div>
+                <div style="flex:1;height:96px;border-radius:10px;background:rgba(124,106,208,.12);border:1px solid rgba(124,106,208,.4);display:grid;place-items:end center;padding-bottom:8px;font-size:11px;font-weight:700;color:var(--lilac)">so</div>
+                <div style="flex:1;height:96px;border-radius:10px;background:rgba(255,0,156,.12);border:1px solid rgba(255,0,156,.4);display:grid;place-items:end center;padding-bottom:8px;font-size:11px;font-weight:700;color:var(--magenta)">la</div>
+              </div>
+            </div>
+            <div style="text-align:center;color:rgba(255,255,255,.4);font-size:11px">Miss it? ECHO just plays it again, slower.</div>
           </div>
         </div>
         <div class="layers" style="color:var(--magenta)">
@@ -336,7 +349,7 @@
       </div>
       <div class="caption">
         <span class="num" style="background:var(--magenta)">4</span><b>The Melody — Trumpet</b>
-        <span class="mech">Falling tiles again, but 5 lanes — each a different note. Every tap is a real note, so it always sounds musical. Unlocks the melody.</span>
+        <span class="mech">Call and response. ECHO plays a short phrase, you play it back on the trumpet pads. Notes are in key, so it always sounds good. Unlocks the melody.</span>
       </div>
     </div>
 
