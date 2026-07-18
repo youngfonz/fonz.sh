@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biz101 Admin | Fonz Morris</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Archivo+Black&family=Spectral:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#131210;--paper:#f4efe6;--gold:#e8a020;--gold-deep:#c77f0a;--line:#d8d0c0;--mut:#6f6754}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Archivo',sans-serif;background:var(--paper);color:var(--ink);padding:40px 20px}
+.wrap{max-width:900px;margin:0 auto}
+h1{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:30px;border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:20px}
+h1 span{color:var(--gold);-webkit-text-stroke:1.5px var(--ink)}
+input,button{font-family:'Archivo',sans-serif;font-size:14px;border:2px solid var(--ink);padding:10px 14px}
+button{background:var(--ink);color:var(--paper);font-weight:800;text-transform:uppercase;letter-spacing:.08em;cursor:pointer}
+.gate{display:flex;gap:10px;margin-bottom:26px}
+.sess{background:#fff;border:2px solid var(--ink);box-shadow:5px 5px 0 var(--gold);margin-bottom:16px}
+.sess-head{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:10px;flex-wrap:wrap}
+.sess-head b{font-size:16px}
+.meta{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
+.body{display:none;border-top:2px solid var(--ink);padding:16px 18px;max-height:420px;overflow-y:auto}
+.turn{margin-bottom:12px;font-size:14px;white-space:pre-wrap}
+.turn b{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep)}
+.plan{border-top:2px dashed var(--gold-deep);margin-top:14px;padding-top:14px;font-family:'Spectral',serif}
+#status{color:#c23b22;font-weight:700;margin-bottom:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1><span>Biz</span>101 &middot; Sessions</h1>
+<div class="gate">
+  <input type="password" id="pass" placeholder="Admin passcode" style="flex:1">
+  <button onclick="load()">Load sessions</button>
+</div>
+<div id="status"></div>
+<div id="list"></div>
+</div>
+<script>
+async function load(){
+  const pass=document.getElementById('pass').value.trim();
+  document.getElementById('status').textContent='';
+  const r=await fetch('/api/biz101/sessions',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({passcode:pass})});
+  const d=await r.json();
+  if(!r.ok){document.getElementById('status').textContent=d.error||'Error';return}
+  const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
+  document.getElementById('list').innerHTML=d.sessions.map((s,i)=>`
+    <div class="sess">
+      <div class="sess-head" onclick="document.getElementById('b${i}').style.display=document.getElementById('b${i}').style.display==='block'?'none':'block'">
+        <b>${esc(s.member_name)}</b>
+        <span class="meta">${(s.transcript||[]).length} turns &middot; ${s.plan_html?'PLAN BUILT &middot; ':''}${new Date(s.updated_at).toLocaleString()}</span>
+      </div>
+      <div class="body" id="b${i}">
+        ${(s.transcript||[]).map(t=>`<div class="turn"><b>${t.role==='user'?esc(s.member_name):'Strategist'}</b>${esc(t.content)}</div>`).join('')}
+        ${s.plan_html?`<div class="plan">${s.plan_html.replace(/<script[\s\S]*?<\/script>/gi,'')}</div>`:''}
+      </div>
+    </div>`).join('')||'No sessions yet.';
+}
+</script>
+</body>
+</html>

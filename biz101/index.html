@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biz101 by Fonz Morris | 0→1 Strategist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Black&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#fffbea;          /* sunny cream */
+  --ink:#111111;
+  --blue:#2b4eff;        /* electric cobalt */
+  --pink:#ff90e8;        /* hot pink */
+  --yellow:#ffc900;      /* taxi yellow */
+  --lime:#a8f24b;        /* lively lime */
+  --coral:#ff5236;       /* vermillion */
+  --white:#ffffff;
+  --mut:#6b6455;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+::selection{background:var(--yellow);color:var(--ink)}
+body{
+  font-family:'Archivo',sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;min-height:100vh;position:relative;
+}
+body::before{ /* flat confetti, pure shapes, zero gradients */
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Ccircle cx='30' cy='40' r='4' fill='%23ff90e8'/%3E%3Ccircle cx='150' cy='90' r='4' fill='%232b4eff'/%3E%3Crect x='90' y='170' width='9' height='9' fill='%23ffc900' transform='rotate(20 94 174)'/%3E%3Crect x='190' y='30' width='8' height='8' fill='%23a8f24b' transform='rotate(-15 194 34)'/%3E%3Ccircle cx='60' cy='150' r='3.5' fill='%23ff5236'/%3E%3C/svg%3E");
+  background-size:220px 220px;
+}
+.wrap{position:relative;z-index:2;max-width:860px;margin:0 auto;padding:0 22px 60px;display:flex;flex-direction:column;min-height:100vh}
+header{padding:40px 0 24px;border-bottom:4px solid var(--ink);margin-bottom:24px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;animation:fadeDown .6s ease both}
+@keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1}}
+.kicker{font-weight:800;letter-spacing:.28em;text-transform:uppercase;font-size:11px;color:var(--ink);background:var(--lime);display:inline-block;padding:4px 10px;border:2px solid var(--ink);margin-bottom:12px;transform:rotate(-1deg)}
+h1{font-family:'Archivo Black',sans-serif;font-size:clamp(36px,6.5vw,62px);line-height:.95;text-transform:uppercase}
+h1 .zero{color:var(--blue);text-shadow:4px 4px 0 var(--pink)}
+.sub{font-family:'Spectral',serif;font-style:italic;font-size:16px;color:var(--mut);margin-top:12px;max-width:480px}
+button{font-family:'Archivo',sans-serif;font-weight:800;text-transform:uppercase;letter-spacing:.09em;font-size:13px;
+  padding:13px 22px;border:3px solid var(--ink);cursor:pointer;background:var(--yellow);color:var(--ink);
+  border-radius:0;box-shadow:4px 4px 0 var(--ink);transition:transform .12s, box-shadow .12s}
+button:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--ink)}
+button:active{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+button.ghost{background:var(--white);color:var(--ink)}
+button.gold{background:var(--blue);color:var(--white)}
+button:disabled{opacity:.4;cursor:not-allowed;transform:none}
+/* SETTINGS */
+#settings{background:var(--white);border:3px solid var(--ink);box-shadow:8px 8px 0 var(--blue);padding:28px 30px;margin-bottom:22px;animation:fadeUp .6s .1s ease both;transform:rotate(-.3deg)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px) rotate(-.3deg)}to{opacity:1;transform:rotate(-.3deg)}}
+#settings h2{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:19px;margin-bottom:6px}
+#settings h2::after{content:'';display:block;width:70px;height:6px;background:var(--pink);margin-top:6px}
+#settings p{font-size:13px;color:var(--mut);margin-bottom:16px}
+.field{margin-bottom:14px}
+.field label{display:block;font-weight:800;font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px}
+.field input,.field textarea{width:100%;font-family:'Archivo',sans-serif;font-size:14px;color:var(--ink);border:3px solid var(--ink);padding:11px 13px;background:var(--bg)}
+.field input:focus,.field textarea:focus{outline:none;background:var(--white);box-shadow:4px 4px 0 var(--yellow)}
+.field input::placeholder,.field textarea::placeholder{color:#a09880}
+.field .note{font-size:11.5px;color:var(--mut);margin-top:4px}
+/* CHAT */
+#chatwrap{flex:1;display:none;flex-direction:column}
+#chat{flex:1;overflow-y:auto;padding:6px 4px 18px;min-height:320px;max-height:56vh}
+.msg{max-width:82%;margin-bottom:16px;padding:14px 18px;font-size:15px;border:3px solid var(--ink);animation:pop .3s ease both;white-space:pre-wrap;background:var(--white)}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
+.msg.bot{box-shadow:5px 5px 0 var(--pink);font-family:'Spectral',serif;font-size:16px;transform:rotate(-.2deg)}
+.msg.user{background:var(--blue);color:var(--white);margin-left:auto;box-shadow:5px 5px 0 var(--yellow);transform:rotate(.2deg)}
+.msg .speaker{display:block;font-family:'Archivo',sans-serif;font-size:9.5px;font-weight:800;letter-spacing:.22em;text-transform:uppercase;margin-bottom:6px;color:var(--coral)}
+.msg.user .speaker{color:var(--yellow)}
+.thinking{font-family:'Spectral',serif;font-style:italic;color:var(--mut);font-size:14px;padding:4px 2px;animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.4}}
+/* INPUT BAR */
+#bar{border-top:4px solid var(--ink);padding-top:16px;display:flex;gap:12px;align-items:flex-end}
+#micbtn{width:80px;height:80px;border-radius:50%;font-size:30px;padding:0;flex-shrink:0;background:var(--coral);color:var(--white);border:3px solid var(--ink);box-shadow:5px 5px 0 var(--ink)}
+#micbtn:hover{background:var(--pink);color:var(--ink)}
+#micbtn.listening{background:var(--lime);color:var(--ink);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{box-shadow:5px 5px 0 var(--ink),0 0 0 0 rgba(168,242,75,.7)}50%{box-shadow:5px 5px 0 var(--ink),0 0 0 18px rgba(168,242,75,0)}}
+#textin{flex:1;font-family:'Archivo',sans-serif;font-size:15px;color:var(--ink);border:3px solid var(--ink);padding:14px 16px;background:var(--white);resize:none;min-height:56px;max-height:130px}
+#textin:focus{outline:none;box-shadow:4px 4px 0 var(--blue)}
+#textin::placeholder{color:#a09880}
+.barcol{display:flex;flex-direction:column;gap:8px}
+#status{font-size:10.5px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--mut);margin-top:9px;min-height:16px}
+#status.hot{color:var(--coral)}
+.toprow{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.toggle{display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;user-select:none}
+.toggle input{accent-color:var(--blue);width:16px;height:16px}
+/* PLAN */
+#plansheet{display:none;background:var(--white);color:var(--ink);border:3px solid var(--ink);box-shadow:10px 10px 0 var(--yellow);padding:38px 42px;margin-top:22px;font-family:'Spectral',serif;font-size:16px}
+#plansheet h2,#plansheet h3{font-family:'Archivo Black',sans-serif;text-transform:uppercase}
+#plansheet h2{font-size:24px;border-bottom:5px solid var(--blue);padding-bottom:9px;margin-bottom:14px}
+#plansheet h3{font-size:12.5px;letter-spacing:.2em;color:var(--coral);margin:20px 0 6px}
+#plansheet ul{padding-left:20px}
+#plansheet li{margin-bottom:4px}
+footer{margin-top:30px;font-size:10.5px;color:var(--mut);letter-spacing:.22em;text-transform:uppercase;text-align:center}
+@media print{ body::before{display:none} header,#bar,#status,.toprow,#settings,#chat,#planbtns{display:none!important} #plansheet{box-shadow:none;border:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div>
+    <div class="kicker">FonzMorris &middot; Founder Strategy</div>
+    <h1><span class="zero">Biz</span>101</h1>
+    <p class="sub">Talk it out. Hit the mic, answer like we're at the table together, and walk away with a monetization plan.</p>
+  </div>
+  <button class="ghost" id="gearbtn" onclick="toggleSettings()">Settings</button>
+</header>
+
+<div id="settings">
+  <h2>Sit down with the Strategist</h2>
+  <p>Enter your name and the team passcode. That's it, no API keys needed.</p>
+  <div class="field">
+    <label>Your name</label>
+    <input type="text" id="k_name" placeholder="First and last">
+  </div>
+  <div class="field">
+    <label>Team passcode</label>
+    <input type="password" id="k_pass" placeholder="Ask Fonz if you don't have it">
+  </div>
+  <div class="field">
+    <label class="toggle" style="text-transform:none;letter-spacing:0"><input type="checkbox" id="k_web" checked> Web research on (the Strategist can search the internet for competitive intel, pricing, market data)</label>
+  </div>
+  <div class="field">
+    <label>Bring in a previous conversation (optional)</label>
+    <textarea id="k_import" style="min-height:70px;font-size:13px" placeholder="Paste a copied transcript from an earlier session. The counselor reads it and picks up where you left off."></textarea>
+  </div>
+  <button class="gold" onclick="startSession()">Start the session &rarr;</button>
+  <button class="ghost" id="resumebtn" style="display:none" onclick="resumeSaved()">Resume last session</button>
+  <div class="note" style="margin-top:10px">Voice input needs Chrome or Edge. Everything also works by typing. Sessions autosave in this browser.</div>
+</div>
+
+<div id="chatwrap">
+  <div class="toprow">
+    <label class="toggle"><input type="checkbox" id="speakToggle" checked> Counselor speaks</label>
+    <span style="flex:1"></span>
+    <button class="ghost" onclick="exportTranscript()">Export transcript</button>
+    <button class="ghost" onclick="buildPlan()" id="planbtn">Wrap up &amp; build my plan</button>
+  </div>
+  <div id="chat"></div>
+  <div id="bar">
+    <button id="micbtn" onclick="toggleMic()" title="Hold a conversation">&#127908;</button>
+    <textarea id="textin" placeholder="...or type your answer" rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendText()}"></textarea>
+    <div class="barcol"><button onclick="sendText()">Send</button></div>
+  </div>
+  <div id="status"></div>
+</div>
+
+<div id="plansheet"></div>
+<div style="display:none;gap:12px;margin-top:14px" id="planbtns">
+  <button onclick="copyPlan()">Copy plan</button>
+  <button class="gold" onclick="window.print()">Print / PDF</button>
+  <button class="ghost" onclick="backToChat()">&larr; Back to session</button>
+</div>
+
+<footer>Built by Fonz Morris &middot; Strategy &rarr; Execution &rarr; Rollout</footer>
+</div>
+
+<script>
+/* ================= CONFIG ================= */
+const SYSTEM_PROMPT = `You are "The Strategist", the engine of the FonzMorris 0-to-1 Monetization Framework, built by Fonz Morris, who helps early-stage founders take a business idea from zero to first revenue.
+
+YOUR CORE OPERATING RULE, THE PRESSURE-BUILD LOOP: Every meaningful claim or answer the founder gives gets two beats from you, in this order:
+1. PRESSURE TEST. Poke the hole. Ask the question a tough investor or skeptical customer would ask. Name the assumption they're making. If the idea has a known failure pattern (crowded market, two-sided marketplace cold start, 'everyone is my customer', price too low to sustain), say so plainly.
+2. BUILD. Never leave them hanging in the hole you just poked. In the same turn, or immediately after their reaction, put YOUR best answer on the table: the sharper version of their claim, the research that settles it, or 2-3 options with your recommendation.
+The rhythm is challenge-then-contribute. Pushback without a path forward is banned. Agreement without stress-testing is also banned. A strong answer earns loud, specific praise AND one hard follow-up. A weak answer gets named as weak AND rebuilt by you.
+
+You do the work WITH the founder. You are a strategist, business developer, and researcher first, and an interviewer last. The founder often does NOT have the answers. That is why they are here. Never stack questions at someone who just told you they don't know. When the founder says "I don't know", "not sure", or gives a thin answer, skip the pressure beat and go straight to producing the answer:
+- Research it (use web search): competitors, pricing norms, market size, demand signals, where the target customers gather.
+- Draft a strong hypothesis: "Here's what I'd run with. Tell me what's off." Propose the customer profile, the price, the channel, the milestone yourself, with reasoning.
+- Give 2-3 concrete options with a clear recommendation, never an open-ended question back.
+The founder's job is to react and correct. Your job is to fill the framework, battle-tested. A founder should be able to get a complete plan out of you by only ever describing their idea and saying "you tell me" to everything else, and that plan should already have survived your own toughest objections.
+
+BUSINESS DEVELOPMENT: You also actively build. On request or when it obviously helps: draft cold outreach messages, pitch one-liners, partnership angles, lists of specific communities/events/orgs to target, offer structures, landing page copy. Deliver finished drafts, not advice about drafts.
+
+Your personality: a sharp, warm business counselor. Direct and real, never corporate. You talk like a trusted mentor at the table, not a consultant with a deck. Short sentences. Plain words. You give praise loudly and specifically when an answer is strong, and you push back plainly when an answer is vague ("That's fuzzy. Say it like you're telling your barber.").
+
+You are a FULL-SERVICE strategist, not just an interviewer. At any point the founder can ask you to WORK, and you deliver:
+- Competitive research: who else is doing this, how they price, where they're weak, and where the founder can wedge in. Use web search when available. Cite what you find.
+- Market context: rough market size, trends, who's funding what in the space.
+- Pricing benchmarks: what comparable products/services charge, and what that implies for the founder's price.
+- Positioning and messaging: sharpen their pitch against the competitors you found.
+- Brainstorming: channels, offers, partnerships, names. Give concrete options with a recommendation, never a generic list.
+When doing research or analysis, drop the brevity rule and go deep with structure. When conversing/interviewing, keep turns under 80 words because they are spoken aloud. After a research deep-dive, tie it back to their plan and return to wherever you were in the framework.
+
+The 5 phases below are YOUR internal checklist to fill, not a script of questions to fire at the founder. Work through them conversationally. For each item: if the founder likely knows it (their idea, their story, their network, their available hours), ask, one question at a time. If it's knowable through research or strategy (market, competitors, pricing, channels, customer profile, milestones), propose or research it yourself and let them react.
+
+PHASE 1 - THE IDEA, STRAIGHT UP: what is it (2 sentences), who exactly is it for, what pain does it kill and what does that pain cost them today, why are THEY the one to build it.
+PHASE 2 - PROOF IT'S REAL: how many real customer conversations they've had, strongest demand signal, the #1 pushback they keep hearing, what people use instead today.
+PHASE 3 - WHO PAYS FIRST: their first paying customer described specifically, where those people already gather, up to 10 real names/orgs they could pitch this week, who in their network opens doors.
+PHASE 4 - THE MONEY MODEL: the one primary money engine for the first 6 months, the price and why that number (anchored to the cost of the pain, not their costs or fear), first revenue milestone with a dollar amount and hard date (money COLLECTED not promised), cost to deliver one sale.
+PHASE 5 - THE 90-DAY ROLLOUT: days 1-30 validate and sell the smallest real version, days 31-60 double down on what produced buyers, days 61-90 systemize, the biggest blocker and their counter-move, and real hours per week they'll commit.
+
+Rules:
+- Announce each phase briefly when you enter it ("Alright, phase two. Proof it's real.").
+- Vague answer on something only THEY can know: probe once, sharper. Vague answer on something research can answer: stop asking and go get it.
+- If they've had zero customer conversations, tell them plainly that 10 conversations this week is the whole assignment, then draft the outreach message and the list of where to find those 10 people yourself.
+- Core beliefs you coach from: 'everyone' is nobody; ideas are cheap, evidence is the currency; the first dollar comes from one person with a name; price from the pain you kill; underpricing reads as not serious; strategy without a calendar is a vibe; sell the smallest real version and let revenue tell you what to build.
+- When all 5 phases are covered, tell them you're ready to build the plan and to hit "Wrap up & build my plan".
+
+Open the very first turn by introducing yourself in 2 sentences, making clear they can hand you the heavy lifting ("Tell me the idea. Anything you don't know, I'll figure out."), and asking what they're building.`;
+
+const PLAN_PROMPT = `The session is wrapping. Based on everything the founder told you, produce their plan as clean HTML (no markdown, no backticks, just HTML tags) using ONLY these tags: h2, h3, p, ul, li, strong, em.
+Structure: <h2>The 0-to-1 Plan</h2>, then sections with h3 headers: THE PLAY (idea, who, pain, their edge), THE MONEY (engine, price logic, first revenue milestone, delivery cost), FIRST BUYERS (profile, where they gather, hit list, door openers), 90-DAY ROLLOUT (days 1-30, 31-60, 61-90, known blocker), STRAIGHT TALK (what's strong, what's weak or missing, bluntly), THIS WEEK (4-5 concrete actions for the next 7 days).
+Where the founder never gave an answer, write the gap plainly in em tags as a to-do. Keep it tight and in Fonz's direct voice.`;
+
+const DEFAULT_MODEL="google/gemini-2.5-flash";
+const DEFAULT_ELEVEN_VOICE="pNInz6obpgDQGcFmaJgB";
+
+/* ================= STATE ================= */
+const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null};
+
+function toggleSettings(){const s=document.getElementById('settings');s.style.display=s.style.display==='none'?'block':'none'}
+
+function startSession(){
+  S.name=document.getElementById('k_name').value.trim();
+  S.pass=document.getElementById('k_pass').value.trim();
+  S.web=document.getElementById('k_web').checked;
+  if(!S.name||!S.pass){setStatus("Name and team passcode required.",true);return}
+  if(!S.sessionKey) S.sessionKey=S.name.replace(/\s+/g,'-').toLowerCase()+'-'+Date.now().toString(36);
+  document.getElementById('settings').style.display='none';
+  document.getElementById('chatwrap').style.display='flex';
+  const imported=document.getElementById('k_import').value.trim();
+  if(imported && S.history.length===0){
+    S.history.push({role:'user',content:"Here is the transcript of our previous session. Read it, keep everything I told you, and pick up exactly where we left off:\n\n"+imported});
+    addMsg('user','[Previous session loaded]');
+  }
+  if(S.history.length===0||imported) callClaude();  // counselor opens or resumes
+}
+
+/* ===== SESSION PERSISTENCE ===== */
+function persist(){
+  try{localStorage.setItem('fonz_session',JSON.stringify({history:S.history,sessionKey:S.sessionKey,ts:Date.now()}))}catch(_){}
+}
+function resumeSaved(){
+  try{
+    const d=JSON.parse(localStorage.getItem('fonz_session'));
+    if(!d||!d.history||!d.history.length)return;
+    S.history=d.history;
+    if(d.sessionKey)S.sessionKey=d.sessionKey;
+    d.history.forEach(m=>addMsg(m.role==='user'?'user':'bot',m.content));
+    document.getElementById('k_import').value='';
+    startSessionAfterResume();
+  }catch(_){setStatus('Could not load saved session',true)}
+}
+function startSessionAfterResume(){
+  S.name=document.getElementById('k_name').value.trim();
+  S.pass=document.getElementById('k_pass').value.trim();
+  S.web=document.getElementById('k_web').checked;
+  if(!S.name||!S.pass){setStatus("Enter your name and passcode first, then hit Resume.",true);S.history=[];chatEl.innerHTML='';return}
+  document.getElementById('settings').style.display='none';
+  document.getElementById('chatwrap').style.display='flex';
+  setStatus('Session restored. Keep talking.');
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  try{
+    const d=JSON.parse(localStorage.getItem('fonz_session'));
+    if(d&&d.history&&d.history.length>1){
+      const b=document.getElementById('resumebtn');b.style.display='inline-block';
+      b.textContent='Resume last session ('+new Date(d.ts).toLocaleDateString()+', '+Math.ceil(d.history.length/2)+' exchanges)';
+    }
+  }catch(_){}
+});
+
+/* ================= CHAT UI ================= */
+const chatEl=document.getElementById('chat');
+function addMsg(role,text){
+  const d=document.createElement('div');
+  d.className='msg '+(role==='user'?'user':'bot');
+  d.innerHTML=`<span class="speaker">${role==='user'?'You':'The Counselor'}</span>`+escHtml(text);
+  chatEl.appendChild(d);chatEl.scrollTop=chatEl.scrollHeight;
+}
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+function setStatus(t,hot){const s=document.getElementById('status');s.textContent=t||'';s.className=hot?'hot':''}
+
+function sendText(){
+  const t=document.getElementById('textin');
+  const v=t.value.trim();if(!v||S.busy)return;
+  t.value='';userTurn(v);
+}
+function userTurn(text){
+  addMsg('user',text);
+  S.history.push({role:'user',content:text});
+  persist();
+  callClaude();
+}
+
+/* ================= CLAUDE ================= */
+async function callClaude(planMode){
+  if(S.busy)return;S.busy=true;
+  const th=document.createElement('div');th.className='thinking';th.textContent='The Counselor is thinking...';chatEl.appendChild(th);chatEl.scrollTop=chatEl.scrollHeight;
+  const messages=S.history.length?[...S.history]:[{role:'user',content:'(The founder just sat down. Open the session.)'}];
+  if(planMode) messages.push({role:'user',content:PLAN_PROMPT});
+  try{
+    const r=await fetch('/api/biz101/chat',{
+      method:'POST',
+      headers:{'content-type':'application/json'},
+      body:JSON.stringify({
+        passcode:S.pass,name:S.name,sessionKey:S.sessionKey,planMode:!!planMode,web:S.web,
+        messages:[{role:'system',content:SYSTEM_PROMPT},...messages]
+      })
+    });
+    const data=await r.json();
+    if(!r.ok||data.error)throw new Error(data.error||('Server error '+r.status));
+    const text=data.text||'';
+    th.remove();
+    if(planMode){renderPlan(text)}
+    else{
+      addMsg('bot',text);
+      S.history.push({role:'assistant',content:text});
+      persist();
+      if(document.getElementById('speakToggle').checked){
+        // Long research answers: speak the opening, let them read the rest.
+        let spoken=text;
+        if(text.length>600){
+          const cut=text.slice(0,400);
+          spoken=cut.slice(0,Math.max(cut.lastIndexOf('.'),cut.lastIndexOf('!'))+1)||cut;
+          spoken+=" The full breakdown is on your screen.";
+        }
+        speak(spoken.replace(/[#*_`>|-]/g,' '));
+      }
+    }
+  }catch(err){
+    th.remove();setStatus('Error: '+err.message,true);
+  }finally{S.busy=false}
+}
+
+/* ================= VOICE OUT ================= */
+async function speak(text){
+  stopSpeaking();
+  try{
+    setStatus('Strategist speaking...');
+    const r=await fetch('/api/biz101/tts',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({passcode:S.pass,text})});
+    if(r.ok){
+      const blob=await r.blob();
+      S.audioEl=new Audio(URL.createObjectURL(blob));
+      S.audioEl.onended=()=>setStatus('');
+      S.audioEl.play();return;
+    }
+  }catch(_){/* fall through to browser voice */}
+  const u=new SpeechSynthesisUtterance(text);
+  u.rate=1.02;u.pitch=.95;
+  const voices=speechSynthesis.getVoices();
+  const pref=voices.find(v=>/en[-_]US/i.test(v.lang)&&/male|david|guy|daniel/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang));
+  if(pref)u.voice=pref;
+  u.onend=()=>setStatus('');
+  setStatus('Counselor speaking...');
+  speechSynthesis.speak(u);
+}
+function stopSpeaking(){speechSynthesis.cancel();if(S.audioEl){S.audioEl.pause();S.audioEl=null}}
+
+/* ================= VOICE IN ================= */
+function toggleMic(){
+  if(S.listening){stopMic();return}
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){setStatus('Voice input needs Chrome or Edge. Type instead.',true);return}
+  stopSpeaking();
+  S.rec=new SR();
+  S.rec.lang='en-US';S.rec.interimResults=true;S.rec.continuous=true;
+  let finalText='';
+  S.rec.onresult=e=>{
+    let interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal)finalText+=e.results[i][0].transcript+' ';
+      else interim+=e.results[i][0].transcript;
+    }
+    document.getElementById('textin').value=(finalText+interim).trim();
+  };
+  S.rec.onerror=e=>{setStatus('Mic error: '+e.error,true);stopMic(false)};
+  S.rec.onend=()=>{ if(S.listening){/*auto-restart while listening*/ try{S.rec.start()}catch(_){}} };
+  S.rec.start();
+  S.listening=true;
+  document.getElementById('micbtn').classList.add('listening');
+  setStatus('Listening... hit the mic again when you\'re done talking',true);
+}
+function stopMic(send=true){
+  S.listening=false;
+  if(S.rec){S.rec.onend=null;try{S.rec.stop()}catch(_){}}
+  document.getElementById('micbtn').classList.remove('listening');
+  setStatus('');
+  if(send){
+    const v=document.getElementById('textin').value.trim();
+    if(v){document.getElementById('textin').value='';userTurn(v)}
+  }
+}
+
+/* ================= PLAN ================= */
+function buildPlan(){
+  if(S.history.length<4){setStatus('Talk a little longer first. The plan is only as good as the session.',true);return}
+  stopSpeaking();
+  callClaude(true);
+}
+function renderPlan(html){
+  const safe=html.replace(/<script[\s\S]*?<\/script>/gi,'');
+  const sheet=document.getElementById('plansheet');
+  sheet.innerHTML=safe+`<p style="margin-top:18px;font-size:12px;font-family:'Archivo',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)">FonzMorris Monetization Framework &middot; ${new Date().toLocaleDateString()}</p>`;
+  sheet.style.display='block';
+  document.getElementById('planbtns').style.display='flex';
+  document.getElementById('chatwrap').style.display='none';
+  sheet.scrollIntoView({behavior:'smooth'});
+}
+function backToChat(){
+  document.getElementById('plansheet').style.display='none';
+  document.getElementById('planbtns').style.display='none';
+  document.getElementById('chatwrap').style.display='flex';
+}
+function exportTranscript(){
+  const txt=S.history.map(m=>(m.role==='user'?'FOUNDER: ':'COUNSELOR: ')+m.content).join('\n\n');
+  navigator.clipboard.writeText(txt);
+  setStatus('Transcript copied. Paste it into any future session to continue.');
+}
+function copyPlan(){
+  navigator.clipboard.writeText(document.getElementById('plansheet').innerText);
+  setStatus('Plan copied.');
+}
+/* warm up browser voices */
+speechSynthesis.getVoices();
+speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+</script>
+</body>
+</html>
