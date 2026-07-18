@@ -2,13 +2,45 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
   "rewrites": [
-    { "source": "/ad-engine", "destination": "/ad-engine.html" },
-    { "source": "/rhythm-rescue", "destination": "/rhythm-rescue.html" },
-    { "source": "/pitch", "destination": "/pitch/index.html" },
-    { "source": "/game-breakdown", "destination": "/docs/game-breakdown.html" },
-    { "source": "/team", "destination": "/docs/team-explainer.html" },
-    { "source": "/stages", "destination": "/docs/stage-mockups.html" },
-    { "source": "/markdown", "destination": "https://pulsepro-markdown-preview.vercel.app/markdown" },
-    { "source": "/markdown/:path*", "destination": "https://pulsepro-markdown-preview.vercel.app/markdown/:path*" }
+    {
+      "source": "/biz101",
+      "destination": "/biz101/index.html"
+    },
+    {
+      "source": "/biz101/admin",
+      "destination": "/biz101/admin.html"
+    },
+    {
+      "source": "/ad-engine",
+      "destination": "/ad-engine.html"
+    },
+    {
+      "source": "/rhythm-rescue",
+      "destination": "/rhythm-rescue.html"
+    },
+    {
+      "source": "/pitch",
+      "destination": "/pitch/index.html"
+    },
+    {
+      "source": "/game-breakdown",
+      "destination": "/docs/game-breakdown.html"
+    },
+    {
+      "source": "/team",
+      "destination": "/docs/team-explainer.html"
+    },
+    {
+      "source": "/stages",
+      "destination": "/docs/stage-mockups.html"
+    },
+    {
+      "source": "/markdown",
+      "destination": "https://pulsepro-markdown-preview.vercel.app/markdown"
+    },
+    {
+      "source": "/markdown/:path*",
+      "destination": "https://pulsepro-markdown-preview.vercel.app/markdown/:path*"
+    }
   ]
 }
