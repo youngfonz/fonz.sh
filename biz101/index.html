@@ -142,6 +142,29 @@ footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-t
     <label class="toggle" style="text-transform:none;letter-spacing:0"><input type="checkbox" id="k_web" checked> Web research on (the Strategist can search the internet for competitive intel, pricing, market data)</label>
   </div>
   <div class="field">
+    <label class="toggle" style="text-transform:none;letter-spacing:0"><input type="checkbox" id="k_hands" checked> Hands-free (just talk, it sends when you pause)</label>
+  </div>
+  <div class="field">
+    <label>The Strategist's voice</label>
+    <select id="k_voice" style="width:100%;font-family:'Archivo',sans-serif;font-size:14px;color:var(--ink);border:1px solid var(--line);border-bottom:1px solid var(--ink);padding:12px 14px;background:#fff;border-radius:0"
+      onchange="setVoice(this.value)">
+      <optgroup label="Deeper">
+        <option value="onyx">Onyx &mdash; deep, warm (default)</option>
+        <option value="ash">Ash &mdash; steady, grounded</option>
+        <option value="echo">Echo &mdash; even, measured</option>
+        <option value="verse">Verse &mdash; expressive</option>
+      </optgroup>
+      <optgroup label="Higher">
+        <option value="nova">Nova &mdash; bright, direct</option>
+        <option value="shimmer">Shimmer &mdash; warm, open</option>
+        <option value="coral">Coral &mdash; lively</option>
+        <option value="sage">Sage &mdash; calm, even</option>
+        <option value="ballad">Ballad &mdash; soft</option>
+      </optgroup>
+    </select>
+    <div class="note">Hit Start to hear it. Change any time in Settings.</div>
+  </div>
+  <div class="field">
     <label>Voice speed <span id="speedval" style="color:var(--blue)">1.15&times;</span></label>
     <input type="range" id="k_speed" min="0.8" max="1.6" step="0.05" value="1.15"
       style="width:100%;padding:0;border:none;accent-color:var(--blue)"
@@ -252,7 +275,16 @@ const DEFAULT_MODEL="google/gemini-2.5-flash";
 const DEFAULT_ELEVEN_VOICE="pNInz6obpgDQGcFmaJgB";
 
 /* ================= STATE ================= */
-const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false};
+const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"onyx",hands:true};
+
+function setVoice(v){
+  S.voice=v;
+  try{localStorage.setItem('fonz_voice',v)}catch(_){}
+}
+try{
+  const vv=localStorage.getItem('fonz_voice');
+  if(vv){S.voice=vv;window.addEventListener('DOMContentLoaded',()=>{const el=document.getElementById('k_voice');if(el)el.value=vv})}
+}catch(_){}
 
 /* voice pace: persists so you only dial it in once */
 function setSpeed(v){
@@ -314,11 +346,16 @@ async function startSession(ev){
   if(!creds)return;                                  // stay on the gate
   S.name=creds.name;S.pass=creds.pass;
   S.web=document.getElementById('k_web').checked;
+  S.hands=document.getElementById('k_hands').checked;
+  S.voice=document.getElementById('k_voice').value||S.voice;
   rememberName(S.name);
   if(!S.sessionKey) S.sessionKey=S.name.replace(/\s+/g,'-').toLowerCase()+'-'+Date.now().toString(36);
   document.getElementById('settings').style.display='none';
   document.getElementById('stage').style.display='flex';
   sizeOrb();
+  // Hands-free: pick the mic up as soon as the opening finishes, so the founder
+  // never has to tap. The Start click is the gesture that unlocks mic access.
+  if(S.hands)S.micWasOn=true;
   const imported=document.getElementById('k_import').value.trim();
   if(imported && S.history.length===0){
     S.history.push({role:'user',content:"Here is the transcript of our previous session. Read it, keep everything I told you, and pick up exactly where we left off:\n\n"+imported});
@@ -352,10 +389,13 @@ async function resumeSaved(ev){
 function startSessionAfterResume(creds){
   S.name=creds.name;S.pass=creds.pass;
   S.web=document.getElementById('k_web').checked;
+  S.hands=document.getElementById('k_hands').checked;
+  S.voice=document.getElementById('k_voice').value||S.voice;
   rememberName(S.name);
   document.getElementById('settings').style.display='none';
   document.getElementById('stage').style.display='flex';
   sizeOrb();
+  if(S.hands)startMic();                        // straight back into the conversation
   setStatus('Session restored. Keep talking.');
 }
 window.addEventListener('DOMContentLoaded',()=>{
@@ -707,7 +747,7 @@ function chunkText(text,max=1100,firstMax=180){
 async function fetchClip(text){
   try{
     const r=await fetch('/api/biz101/tts',{method:'POST',headers:{'content-type':'application/json'},
-      body:JSON.stringify({passcode:S.pass,text,speed:S.speed})});
+      body:JSON.stringify({passcode:S.pass,text,speed:S.speed,voice:S.voice})});
     if(r.ok){const a=new Audio(URL.createObjectURL(await r.blob()));a.crossOrigin='anonymous';return a}
   }catch(_){}
   return null;                                     // caller falls back to browser voice
@@ -769,6 +809,7 @@ function stopSpeaking(){
    speech recognition transcribes the Strategist and feeds it back as if the
    founder had said it. */
 function pauseMicForSpeech(){
+  disarmSilence();
   if(!S.listening)return;
   S.micWasOn=true;
   S.listening=false;                               // stops the onend auto-restart
@@ -790,6 +831,24 @@ function toggleMic(){
   setMode('idle');
   startMic();
 }
+/* Hands-free: no push-to-talk. Every result resets a silence timer; when you
+   stop talking for a beat, the turn sends itself. */
+let silenceTimer=null;
+const SILENCE_MS=1400;                         // long enough to think mid-sentence
+function armSilence(){
+  clearTimeout(silenceTimer);
+  silenceTimer=setTimeout(()=>{
+    const v=document.getElementById('textin').value.trim();
+    if(!v||S.busy||mode==='speaking')return;
+    if(v.split(/\s+/).length<2)return;         // ignore a stray cough or "um"
+    S.micWasOn=true;                           // pick the mic back up after the answer
+    pauseMicForSpeech();
+    document.getElementById('textin').value='';
+    userTurn(v);
+  },SILENCE_MS);
+}
+function disarmSilence(){clearTimeout(silenceTimer);silenceTimer=null}
+
 function startMic(){
   if(S.listening)return;
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
@@ -808,14 +867,16 @@ function startMic(){
     const all=(finalText+interim).trim();
     document.getElementById('textin').value=all;
     showInterim(all);                          // you see your words land live
+    if(S.hands)armSilence();
   };
   S.rec.onerror=e=>{if(e.error!=='aborted')setStatus('Mic error: '+e.error,true);stopMic(false)};
   S.rec.onend=()=>{ if(S.listening){/*auto-restart while listening*/ try{S.rec.start()}catch(_){}} };
   try{S.rec.start()}catch(_){return}
   S.listening=true;
-  setMode('listening','Listening · tap to send');
+  setMode('listening',S.hands?'Listening · just talk':'Listening · tap to send');
 }
 function stopMic(send=true){
+  disarmSilence();
   S.listening=false;
   if(S.rec){S.rec.onend=null;try{S.rec.stop()}catch(_){}}
   detachMic();

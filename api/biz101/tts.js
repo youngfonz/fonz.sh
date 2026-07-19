@@ -3,6 +3,8 @@
 // Both providers return MP3, so the client (and the orb's waveform) is unchanged.
 
 const OPENAI_VOICE = process.env.OPENAI_VOICE_ID || "onyx";
+// Voices the client may pick. Anything else falls back to the default.
+const ALLOWED_VOICES = ["alloy","ash","ballad","coral","echo","fable","nova","onyx","sage","shimmer","verse"];
 const OPENAI_TTS_MODEL = process.env.OPENAI_TTS_MODEL || "gpt-4o-mini-tts";
 
 // How the lines should land. gpt-4o-mini-tts takes plain-English direction.
@@ -16,7 +18,7 @@ const DEFAULT_SPEED = Number(process.env.OPENAI_TTS_SPEED || 1.15);
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
-  const { passcode, text, speed } = req.body || {};
+  const { passcode, text, speed, voice: wantVoice } = req.body || {};
   if (passcode !== process.env.TEAM_PASSCODE) return res.status(401).json({ error: "Wrong passcode." });
 
   const line = String(text || "").slice(0, 2500);
@@ -24,6 +26,7 @@ export default async function handler(req, res) {
 
   // Client can tune pace live; OpenAI accepts 0.25-4.0.
   const rate = Math.min(4, Math.max(0.25, Number(speed) || DEFAULT_SPEED));
+  const voiceId = ALLOWED_VOICES.includes(wantVoice) ? wantVoice : OPENAI_VOICE;
 
   // --- OpenAI (preferred) ---
   if (process.env.OPENAI_API_KEY) {
@@ -35,7 +38,7 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: OPENAI_TTS_MODEL,
-        voice: OPENAI_VOICE,
+        voice: voiceId,
         input: line,
         instructions: DELIVERY,
         speed: rate,
