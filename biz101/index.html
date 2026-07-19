@@ -263,6 +263,7 @@ function startSession(){
   S.pass=document.getElementById('k_pass').value.trim();
   S.web=document.getElementById('k_web').checked;
   if(!S.name||!S.pass){setStatus("Name and team passcode required.",true);return}
+  rememberName(S.name);
   if(!S.sessionKey) S.sessionKey=S.name.replace(/\s+/g,'-').toLowerCase()+'-'+Date.now().toString(36);
   document.getElementById('settings').style.display='none';
   document.getElementById('stage').style.display='flex';
@@ -279,6 +280,9 @@ function startSession(){
 function persist(){
   try{localStorage.setItem('fonz_session',JSON.stringify({history:S.history,sessionKey:S.sessionKey,ts:Date.now()}))}catch(_){}
 }
+/* Remember the name only. The passcode is shared with the team, so it stays
+   out of localStorage and gets typed each time. */
+function rememberName(n){try{if(n)localStorage.setItem('fonz_name',n)}catch(_){}}
 function resumeSaved(){
   try{
     const d=JSON.parse(localStorage.getItem('fonz_session'));
@@ -297,12 +301,20 @@ function startSessionAfterResume(){
   S.pass=document.getElementById('k_pass').value.trim();
   S.web=document.getElementById('k_web').checked;
   if(!S.name||!S.pass){setStatus("Enter your name and passcode first, then hit Resume.",true);S.history=[];chatEl.innerHTML='';return}
+  rememberName(S.name);
   document.getElementById('settings').style.display='none';
   document.getElementById('stage').style.display='flex';
   sizeOrb();
   setStatus('Session restored. Keep talking.');
 }
 window.addEventListener('DOMContentLoaded',()=>{
+  try{
+    const n=localStorage.getItem('fonz_name');
+    if(n){
+      document.getElementById('k_name').value=n;
+      document.getElementById('k_pass').focus();   // name's filled, go straight to passcode
+    }
+  }catch(_){}
   try{
     const d=JSON.parse(localStorage.getItem('fonz_session'));
     if(d&&d.history&&d.history.length>1){
