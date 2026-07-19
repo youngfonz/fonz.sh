@@ -170,8 +170,11 @@ footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-t
   </div>
 
   <div id="drawer"><div id="chat"></div></div>
-  <div id="status"></div>
 </div>
+
+<!-- Outside #stage on purpose: #stage is display:none before a session starts,
+     so anything in it (validation errors from Start / Resume) would be invisible. -->
+<div id="status"></div>
 
 <div id="plansheet"></div>
 <div style="display:none;gap:12px;margin-top:14px" id="planbtns">
