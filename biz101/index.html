@@ -88,6 +88,10 @@ button:disabled{opacity:.35;cursor:not-allowed}
 @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
 .msg.bot{background:#fff;font-family:'Spectral',serif;font-size:15.5px}
 .msg.user{background:var(--ink);color:#fff;margin-left:auto;border-color:var(--ink)}
+.msg a{color:var(--blue);text-decoration:none;border-bottom:1px solid var(--blue);word-break:break-word}
+.msg a:hover{color:var(--ink);border-color:var(--ink)}
+.msg h3,.msg h4{font-family:'Archivo',sans-serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin:12px 0 4px}
+.msg ul{padding-left:18px;margin:6px 0}
 .msg .speaker{display:block;font-family:'Archivo',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;margin-bottom:7px;color:var(--blue)}
 .msg.user .speaker{color:var(--neon)}
 #status{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);margin-top:14px;min-height:15px;text-align:center}
@@ -480,6 +484,8 @@ function mdToHtml(s){
     .replace(/^###\s?(.+)$/gm,'<h4>$1</h4>')
     .replace(/^##\s?(.+)$/gm,'<h3>$1</h3>')
     .replace(/^#\s?(.+)$/gm,'<h3>$1</h3>')
+    .replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>')
+    .replace(/(^|[\s>])(https?:\/\/[^\s<]+)/g,'$1<a href="$2" target="_blank" rel="noopener">$2</a>')
     .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
     .replace(/(^|[\s(])\*([^*\n]+)\*/g,'$1<em>$2</em>')
     .replace(/`([^`]+)`/g,'<strong>$1</strong>')
@@ -493,13 +499,28 @@ function mdToHtml(s){
 function stripMd(s){
   return s.replace(/[*_`#>|]/g,'').replace(/\s{2,}/g,' ').trim();
 }
+/* Speech-safe text. Reading a URL aloud is unbearable - it spells out every
+   slash and hyphen - so links become their label, or just disappear. */
+function toSpeech(s){
+  return stripMd(
+    String(s)
+      .replace(/\[([^\]]+)\]\((https?:[^)]+)\)/g,'$1')   // [label](url) -> label
+      .replace(/\((https?:\/\/[^)]+)\)/g,'')             // (bare url)
+      .replace(/<https?:\/\/[^>]+>/g,'')
+      .replace(/https?:\/\/\S+/g,'')                     // any leftover url
+      .replace(/\bwww\.\S+/gi,'')
+      .replace(/\[\d+\]/g,'')                            // [1] style citations
+      .replace(/\(\s*\)/g,'')
+      .replace(/\s+([.,;:!?])/g,'$1')
+  ).replace(/\s{2,}/g,' ');
+}
 function setStatus(t,hot){const s=document.getElementById('status');s.textContent=t||'';s.className=hot?'hot':''}
 
 /* show the Strategist's reply big and centered; long ones get trimmed with a
    "read the full answer" escape into the transcript drawer */
 function showReply(text){
   S.lastReply=text;
-  const clean=stripMd(text);                        // no raw ** or ## on the stage
+  const clean=toSpeech(text);                       // no raw **, ##, or link syntax on the stage
   const cap=document.getElementById('caption'), more=document.getElementById('more');
   cap.className='';
   if(clean.length>340){
@@ -539,10 +560,34 @@ function userTurn(text){
 }
 
 /* ================= CLAUDE ================= */
+/* A ticking, changing signal. Web research turns can run 20s+ and a static
+   "working on it" reads as frozen. */
+let waitTimer=null;
+function startWaiting(planMode){
+  const cap=document.getElementById('caption');
+  const started=Date.now();
+  const beats=planMode
+    ? ['Pulling the whole session together','Writing your plan','Pressure-testing it','Almost there']
+    : (S.web?['Thinking','Digging into it','Checking the research','Still going, this one is meaty']
+            :['Thinking','Working it through','Still going']);
+  document.getElementById('more').style.display='none';
+  cap.className='interim';
+  const tick=()=>{
+    const s=Math.round((Date.now()-started)/1000);
+    const beat=beats[Math.min(Math.floor(s/6),beats.length-1)];
+    cap.textContent=beat+'... '+s+'s';
+    setMode('thinking',beat.toUpperCase());
+  };
+  tick();
+  clearInterval(waitTimer);
+  waitTimer=setInterval(tick,1000);
+}
+function stopWaiting(){clearInterval(waitTimer);waitTimer=null}
+
 async function callClaude(planMode){
   if(S.busy)return;S.busy=true;
   setMode('thinking');
-  if(!planMode){const cap=document.getElementById('caption');cap.className='interim';cap.textContent='Working on it...';document.getElementById('more').style.display='none'}
+  startWaiting(planMode);
   const messages=S.history.length?[...S.history]:[{role:'user',content:'(The founder just sat down. Open the session.)'}];
   if(planMode) messages.push({role:'user',content:PLAN_PROMPT});
   try{
@@ -557,6 +602,7 @@ async function callClaude(planMode){
     const data=await r.json();
     if(!r.ok||data.error)throw new Error(data.error||('Server error '+r.status));
     const text=data.text||'';
+    stopWaiting();
     if(planMode){renderPlan(text)}
     else{
       addMsg('bot',text);
@@ -567,15 +613,16 @@ async function callClaude(planMode){
         // Read the whole answer, however long. speakLong chunks it under the
         // route's 2500-char cap; it used to stop at 400 and say "the full
         // breakdown is on your screen", which buried the research.
-        speakLong(text.replace(/[#*_`>|-]/g,' '));
+        speakLong(toSpeech(text));
       }else{setMode('idle')}
     }
   }catch(err){
+    stopWaiting();
     setMode('idle');
     document.getElementById('caption').className='';
     document.getElementById('caption').textContent='';
     setStatus('Error: '+err.message,true);
-  }finally{S.busy=false}
+  }finally{stopWaiting();S.busy=false}
 }
 
 /* ================= VOICE OUT =================
@@ -738,7 +785,7 @@ function renderPlan(html){
     document.getElementById('planbtns').style.display='none';
     document.getElementById('readrow').style.display='flex';
     setStatus('Reading your plan back to you...');
-    speakLong(planToSpeech(safe),finishReading);
+    speakLong(toSpeech(planToSpeech(safe)),finishReading);
   }else{
     finishReading();
   }
