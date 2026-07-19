@@ -2,7 +2,7 @@
 // only that key is set, and to the browser's own voice if neither is.
 // Both providers return MP3, so the client (and the orb's waveform) is unchanged.
 
-const OPENAI_VOICE = process.env.OPENAI_VOICE_ID || "onyx";
+const OPENAI_VOICE = process.env.OPENAI_VOICE_ID || "nova";
 // Voices the client may pick. Anything else falls back to the default.
 const ALLOWED_VOICES = ["alloy","ash","ballad","coral","echo","fable","nova","onyx","sage","shimmer","verse"];
 const OPENAI_TTS_MODEL = process.env.OPENAI_TTS_MODEL || "gpt-4o-mini-tts";

@@ -148,18 +148,18 @@ footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-t
     <label>The Strategist's voice</label>
     <select id="k_voice" style="width:100%;font-family:'Archivo',sans-serif;font-size:14px;color:var(--ink);border:1px solid var(--line);border-bottom:1px solid var(--ink);padding:12px 14px;background:#fff;border-radius:0"
       onchange="setVoice(this.value)">
-      <optgroup label="Deeper">
-        <option value="onyx">Onyx &mdash; deep, warm (default)</option>
-        <option value="ash">Ash &mdash; steady, grounded</option>
-        <option value="echo">Echo &mdash; even, measured</option>
-        <option value="verse">Verse &mdash; expressive</option>
-      </optgroup>
       <optgroup label="Higher">
-        <option value="nova">Nova &mdash; bright, direct</option>
+        <option value="nova" selected>Nova &mdash; bright, direct (default)</option>
         <option value="shimmer">Shimmer &mdash; warm, open</option>
         <option value="coral">Coral &mdash; lively</option>
         <option value="sage">Sage &mdash; calm, even</option>
         <option value="ballad">Ballad &mdash; soft</option>
+      </optgroup>
+      <optgroup label="Deeper">
+        <option value="onyx">Onyx &mdash; deep, warm</option>
+        <option value="ash">Ash &mdash; steady, grounded</option>
+        <option value="echo">Echo &mdash; even, measured</option>
+        <option value="verse">Verse &mdash; expressive</option>
       </optgroup>
     </select>
     <div class="note">Hit Start to hear it. Change any time in Settings.</div>
@@ -275,7 +275,7 @@ const DEFAULT_MODEL="google/gemini-2.5-flash";
 const DEFAULT_ELEVEN_VOICE="pNInz6obpgDQGcFmaJgB";
 
 /* ================= STATE ================= */
-const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"onyx",hands:true};
+const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"nova",hands:true};
 
 function setVoice(v){
   S.voice=v;
