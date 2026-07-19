@@ -467,24 +467,47 @@ const chatEl=document.getElementById('chat');
 function addMsg(role,text){
   const d=document.createElement('div');
   d.className='msg '+(role==='user'?'user':'bot');
-  d.innerHTML=`<span class="speaker">${role==='user'?'You':'The Counselor'}</span>`+escHtml(text);
+  d.innerHTML=`<span class="speaker">${role==='user'?'You':'The Counselor'}</span>`+
+    (role==='user'?escHtml(text):mdToHtml(text));
   chatEl.appendChild(d);chatEl.scrollTop=chatEl.scrollHeight;
 }
 function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;')}
+
+/* The model writes markdown even when asked not to. Render it instead of
+   showing raw ** and ## to the founder. Escapes first, so this stays safe. */
+function mdToHtml(s){
+  return escHtml(s)
+    .replace(/^###\s?(.+)$/gm,'<h4>$1</h4>')
+    .replace(/^##\s?(.+)$/gm,'<h3>$1</h3>')
+    .replace(/^#\s?(.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
+    .replace(/(^|[\s(])\*([^*\n]+)\*/g,'$1<em>$2</em>')
+    .replace(/`([^`]+)`/g,'<strong>$1</strong>')
+    .replace(/^\s*[-•]\s+(.+)$/gm,'<li>$1</li>')
+    .replace(/^\s*\d+\.\s+(.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[\s\S]*?<\/li>)(?!\s*<li>)/g,'<ul>$1</ul>')
+    .replace(/\n{2,}/g,'<br><br>')
+    .replace(/\n/g,'<br>');
+}
+/* Plain text for the caption and for speech: drop the markers, keep the words. */
+function stripMd(s){
+  return s.replace(/[*_`#>|]/g,'').replace(/\s{2,}/g,' ').trim();
+}
 function setStatus(t,hot){const s=document.getElementById('status');s.textContent=t||'';s.className=hot?'hot':''}
 
 /* show the Strategist's reply big and centered; long ones get trimmed with a
    "read the full answer" escape into the transcript drawer */
 function showReply(text){
   S.lastReply=text;
+  const clean=stripMd(text);                        // no raw ** or ## on the stage
   const cap=document.getElementById('caption'), more=document.getElementById('more');
   cap.className='';
-  if(text.length>340){
-    const cut=text.slice(0,300);
+  if(clean.length>340){
+    const cut=clean.slice(0,300);
     cap.textContent=(cut.slice(0,Math.max(cut.lastIndexOf('.'),cut.lastIndexOf('!'))+1)||cut)+' ';
     more.style.display='inline-block';
   }else{
-    cap.textContent=text; more.style.display='none';
+    cap.textContent=clean; more.style.display='none';
   }
 }
 function showInterim(text){
@@ -668,7 +691,11 @@ function stopMic(send=true){
 /* ================= PLAN ================= */
 function buildPlan(){
   if(S.history.length<4){setStatus('Talk a little longer first. The plan is only as good as the session.',true);return}
+  // callClaude bails silently while a turn is in flight, which reads as a dead
+  // button. Say so instead.
+  if(S.busy){setStatus('Still finishing the last answer. Try the plan again in a second.',true);return}
   stopSpeaking();
+  setStatus('Building your plan. This one takes a few seconds...');
   callClaude(true);
 }
 /* Turn the plan HTML into something that sounds right read aloud: headers become
@@ -693,7 +720,13 @@ function planToSpeech(html){
 }
 
 function renderPlan(html){
-  const safe=html.replace(/<script[\s\S]*?<\/script>/gi,'');
+  // The model is asked for HTML and usually complies, but it sometimes wraps it
+  // in ``` fences or answers in markdown. Either would render as a wall of raw
+  // text, so normalise before display.
+  let raw=String(html||'').trim()
+    .replace(/^```(?:html)?\s*/i,'').replace(/```\s*$/,'').trim();
+  if(!/<(h2|h3|p|ul|li|strong)\b/i.test(raw)) raw=mdToHtml(raw);
+  const safe=raw.replace(/<script[\s\S]*?<\/script>/gi,'');
   const sheet=document.getElementById('plansheet');
   sheet.innerHTML=safe+`<p style="margin-top:18px;font-size:12px;font-family:'Archivo',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)">FonzMorris Monetization Framework &middot; ${new Date().toLocaleDateString()}</p>`;
   sheet.style.display='block';
