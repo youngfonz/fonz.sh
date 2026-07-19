@@ -103,7 +103,7 @@ button:disabled{opacity:.35;cursor:not-allowed}
 #plansheet ul{padding-left:20px}
 #plansheet li{margin-bottom:4px}
 footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-transform:uppercase;text-align:center}
-@media print{ header,#rail,#status,#settings,#drawer,#planbtns,#orbwrap,#state,#caption,#typerow{display:none!important} #plansheet{border:none} }
+@media print{ header,#rail,#status,#settings,#drawer,#planbtns,#readrow,#orbwrap,#state,#caption,#typerow{display:none!important} #plansheet{border:none} }
 @media (prefers-reduced-motion:reduce){ #orb{opacity:.9} }
 </style>
 </head>
@@ -177,7 +177,11 @@ footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-t
 <div id="status"></div>
 
 <div id="plansheet"></div>
-<div style="display:none;gap:12px;margin-top:14px" id="planbtns">
+<div style="display:none;gap:12px;margin-top:14px;align-items:center" id="readrow">
+  <button class="ghost" onclick="stopReading()">Skip the read-back &rarr;</button>
+</div>
+<div style="display:none;gap:12px;margin-top:14px;flex-wrap:wrap" id="planbtns">
+  <button class="gold" onclick="downloadPlan()">Download plan</button>
   <button onclick="copyPlan()">Copy plan</button>
   <button class="gold" onclick="window.print()">Print / PDF</button>
   <button class="ghost" onclick="backToChat()">&larr; Back to session</button>
@@ -555,31 +559,74 @@ async function callClaude(planMode){
   }finally{S.busy=false}
 }
 
-/* ================= VOICE OUT ================= */
-async function speak(text){
-  stopSpeaking();
-  try{
-    setMode('speaking');
-    const r=await fetch('/api/biz101/tts',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({passcode:S.pass,text,speed:S.speed})});
-    if(r.ok){
-      const blob=await r.blob();
-      S.audioEl=new Audio(URL.createObjectURL(blob));
-      S.audioEl.crossOrigin='anonymous';
-      ensureAudio(); attachTTS(S.audioEl);       // orb rides the real waveform
-      S.audioEl.onended=()=>{setMode('idle');ttsNode=null};
-      S.audioEl.play();return;
-    }
-  }catch(_){/* fall through to browser voice */}
-  const u=new SpeechSynthesisUtterance(text);
-  u.rate=Math.min(2,S.speed*1.02);u.pitch=.95;
-  const voices=speechSynthesis.getVoices();
-  const pref=voices.find(v=>/en[-_]US/i.test(v.lang)&&/male|david|guy|daniel/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang));
-  if(pref)u.voice=pref;
-  u.onend=()=>setMode('idle');
-  setMode('speaking');
-  speechSynthesis.speak(u);
+/* ================= VOICE OUT =================
+   speakOne resolves when the audio actually finishes, so longer material can be
+   queued. The TTS route caps input at 2500 chars, so anything long (the plan)
+   must be chunked or it truncates mid-sentence. */
+let speakToken=0;                                  // bumped to cancel an in-flight queue
+
+function speakOne(text){
+  return new Promise(async resolve=>{
+    try{
+      const r=await fetch('/api/biz101/tts',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({passcode:S.pass,text,speed:S.speed})});
+      if(r.ok){
+        const blob=await r.blob();
+        S.audioEl=new Audio(URL.createObjectURL(blob));
+        S.audioEl.crossOrigin='anonymous';
+        ensureAudio(); attachTTS(S.audioEl);       // orb rides the real waveform
+        S.audioEl.onended=()=>{ttsNode=null;resolve()};
+        S.audioEl.onerror=()=>{ttsNode=null;resolve()};
+        S.audioEl.play();return;
+      }
+    }catch(_){/* fall through to browser voice */}
+    const u=new SpeechSynthesisUtterance(text);
+    u.rate=Math.min(2,S.speed*1.02);u.pitch=.95;
+    const voices=speechSynthesis.getVoices();
+    const pref=voices.find(v=>/en[-_]US/i.test(v.lang)&&/male|david|guy|daniel/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang));
+    if(pref)u.voice=pref;
+    u.onend=()=>resolve();
+    u.onerror=()=>resolve();
+    speechSynthesis.speak(u);
+  });
 }
+
+async function speak(text,onDone){
+  stopSpeaking();
+  const mine=++speakToken;
+  setMode('speaking');
+  await speakOne(text);
+  if(mine!==speakToken)return;                     // superseded or stopped
+  setMode('idle');
+  if(onDone)onDone();
+}
+
+/* Split on sentence boundaries, staying under the route's limit. */
+function chunkText(text,max=1100){
+  const parts=String(text).split(/(?<=[.!?])\s+/);
+  const out=[];let cur='';
+  for(const p of parts){
+    if((cur+' '+p).trim().length>max){ if(cur)out.push(cur.trim()); cur=p.slice(0,max) }
+    else cur=(cur+' '+p).trim();
+  }
+  if(cur)out.push(cur.trim());
+  return out.filter(Boolean);
+}
+
+async function speakLong(text,onDone){
+  stopSpeaking();
+  const mine=++speakToken;
+  const chunks=chunkText(text);
+  setMode('speaking');
+  for(const c of chunks){
+    await speakOne(c);
+    if(mine!==speakToken)return;                   // stopped mid-read
+  }
+  setMode('idle');
+  if(onDone)onDone();
+}
+
 function stopSpeaking(){
+  speakToken++;                                    // invalidate any running queue
   speechSynthesis.cancel();
   if(S.audioEl){S.audioEl.pause();S.audioEl=null}
   ttsNode=null;
@@ -628,18 +675,72 @@ function buildPlan(){
   stopSpeaking();
   callClaude(true);
 }
+/* Turn the plan HTML into something that sounds right read aloud: headers become
+   spoken beats, list items become sentences, tags disappear. */
+function planToSpeech(html){
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi,'')
+    .replace(/<h2[^>]*>/gi,'\n')
+    .replace(/<h3[^>]*>/gi,'\n')
+    .replace(/<\/h2>|<\/h3>/gi,'. ')
+    .replace(/<li[^>]*>/gi,'\n')
+    .replace(/<\/li>/gi,'. ')
+    .replace(/<\/p>|<\/ul>/gi,'\n')
+    .replace(/<[^>]+>/g,'')
+    .replace(/&amp;/g,'and').replace(/&nbsp;/g,' ')
+    .replace(/&[a-z]+;/gi,' ')
+    .replace(/[*_`#>|]/g,' ')
+    .replace(/\.\s*\./g,'.')
+    .replace(/\n{2,}/g,'\n')
+    .replace(/[ \t]{2,}/g,' ')
+    .trim();
+}
+
 function renderPlan(html){
   const safe=html.replace(/<script[\s\S]*?<\/script>/gi,'');
   const sheet=document.getElementById('plansheet');
   sheet.innerHTML=safe+`<p style="margin-top:18px;font-size:12px;font-family:'Archivo',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)">FonzMorris Monetization Framework &middot; ${new Date().toLocaleDateString()}</p>`;
   sheet.style.display='block';
-  document.getElementById('planbtns').style.display='flex';
   document.getElementById('stage').style.display='none';
   sheet.scrollIntoView({behavior:'smooth'});
+
+  // Read it back first, then offer the download.
+  if(document.getElementById('speakToggle').checked){
+    document.getElementById('planbtns').style.display='none';
+    document.getElementById('readrow').style.display='flex';
+    setStatus('Reading your plan back to you...');
+    speakLong(planToSpeech(safe),finishReading);
+  }else{
+    finishReading();
+  }
+}
+function finishReading(){
+  document.getElementById('readrow').style.display='none';
+  document.getElementById('planbtns').style.display='flex';
+  setStatus('That\'s the plan. Download it or print it.');
+}
+function stopReading(){stopSpeaking();setMode('idle');finishReading()}
+
+function downloadPlan(){
+  const sheet=document.getElementById('plansheet');
+  // Carries the app's own type system; the system stack is only the offline fallback.
+  const doc='<!DOCTYPE html><html><head><meta charset="utf-8"><title>Biz101 Plan</title>'+
+    '<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&family=Spectral:ital,wght@0,400;1,400&display=swap" rel="stylesheet">'+
+    '<style>body{font-family:\'Spectral\',Georgia,serif;max-width:720px;margin:40px auto;padding:0 24px;color:#0a0a0a;line-height:1.6}'+
+    'h2{font-family:\'Archivo\',system-ui,sans-serif;font-weight:900;text-transform:uppercase;border-bottom:3px solid #2447ff;padding-bottom:10px}'+
+    'h3{font-family:\'Archivo\',system-ui,sans-serif;font-weight:700;font-size:12px;letter-spacing:.22em;color:#2447ff;margin-top:22px}'+
+    'li{margin-bottom:4px}</style></head><body>'+sheet.innerHTML+'</body></html>';
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob([doc],{type:'text/html'}));
+  a.download='biz101-plan-'+new Date().toISOString().slice(0,10)+'.html';
+  document.body.appendChild(a);a.click();a.remove();
+  setStatus('Plan downloaded.');
 }
 function backToChat(){
+  stopSpeaking();setMode('idle');
   document.getElementById('plansheet').style.display='none';
   document.getElementById('planbtns').style.display='none';
+  document.getElementById('readrow').style.display='none';
   document.getElementById('stage').style.display='flex';
   sizeOrb();
 }
