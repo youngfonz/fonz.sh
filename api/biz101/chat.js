@@ -3,12 +3,15 @@ const SUPABASE_URL = process.env.SUPABASE_URL || "https://qrtvbclbrumsrwbugvrr.s
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
-  const { passcode, name, sessionKey, messages, planMode, web, model } = req.body || {};
+  const { passcode, name, sessionKey, messages, planMode, web, model, verify } = req.body || {};
 
   if (!process.env.TEAM_PASSCODE || !process.env.OPENROUTER_API_KEY)
     return res.status(500).json({ error: "Server not configured. Add TEAM_PASSCODE and OPENROUTER_API_KEY in Vercel env settings." });
   if (passcode !== process.env.TEAM_PASSCODE)
     return res.status(401).json({ error: "Wrong passcode." });
+
+  // Passcode-only check so the app can gate entry without spending a model call.
+  if (verify) return res.status(200).json({ ok: true });
   if (!Array.isArray(messages) || messages.length > 400)
     return res.status(400).json({ error: "Bad request." });
 

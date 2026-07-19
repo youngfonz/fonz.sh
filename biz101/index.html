@@ -53,6 +53,11 @@ button:disabled{opacity:.35;cursor:not-allowed}
 .field input:focus,.field textarea:focus{outline:none;border-color:var(--blue)}
 .field input::placeholder,.field textarea::placeholder{color:#b3b3b3}
 .field .note{font-size:11px;color:var(--mut);margin-top:5px}
+#gateerr{display:none;border:1px solid var(--ink);border-left:6px solid var(--blue);background:#fff;
+  padding:14px 16px;margin:0 0 18px;font-size:13.5px;font-weight:700;color:var(--ink)}
+#gateerr.on{display:block;animation:shake .3s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.field input.bad{border-color:var(--blue);border-width:2px}
 
 /* ===== STAGE (voice-first) ===== */
 #stage{display:none;flex:1;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px 0 0}
@@ -124,6 +129,7 @@ footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-t
 <div id="settings">
   <h2>Sit down with the Strategist</h2>
   <p>Enter your name and the team passcode. That's it, no API keys needed.</p>
+  <div id="gateerr"></div>
   <div class="field">
     <label>Your name</label>
     <input type="text" id="k_name" placeholder="First and last">
@@ -146,8 +152,8 @@ footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-t
     <label>Bring in a previous conversation (optional)</label>
     <textarea id="k_import" style="min-height:70px;font-size:13px" placeholder="Paste a copied transcript from an earlier session. The counselor reads it and picks up where you left off."></textarea>
   </div>
-  <button class="gold" onclick="startSession()">Start the session &rarr;</button>
-  <button class="ghost" id="resumebtn" style="display:none" onclick="resumeSaved()">Resume last session</button>
+  <button class="gold" onclick="startSession(event)">Start the session &rarr;</button>
+  <button class="ghost" id="resumebtn" style="display:none" onclick="resumeSaved(event)">Resume last session</button>
   <div class="note" style="margin-top:10px">Voice input needs Chrome or Edge. Everything also works by typing. Sessions autosave in this browser.</div>
 </div>
 
@@ -266,11 +272,48 @@ try{
 
 function toggleSettings(){const s=document.getElementById('settings');s.style.display=s.style.display==='none'?'block':'none'}
 
-function startSession(){
-  S.name=document.getElementById('k_name').value.trim();
-  S.pass=document.getElementById('k_pass').value.trim();
+/* The gate. Nothing gets past this without a passcode the server accepts. */
+function gateError(msg){
+  const g=document.getElementById('gateerr');
+  g.textContent=msg||'';
+  g.className=msg?'on':'';
+  document.getElementById('k_pass').classList.toggle('bad',!!msg);
+  if(msg)document.getElementById('k_pass').focus();
+}
+async function checkPasscode(pass){
+  try{
+    const r=await fetch('/api/biz101/chat',{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({passcode:pass,verify:true})});
+    if(r.ok)return{ok:true};
+    const d=await r.json().catch(()=>({}));
+    return{ok:false,error:d.error||('Server error '+r.status)};
+  }catch(_){return{ok:false,error:'Could not reach the server. Check your connection.'}}
+}
+async function gate(btn,label){
+  const name=document.getElementById('k_name').value.trim();
+  const pass=document.getElementById('k_pass').value.trim();
+  if(!name){gateError('Enter your name first.');return null}
+  if(!pass){gateError('Enter the team passcode.');return null}
+  gateError('');
+  const old=btn?btn.textContent:'';
+  if(btn){btn.disabled=true;btn.textContent=label}
+  const res=await checkPasscode(pass);
+  if(btn){btn.disabled=false;btn.textContent=old}
+  if(!res.ok){
+    gateError(res.error==='Wrong passcode.'
+      ? 'That passcode is not right. Ask Fonz for the current one.'
+      : res.error);
+    return null;
+  }
+  return{name,pass};
+}
+
+async function startSession(ev){
+  const btn=ev&&ev.target;
+  const creds=await gate(btn,'Checking...');
+  if(!creds)return;                                  // stay on the gate
+  S.name=creds.name;S.pass=creds.pass;
   S.web=document.getElementById('k_web').checked;
-  if(!S.name||!S.pass){setStatus("Name and team passcode required.",true);return}
   rememberName(S.name);
   if(!S.sessionKey) S.sessionKey=S.name.replace(/\s+/g,'-').toLowerCase()+'-'+Date.now().toString(36);
   document.getElementById('settings').style.display='none';
@@ -291,24 +334,24 @@ function persist(){
 /* Remember the name only. The passcode is shared with the team, so it stays
    out of localStorage and gets typed each time. */
 function rememberName(n){try{if(n)localStorage.setItem('fonz_name',n)}catch(_){}}
-function resumeSaved(){
+async function resumeSaved(ev){
+  const creds=await gate(ev&&ev.target,'Checking...');
+  if(!creds)return;                                  // wrong passcode: stay put
   try{
     const d=JSON.parse(localStorage.getItem('fonz_session'));
-    if(!d||!d.history||!d.history.length)return;
+    if(!d||!d.history||!d.history.length){gateError('No saved session found in this browser.');return}
     S.history=d.history;
     if(d.sessionKey)S.sessionKey=d.sessionKey;
     d.history.forEach(m=>addMsg(m.role==='user'?'user':'bot',m.content));
     const last=[...d.history].reverse().find(m=>m.role==='assistant');
     if(last) showReply(last.content);
     document.getElementById('k_import').value='';
-    startSessionAfterResume();
-  }catch(_){setStatus('Could not load saved session',true)}
+    startSessionAfterResume(creds);
+  }catch(_){gateError('Could not load the saved session. Start a new one.')}
 }
-function startSessionAfterResume(){
-  S.name=document.getElementById('k_name').value.trim();
-  S.pass=document.getElementById('k_pass').value.trim();
+function startSessionAfterResume(creds){
+  S.name=creds.name;S.pass=creds.pass;
   S.web=document.getElementById('k_web').checked;
-  if(!S.name||!S.pass){setStatus("Enter your name and passcode first, then hit Resume.",true);S.history=[];chatEl.innerHTML='';return}
   rememberName(S.name);
   document.getElementById('settings').style.display='none';
   document.getElementById('stage').style.display='flex';
@@ -626,7 +669,16 @@ async function callClaude(planMode){
     setMode('idle');
     document.getElementById('caption').className='';
     document.getElementById('caption').textContent='';
-    setStatus('Error: '+err.message,true);
+    // If the passcode stopped working mid-session, send them back to the gate
+    // rather than leaving them in an app that silently can't talk.
+    if(/passcode/i.test(err.message)){
+      document.getElementById('stage').style.display='none';
+      document.getElementById('settings').style.display='block';
+      gateError('That passcode is no longer working. Enter it again.');
+      setStatus('');
+    }else{
+      setStatus('Error: '+err.message,true);
+    }
   }finally{S.busy=false}   // waiting clock is cleared by reveal(), not here
 }
 
