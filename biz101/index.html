@@ -132,6 +132,13 @@ footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-t
     <label class="toggle" style="text-transform:none;letter-spacing:0"><input type="checkbox" id="k_web" checked> Web research on (the Strategist can search the internet for competitive intel, pricing, market data)</label>
   </div>
   <div class="field">
+    <label>Voice speed <span id="speedval" style="color:var(--blue)">1.15&times;</span></label>
+    <input type="range" id="k_speed" min="0.8" max="1.6" step="0.05" value="1.15"
+      style="width:100%;padding:0;border:none;accent-color:var(--blue)"
+      oninput="setSpeed(this.value)">
+    <div class="note">Takes effect on the next thing the Strategist says.</div>
+  </div>
+  <div class="field">
     <label>Bring in a previous conversation (optional)</label>
     <textarea id="k_import" style="min-height:70px;font-size:13px" placeholder="Paste a copied transcript from an earlier session. The counselor reads it and picks up where you left off."></textarea>
   </div>
@@ -228,7 +235,23 @@ const DEFAULT_MODEL="google/gemini-2.5-flash";
 const DEFAULT_ELEVEN_VOICE="pNInz6obpgDQGcFmaJgB";
 
 /* ================= STATE ================= */
-const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:""};
+const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15};
+
+/* voice pace: persists so you only dial it in once */
+function setSpeed(v){
+  S.speed=Number(v);
+  document.getElementById('speedval').textContent=S.speed.toFixed(2)+'×';
+  try{localStorage.setItem('fonz_speed',String(S.speed))}catch(_){}
+}
+try{
+  const sv=parseFloat(localStorage.getItem('fonz_speed'));
+  if(sv>=0.8&&sv<=1.6){S.speed=sv;
+    window.addEventListener('DOMContentLoaded',()=>{
+      const el=document.getElementById('k_speed');
+      if(el){el.value=sv;document.getElementById('speedval').textContent=sv.toFixed(2)+'×'}
+    });
+  }
+}catch(_){}
 
 function toggleSettings(){const s=document.getElementById('settings');s.style.display=s.style.display==='none'?'block':'none'}
 
@@ -522,7 +545,7 @@ async function speak(text){
   stopSpeaking();
   try{
     setMode('speaking');
-    const r=await fetch('/api/biz101/tts',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({passcode:S.pass,text})});
+    const r=await fetch('/api/biz101/tts',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({passcode:S.pass,text,speed:S.speed})});
     if(r.ok){
       const blob=await r.blob();
       S.audioEl=new Audio(URL.createObjectURL(blob));
@@ -533,7 +556,7 @@ async function speak(text){
     }
   }catch(_){/* fall through to browser voice */}
   const u=new SpeechSynthesisUtterance(text);
-  u.rate=1.02;u.pitch=.95;
+  u.rate=Math.min(2,S.speed*1.02);u.pitch=.95;
   const voices=speechSynthesis.getVoices();
   const pref=voices.find(v=>/en[-_]US/i.test(v.lang)&&/male|david|guy|daniel/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang));
   if(pref)u.voice=pref;
