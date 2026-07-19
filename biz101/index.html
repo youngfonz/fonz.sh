@@ -246,7 +246,7 @@ const DEFAULT_MODEL="google/gemini-2.5-flash";
 const DEFAULT_ELEVEN_VOICE="pNInz6obpgDQGcFmaJgB";
 
 /* ================= STATE ================= */
-const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15};
+const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false};
 
 /* voice pace: persists so you only dial it in once */
 function setSpeed(v){
@@ -562,10 +562,11 @@ function userTurn(text){
 /* ================= CLAUDE ================= */
 /* A ticking, changing signal. Web research turns can run 20s+ and a static
    "working on it" reads as frozen. */
-let waitTimer=null;
+let waitTimer=null,waitOverride=null;
 function startWaiting(planMode){
   const cap=document.getElementById('caption');
   const started=Date.now();
+  waitOverride=null;
   const beats=planMode
     ? ['Pulling the whole session together','Writing your plan','Pressure-testing it','Almost there']
     : (S.web?['Thinking','Digging into it','Checking the research','Still going, this one is meaty']
@@ -574,7 +575,7 @@ function startWaiting(planMode){
   cap.className='interim';
   const tick=()=>{
     const s=Math.round((Date.now()-started)/1000);
-    const beat=beats[Math.min(Math.floor(s/6),beats.length-1)];
+    const beat=waitOverride||beats[Math.min(Math.floor(s/6),beats.length-1)];
     cap.textContent=beat+'... '+s+'s';
     setMode('thinking',beat.toUpperCase());
   };
@@ -582,7 +583,10 @@ function startWaiting(planMode){
   clearInterval(waitTimer);
   waitTimer=setInterval(tick,1000);
 }
-function stopWaiting(){clearInterval(waitTimer);waitTimer=null}
+/* Keep the clock running while audio is being synthesised, just say what it's
+   doing - otherwise the caption freezes on the last number and reads as hung. */
+function setWaitBeat(t){waitOverride=t}
+function stopWaiting(){clearInterval(waitTimer);waitTimer=null;waitOverride=null}
 
 async function callClaude(planMode){
   if(S.busy)return;S.busy=true;
@@ -602,19 +606,20 @@ async function callClaude(planMode){
     const data=await r.json();
     if(!r.ok||data.error)throw new Error(data.error||('Server error '+r.status));
     const text=data.text||'';
-    stopWaiting();
-    if(planMode){renderPlan(text)}
+    if(planMode){stopWaiting();renderPlan(text)}
     else{
-      addMsg('bot',text);
-      showReply(text);
+      addMsg('bot',text);                        // transcript can fill immediately
       S.history.push({role:'assistant',content:text});
       persist();
       if(document.getElementById('speakToggle').checked){
-        // Read the whole answer, however long. speakLong chunks it under the
-        // route's 2500-char cap; it used to stop at 400 and say "the full
-        // breakdown is on your screen", which buried the research.
-        speakLong(toSpeech(text));
-      }else{setMode('idle')}
+        // Hold the caption until the voice actually starts. Showing text first
+        // and speaking seconds later made the whole thing feel laggy.
+        setWaitBeat('Getting the voice ready');
+        let shown=false;
+        const reveal=()=>{if(shown)return;shown=true;stopWaiting();showReply(text)};
+        setTimeout(reveal,8000);                 // never hold the text hostage
+        speakLong(toSpeech(text),null,reveal);
+      }else{stopWaiting();showReply(text);setMode('idle')}
     }
   }catch(err){
     stopWaiting();
@@ -622,7 +627,7 @@ async function callClaude(planMode){
     document.getElementById('caption').className='';
     document.getElementById('caption').textContent='';
     setStatus('Error: '+err.message,true);
-  }finally{stopWaiting();S.busy=false}
+  }finally{S.busy=false}   // waiting clock is cleared by reveal(), not here
 }
 
 /* ================= VOICE OUT =================
@@ -631,65 +636,75 @@ async function callClaude(planMode){
    must be chunked or it truncates mid-sentence. */
 let speakToken=0;                                  // bumped to cancel an in-flight queue
 
-function speakOne(text){
-  return new Promise(async resolve=>{
-    try{
-      const r=await fetch('/api/biz101/tts',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({passcode:S.pass,text,speed:S.speed})});
-      if(r.ok){
-        const blob=await r.blob();
-        S.audioEl=new Audio(URL.createObjectURL(blob));
-        S.audioEl.crossOrigin='anonymous';
-        ensureAudio(); attachTTS(S.audioEl);       // orb rides the real waveform
-        S.audioEl.onended=()=>{ttsNode=null;resolve()};
-        S.audioEl.onerror=()=>{ttsNode=null;resolve()};
-        S.audioEl.play();return;
-      }
-    }catch(_){/* fall through to browser voice */}
-    const u=new SpeechSynthesisUtterance(text);
-    u.rate=Math.min(2,S.speed*1.02);u.pitch=.95;
-    const voices=speechSynthesis.getVoices();
-    const pref=voices.find(v=>/en[-_]US/i.test(v.lang)&&/male|david|guy|daniel/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang));
-    if(pref)u.voice=pref;
-    u.onend=()=>resolve();
-    u.onerror=()=>resolve();
-    speechSynthesis.speak(u);
-  });
-}
-
-async function speak(text,onDone){
-  stopSpeaking();
-  const mine=++speakToken;
-  setMode('speaking');
-  await speakOne(text);
-  if(mine!==speakToken)return;                     // superseded or stopped
-  setMode('idle');
-  if(onDone)onDone();
-}
-
-/* Split on sentence boundaries, staying under the route's limit. */
-function chunkText(text,max=1100){
+/* Time-to-first-word is what the founder actually feels. TTS latency scales
+   with how much text you send, so the first chunk is deliberately tiny (one
+   sentence) to start the voice fast, and every later chunk is synthesised
+   while the previous one is still playing. */
+function chunkText(text,max=1100,firstMax=180){
   const parts=String(text).split(/(?<=[.!?])\s+/);
   const out=[];let cur='';
   for(const p of parts){
-    if((cur+' '+p).trim().length>max){ if(cur)out.push(cur.trim()); cur=p.slice(0,max) }
+    const cap=out.length===0?firstMax:max;
+    if(cur&&(cur+' '+p).trim().length>cap){out.push(cur.trim());cur=p.slice(0,max)}
     else cur=(cur+' '+p).trim();
   }
   if(cur)out.push(cur.trim());
   return out.filter(Boolean);
 }
 
-async function speakLong(text,onDone){
+async function fetchClip(text){
+  try{
+    const r=await fetch('/api/biz101/tts',{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({passcode:S.pass,text,speed:S.speed})});
+    if(r.ok){const a=new Audio(URL.createObjectURL(await r.blob()));a.crossOrigin='anonymous';return a}
+  }catch(_){}
+  return null;                                     // caller falls back to browser voice
+}
+function playClip(a,onStart){
+  return new Promise(res=>{
+    S.audioEl=a; ensureAudio(); attachTTS(a);      // orb rides the real waveform
+    const go=()=>{if(onStart){onStart();onStart=null}};
+    a.onplaying=go;
+    a.onended=()=>{ttsNode=null;res()};
+    a.onerror=()=>{ttsNode=null;go();res()};
+    const p=a.play(); if(p&&p.catch)p.catch(()=>{go();res()});
+  });
+}
+function playBrowser(text,onStart){
+  return new Promise(res=>{
+    const u=new SpeechSynthesisUtterance(text);
+    u.rate=Math.min(2,S.speed*1.02);u.pitch=.95;
+    const voices=speechSynthesis.getVoices();
+    const pref=voices.find(v=>/en[-_]US/i.test(v.lang)&&/male|david|guy|daniel/i.test(v.name))||voices.find(v=>/en[-_]US/i.test(v.lang));
+    if(pref)u.voice=pref;
+    const go=()=>{if(onStart){onStart();onStart=null}};
+    u.onstart=go; u.onend=()=>res(); u.onerror=()=>{go();res()};
+    speechSynthesis.speak(u);
+    setTimeout(go,1200);                           // Safari sometimes skips onstart
+  });
+}
+
+async function speakLong(text,onDone,onStart){
   stopSpeaking();
   const mine=++speakToken;
   const chunks=chunkText(text);
+  if(!chunks.length){if(onStart)onStart();if(onDone)onDone();return}
+  pauseMicForSpeech();                             // never record our own voice
   setMode('speaking');
-  for(const c of chunks){
-    await speakOne(c);
+  let pending=fetchClip(chunks[0]);
+  for(let i=0;i<chunks.length;i++){
+    const clip=await pending;
     if(mine!==speakToken)return;                   // stopped mid-read
+    pending=(i+1<chunks.length)?fetchClip(chunks[i+1]):null;   // synthesise ahead
+    const cb=(i===0)?onStart:null;
+    if(clip) await playClip(clip,cb); else await playBrowser(chunks[i],cb);
+    if(mine!==speakToken)return;
   }
   setMode('idle');
+  resumeMicAfterSpeech();
   if(onDone)onDone();
 }
+function speak(text,onDone){return speakLong(text,onDone)}
 
 function stopSpeaking(){
   speakToken++;                                    // invalidate any running queue
@@ -698,17 +713,41 @@ function stopSpeaking(){
   ttsNode=null;
 }
 
+/* Half-duplex. The mic and the voice must never be live at the same time, or
+   speech recognition transcribes the Strategist and feeds it back as if the
+   founder had said it. */
+function pauseMicForSpeech(){
+  if(!S.listening)return;
+  S.micWasOn=true;
+  S.listening=false;                               // stops the onend auto-restart
+  if(S.rec){S.rec.onend=null;S.rec.onresult=null;try{S.rec.stop()}catch(_){}}
+  detachMic();
+}
+function resumeMicAfterSpeech(){
+  if(!S.micWasOn)return;
+  S.micWasOn=false;
+  // Small gap so the tail of the audio (and any room echo) isn't captured.
+  setTimeout(()=>{if(!S.listening&&!S.busy)startMic()},350);
+}
+
 /* ================= VOICE IN ================= */
 function toggleMic(){
   if(S.listening){stopMic();return}
+  S.micWasOn=false;                            // a manual tap overrides auto-resume
+  stopSpeaking();                              // barge-in: talking over it stops it
+  setMode('idle');
+  startMic();
+}
+function startMic(){
+  if(S.listening)return;
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){setStatus('Voice input needs Chrome or Edge. Type instead.',true);toggleType();return}
-  stopSpeaking();
   attachMic();
   S.rec=new SR();
   S.rec.lang='en-US';S.rec.interimResults=true;S.rec.continuous=true;
   let finalText='';
   S.rec.onresult=e=>{
+    if(mode==='speaking')return;               // never transcribe our own voice
     let interim='';
     for(let i=e.resultIndex;i<e.results.length;i++){
       if(e.results[i].isFinal)finalText+=e.results[i][0].transcript+' ';
@@ -718,11 +757,11 @@ function toggleMic(){
     document.getElementById('textin').value=all;
     showInterim(all);                          // you see your words land live
   };
-  S.rec.onerror=e=>{setStatus('Mic error: '+e.error,true);stopMic(false)};
+  S.rec.onerror=e=>{if(e.error!=='aborted')setStatus('Mic error: '+e.error,true);stopMic(false)};
   S.rec.onend=()=>{ if(S.listening){/*auto-restart while listening*/ try{S.rec.start()}catch(_){}} };
-  S.rec.start();
+  try{S.rec.start()}catch(_){return}
   S.listening=true;
-  setMode('listening','Listening &middot; tap to send'.replace('&middot;','·'));
+  setMode('listening','Listening · tap to send');
 }
 function stopMic(send=true){
   S.listening=false;
