@@ -541,14 +541,10 @@ async function callClaude(planMode){
       S.history.push({role:'assistant',content:text});
       persist();
       if(document.getElementById('speakToggle').checked){
-        // Long research answers: speak the opening, let them read the rest.
-        let spoken=text;
-        if(text.length>600){
-          const cut=text.slice(0,400);
-          spoken=cut.slice(0,Math.max(cut.lastIndexOf('.'),cut.lastIndexOf('!'))+1)||cut;
-          spoken+=" The full breakdown is on your screen.";
-        }
-        speak(spoken.replace(/[#*_`>|-]/g,' '));
+        // Read the whole answer, however long. speakLong chunks it under the
+        // route's 2500-char cap; it used to stop at 400 and say "the full
+        // breakdown is on your screen", which buried the research.
+        speakLong(text.replace(/[#*_`>|-]/g,' '));
       }else{setMode('idle')}
     }
   }catch(err){
