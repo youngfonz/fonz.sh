@@ -978,6 +978,9 @@ function stopWaiting(){clearInterval(waitTimer);waitTimer=null;waitOverride=null
 
 async function callClaude(planMode){
   if(S.busy)return;S.busy=true;
+  // Plans are rendered whole, so only conversation streams. Falls back to the
+  // buffered path anywhere ReadableStream isn't available.
+  const canStream=typeof ReadableStream!=='undefined'&&!!(window.TextDecoder||window.TextDecoderStream);
   setMode('thinking');
   startWaiting(planMode);
   const messages=S.history.length?[...S.history]:[{role:'user',content:'(The founder just sat down. Open the session.)'}];
@@ -988,9 +991,42 @@ async function callClaude(planMode){
       headers:{'content-type':'application/json'},
       body:JSON.stringify({
         passcode:S.pass,name:S.name,founderKey:S.founder,sessionKey:S.sessionKey,planMode:!!planMode,web:S.web,
+        stream:canStream&&!planMode,
         messages:[{role:'system',content:SYSTEM_PROMPT},...messages]
       })
     });
+    // Streamed conversational turns: speak each sentence as it arrives.
+    if(canStream&&!planMode&&r.ok&&r.body&&(r.headers.get('content-type')||'').startsWith('text/plain')){
+      const reader=r.body.getReader(), dec=new TextDecoder();
+      let full='',buf='',shown=false;
+      const reveal=()=>{if(shown)return;shown=true;stopWaiting()};
+      setWaitBeat('Getting the voice ready');
+      const speaks=document.getElementById('speakToggle').checked;
+      pauseMicForSpeech();
+      if(speaks){setMode('speaking');sqReset(reveal,null)}
+      for(;;){
+        const {done,value}=await reader.read();
+        if(done)break;
+        const piece=dec.decode(value,{stream:true});
+        full+=piece;buf+=piece;
+        const {sentences,rest}=takeSentences(buf);
+        buf=rest;
+        for(const sen of sentences){
+          if(speaks)sqPush(toSpeech(sen));
+          reveal();
+          showReply(full);                       // caption keeps pace with the voice
+        }
+      }
+      if(buf.trim()){if(speaks)sqPush(toSpeech(buf));}
+      if(speaks)sqFinish(); else {setMode('idle');resumeMicAfterSpeech()}
+      reveal();
+      if(!full.trim())throw new Error('Empty reply');
+      addMsg('bot',full);
+      showReply(full);
+      S.history.push({role:'assistant',content:full});
+      persist();
+      return;
+    }
     const data=await r.json();
     if(!r.ok||data.error)throw new Error(data.error||('Server error '+r.status));
     const text=data.text||'';
@@ -1095,6 +1131,59 @@ function playBrowser(text,onStart){
     speechSynthesis.speak(u);
     setTimeout(go,1200);                           // Safari sometimes skips onstart
   });
+}
+
+/* ===== STREAMED SPEECH =====
+   Sentences are queued the moment they're complete, so the Strategist starts
+   talking while the rest of the answer is still being written. */
+const SQ={items:[],running:false,done:false,onFirst:null,onEnd:null};
+function sqReset(onFirst,onEnd){
+  SQ.items=[];SQ.running=false;SQ.done=false;SQ.onFirst=onFirst;SQ.onEnd=onEnd;
+}
+function sqPush(sentence){
+  const t=String(sentence||'').trim();
+  if(t)SQ.items.push(t);
+  sqRun();
+}
+function sqFinish(){SQ.done=true;sqRun()}
+async function sqRun(){
+  if(SQ.running)return;
+  SQ.running=true;
+  const mine=speakToken;
+  let first=true;
+  while(true){
+    if(mine!==speakToken){SQ.running=false;return}
+    if(!SQ.items.length){
+      if(SQ.done)break;
+      await new Promise(r=>setTimeout(r,60));      // wait for more text
+      continue;
+    }
+    const next=SQ.items.shift();
+    const clip=await fetchClip(next);
+    if(mine!==speakToken){SQ.running=false;return}
+    const cb=first?SQ.onFirst:null; first=false;
+    if(clip) await playClip(clip,cb); else await playBrowser(next,cb);
+  }
+  SQ.running=false;
+  if(mine===speakToken){
+    setMode('idle');
+    resumeMicAfterSpeech();
+    if(SQ.onEnd)SQ.onEnd();
+  }
+}
+/* Pull complete sentences out of a growing buffer. */
+function takeSentences(buf){
+  const out=[];
+  let rest=buf;
+  for(;;){
+    const m=rest.match(/[^.!?]*[.!?]+["')\]]*\s/);
+    if(!m||m.index===undefined)break;
+    const end=m.index+m[0].length;
+    const piece=rest.slice(0,end).trim();
+    if(piece)out.push(piece);
+    rest=rest.slice(end);
+  }
+  return {sentences:out,rest};
 }
 
 async function speakLong(text,onDone,onStart){
