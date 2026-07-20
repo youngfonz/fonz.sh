@@ -3,6 +3,16 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "(www\\.)?whopaysfirst\\.com" }],
+      "destination": "/biz101/index.html"
+    },
+    {
+      "source": "/admin",
+      "has": [{ "type": "host", "value": "(www\\.)?whopaysfirst\\.com" }],
+      "destination": "/biz101/admin.html"
+    },
+    {
       "source": "/biz101",
       "destination": "/biz101/index.html"
     },
