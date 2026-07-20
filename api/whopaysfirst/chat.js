@@ -3,7 +3,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL || "https://qrtvbclbrumsrwbugvrr.s
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
-  const { passcode, name, sessionKey, messages, planMode, web, model, verify, commitments, email } = req.body || {};
+  const { passcode, name, sessionKey, messages, planMode, web, model, verify, commitments, email, founderKey } = req.body || {};
 
   if (!process.env.TEAM_PASSCODE || !process.env.OPENROUTER_API_KEY)
     return res.status(500).json({ error: "Server not configured. Add TEAM_PASSCODE and OPENROUTER_API_KEY in Vercel env settings." });
@@ -59,7 +59,7 @@ export default async function handler(req, res) {
     headers: {
       "content-type": "application/json",
       Authorization: "Bearer " + process.env.OPENROUTER_API_KEY,
-      "X-Title": "FonzMorris 0-to-1 Strategist",
+      "X-Title": "Who Pays First",
     },
     body: JSON.stringify({
       model: chosenModel,
@@ -88,6 +88,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           session_key: String(sessionKey).slice(0, 100),
           member_name: String(name || "unknown").slice(0, 100),
+          ...(founderKey ? { founder_key: String(founderKey).slice(0, 64) } : {}),
           transcript,
           model: chosenModel,
           ...(planMode ? { plan_html: text, plan_built_at: new Date().toISOString() } : {}),

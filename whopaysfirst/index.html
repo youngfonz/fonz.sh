@@ -406,7 +406,23 @@ const DEFAULT_MODEL="google/gemini-2.5-flash";
 const DEFAULT_ELEVEN_VOICE="pNInz6obpgDQGcFmaJgB";
 
 /* ================= STATE ================= */
-const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"nova",hands:true};
+const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"nova",hands:true,founder:"",emailed:false};
+
+/* A typed name is not an identity. Two founders called John would have been
+   matched as the same person, and the follow-up loop would have read one
+   founder's milestone and blocker aloud to the other. This key is random,
+   per-browser, and never leaves localStorage except as an opaque id. */
+function founderKey(){
+  try{
+    let k=localStorage.getItem('wpf_founder');
+    if(!k){
+      k=(crypto&&crypto.randomUUID)?crypto.randomUUID()
+        :'f-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,10);
+      localStorage.setItem('wpf_founder',k);
+    }
+    return k;
+  }catch(_){return ''}
+}
 
 function setVoice(v){
   S.voice=v;
@@ -463,7 +479,9 @@ function enterApp(){
 async function loadPrior(){
   try{
     const r=await fetch('/api/whopaysfirst/history',{method:'POST',headers:{'content-type':'application/json'},
-      body:JSON.stringify({passcode:S.pass,name:S.name,sessionKey:S.sessionKey})});
+      body:JSON.stringify({passcode:S.pass,founderKey:S.founder,
+        email:(function(){try{return localStorage.getItem('wpf_email')||''}catch(_){return ''}})(),
+        sessionKey:S.sessionKey})});
     if(!r.ok)return null;
     const d=await r.json();
     return d&&d.prior&&d.prior.commitments?d.prior:null;
@@ -523,7 +541,7 @@ async function startSession(ev){
   const btn=ev&&ev.target;
   const creds=await gate(btn,'Checking...');
   if(!creds)return;                                  // stay on the gate
-  S.name=creds.name;S.pass=creds.pass;
+  S.name=creds.name;S.pass=creds.pass;S.founder=founderKey();
   S.web=document.getElementById('k_web').checked;
   S.hands=document.getElementById('k_hands').checked;
   S.voice=document.getElementById('k_voice').value||S.voice;
@@ -572,7 +590,7 @@ async function resumeSaved(ev){
   }catch(_){gateError('Could not load the saved session. Start a new one.')}
 }
 function startSessionAfterResume(creds){
-  S.name=creds.name;S.pass=creds.pass;
+  S.name=creds.name;S.pass=creds.pass;S.founder=founderKey();
   S.web=document.getElementById('k_web').checked;
   S.hands=document.getElementById('k_hands').checked;
   S.voice=document.getElementById('k_voice').value||S.voice;
@@ -878,7 +896,7 @@ async function callClaude(planMode){
       method:'POST',
       headers:{'content-type':'application/json'},
       body:JSON.stringify({
-        passcode:S.pass,name:S.name,sessionKey:S.sessionKey,planMode:!!planMode,web:S.web,
+        passcode:S.pass,name:S.name,founderKey:S.founder,sessionKey:S.sessionKey,planMode:!!planMode,web:S.web,
         messages:[{role:'system',content:SYSTEM_PROMPT},...messages]
       })
     });
@@ -1144,7 +1162,7 @@ function renderPlan(html){
 async function captureCommitments(){
   try{
     const r=await fetch('/api/whopaysfirst/chat',{method:'POST',headers:{'content-type':'application/json'},
-      body:JSON.stringify({passcode:S.pass,name:S.name,sessionKey:S.sessionKey,web:false,
+      body:JSON.stringify({passcode:S.pass,name:S.name,founderKey:S.founder,sessionKey:S.sessionKey,web:false,
         messages:[{role:'system',content:SYSTEM_PROMPT},...S.history,{role:'user',content:COMMITMENT_PROMPT}]})});
     if(!r.ok)return;
     const d=await r.json();
@@ -1155,7 +1173,7 @@ async function captureCommitments(){
     if(!c||typeof c!=='object')return;
     // Commitment-only save: no model call on the server side.
     await fetch('/api/whopaysfirst/chat',{method:'POST',headers:{'content-type':'application/json'},
-      body:JSON.stringify({passcode:S.pass,name:S.name,sessionKey:S.sessionKey,commitments:c})})
+      body:JSON.stringify({passcode:S.pass,name:S.name,founderKey:S.founder,sessionKey:S.sessionKey,commitments:c})})
       .catch(()=>{});
   }catch(_){/* never let this break the plan */}
 }
