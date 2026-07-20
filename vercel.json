@@ -1,12 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
-  "rewrites": [
+  "redirects": [
     {
       "source": "/",
       "has": [{ "type": "host", "value": "(www\\.)?whopaysfirst\\.com" }],
-      "destination": "/biz101/index.html"
-    },
+      "destination": "/biz101",
+      "permanent": false
+    }
+  ],
+  "rewrites": [
     {
       "source": "/admin",
       "has": [{ "type": "host", "value": "(www\\.)?whopaysfirst\\.com" }],
