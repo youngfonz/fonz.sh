@@ -3,12 +3,9 @@
 // the mic with the waveform's audio capture, ignores continuous mode, and only
 // starts from a direct tap - which rules out hands-free. Recording and
 // transcribing works everywhere and is more accurate anyway.
-const MODEL = process.env.OPENAI_STT_MODEL || "gpt-4o-mini-transcribe";
+export const config = { api: { bodyParser: { sizeLimit: "8mb" } } };
 
-// Vercel caps request bodies around 4.5MB and base64 inflates by a third, so
-// this is the honest ceiling. The client stops recording at 60s, which is a
-// couple hundred KB of mono speech - nowhere near it.
-const MAX_BYTES = 3 * 1024 * 1024;
+const MODEL = process.env.OPENAI_STT_MODEL || "gpt-4o-mini-transcribe";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
@@ -24,7 +21,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: "Bad audio." });
   }
   if (!bytes.length) return res.status(400).json({ error: "Empty audio." });
-  if (bytes.length > MAX_BYTES) return res.status(413).json({ error: "That clip is too long." });
+  if (bytes.length > 8 * 1024 * 1024) return res.status(413).json({ error: "That clip is too long." });
 
   const type = typeof mime === "string" && mime.startsWith("audio/") ? mime : "audio/webm";
   const ext = type.includes("mp4") ? "mp4" : type.includes("mpeg") ? "mp3" : type.includes("wav") ? "wav" : "webm";
