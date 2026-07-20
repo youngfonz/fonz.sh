@@ -1219,7 +1219,8 @@ function stopSpeaking(){
    speech recognition transcribes the Strategist and feeds it back as if the
    founder had said it. */
 function pauseMicForSpeech(){
-  disarmSilence();
+  disarmSilence();clearInterval(S.vad);
+  if(S.recorder){S.recorder.onstop=null;try{S.recorder.stop()}catch(_){}S.recorder=null;S.listening=false;S.micWasOn=true;return}
   if(!S.listening)return;
   S.micWasOn=true;
   S.listening=false;                               // stops the onend auto-restart
@@ -1260,8 +1261,88 @@ function armSilence(){
 }
 function disarmSilence(){clearTimeout(silenceTimer);silenceTimer=null}
 
+/* ===== iOS VOICE INPUT =====
+   Safari exposes webkitSpeechRecognition but won't run it while anything else
+   holds the mic, ignores continuous mode, and only starts from a direct tap -
+   which is exactly what hands-free can't provide. So on iOS we record, watch
+   the level for a natural pause, and transcribe. Permission persists once
+   granted, so the mic can come back on its own after each reply. */
+function pickMime(){
+  const want=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/mpeg'];
+  for(const m of want){if(window.MediaRecorder&&MediaRecorder.isTypeSupported(m))return m}
+  return '';
+}
+async function startWhisperMic(){
+  if(S.listening)return;
+  try{
+    ensureAudio();
+    if(!micStream){
+      micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+      if(audioCtx&&analyser)audioCtx.createMediaStreamSource(micStream).connect(analyser);
+    }
+  }catch(_){
+    setStatus('Microphone blocked. Allow it in Settings, or type instead.',true);toggleType();return;
+  }
+  const mime=pickMime();
+  let rec;
+  try{rec=new MediaRecorder(micStream,mime?{mimeType:mime}:undefined)}
+  catch(_){setStatus('This browser can\'t record. Type instead.',true);toggleType();return}
+
+  const chunks=[];
+  rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  rec.onstop=async()=>{
+    S.listening=false;clearInterval(S.vad);
+    const blob=new Blob(chunks,{type:mime||'audio/webm'});
+    if(blob.size<1500){setMode('idle');if(S.hands)startMic();return}   // too short to be speech
+    setMode('thinking','TRANSCRIBING');
+    try{
+      const b64=await new Promise((res,rej)=>{
+        const fr=new FileReader();
+        fr.onload=()=>res(String(fr.result).split(',')[1]);
+        fr.onerror=rej;fr.readAsDataURL(blob);
+      });
+      const r=await fetch('/api/whopaysfirst/transcribe',{method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({passcode:S.pass,audio:b64,mime:mime||'audio/webm'})});
+      const d=await r.json();
+      if(!r.ok)throw new Error(d.error||'failed');
+      const said=(d.text||'').trim();
+      if(said.split(/\s+/).length<2){setMode('idle');if(S.hands)startMic();return}
+      showInterim(said);
+      S.micWasOn=S.hands;
+      userTurn(said);
+    }catch(e){setMode('idle');setStatus('Could not transcribe: '+e.message,true)}
+  };
+  S.recorder=rec;
+  rec.start();
+  S.listening=true;
+  setMode('listening',S.hands?'Listening \u00b7 just talk':'Listening \u00b7 tap to send');
+  if(S.hands)watchLevel();
+}
+/* Stop on a natural pause, using the same analyser the orb reads. */
+function watchLevel(){
+  if(!analyser)return;
+  const buf=new Uint8Array(analyser.frequencyBinCount);
+  let quiet=0,spoke=false,last=Date.now();
+  S.recStart=Date.now();
+  clearInterval(S.vad);
+  S.vad=setInterval(()=>{
+    if(!S.listening){clearInterval(S.vad);return}
+    analyser.getByteFrequencyData(buf);
+    let sum=0;for(let i=0;i<buf.length;i++)sum+=buf[i];
+    const level=sum/buf.length,now=Date.now(),dt=now-last;last=now;
+    if(level>13){spoke=true;quiet=0}else if(spoke){quiet+=dt}
+    if((spoke&&quiet>1400)||now-S.recStart>60000)stopWhisperMic();
+  },120);
+}
+function stopWhisperMic(){
+  clearInterval(S.vad);
+  if(S.recorder&&S.recorder.state!=='inactive'){try{S.recorder.stop()}catch(_){}}
+  S.recorder=null;
+}
+
 function startMic(){
   if(S.listening)return;
+  if(IS_IOS){startWhisperMic();return}
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){setStatus('Voice input needs Chrome or Edge. Type instead.',true);toggleType();return}
   attachMic();
@@ -1287,7 +1368,11 @@ function startMic(){
   setMode('listening',S.hands?'Listening · just talk':'Listening · tap to send');
 }
 function stopMic(send=true){
-  disarmSilence();
+  disarmSilence();clearInterval(S.vad);
+  if(S.recorder){                                  // tapping means "I'm done"
+    if(!send){S.recorder.onstop=null;S.listening=false;setMode('idle')}
+    stopWhisperMic();return;
+  }
   S.listening=false;
   if(S.rec){S.rec.onend=null;try{S.rec.stop()}catch(_){}}
   detachMic();
