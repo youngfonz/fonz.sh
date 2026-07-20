@@ -553,6 +553,7 @@ async function gate(btn,label){
 }
 
 async function startSession(ev){
+  unlockAudio();                             // must run in the tap itself
   const btn=ev&&ev.target;
   const creds=await gate(btn,'Checking...');
   if(!creds)return;                                  // stay on the gate
@@ -651,6 +652,16 @@ function sizeOrb(){
 }
 window.addEventListener('resize',sizeOrb);
 
+/* iOS is a different animal for audio:
+   - the AudioContext starts suspended and only resumes inside a real user
+     gesture, so one created during a fetch stays suspended forever;
+   - anything routed through a suspended context is silent even though play()
+     resolves happily, which is why the Strategist appeared mute;
+   - holding the mic for the waveform stops speech recognition from working.
+   So on iOS we unlock on the tap, play audio natively, and leave the mic alone. */
+const IS_IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||
+  (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+
 function ensureAudio(){
   if(!audioCtx){
     const AC=window.AudioContext||window.webkitAudioContext;
@@ -663,7 +674,30 @@ function ensureAudio(){
   if(audioCtx.state==='suspended')audioCtx.resume();
   return audioCtx;
 }
+
+/* Must be called straight from a tap - not after an await, or iOS ignores it. */
+let audioUnlocked=false;
+function unlockAudio(){
+  try{
+    ensureAudio();
+    if(audioCtx&&audioCtx.state==='suspended')audioCtx.resume();
+    if(!audioUnlocked&&audioCtx){
+      const b=audioCtx.createBuffer(1,1,22050);
+      const s=audioCtx.createBufferSource();
+      s.buffer=b;s.connect(audioCtx.destination);s.start(0);
+    }
+    // Priming a real element during the gesture is what lets later,
+    // non-gesture playback through on iOS.
+    if(!audioUnlocked){
+      const a=new Audio('data:audio/mp4;base64,AAAAHGZ0eXBNNEEgAAACAGlzb21pc28yYXZjMQAAAAhmcmVl');
+      a.volume=0;const p=a.play();if(p&&p.catch)p.catch(()=>{});
+      S.primed=a;
+    }
+    audioUnlocked=true;
+  }catch(_){}
+}
 async function attachMic(){
+  if(IS_IOS)return;                          // frees the mic for recognition
   if(!ensureAudio()||micStream)return;
   try{
     micStream=await navigator.mediaDevices.getUserMedia({audio:true});
@@ -674,6 +708,7 @@ function detachMic(){
   if(micStream){micStream.getTracks().forEach(t=>t.stop());micStream=null}
 }
 function attachTTS(el){
+  if(IS_IOS)return;                          // play natively; see unlockAudio
   if(!ensureAudio())return;
   try{
     ttsNode=audioCtx.createMediaElementSource(el);
@@ -981,12 +1016,24 @@ async function fetchClip(text){
   try{
     const r=await fetch('/api/whopaysfirst/tts',{method:'POST',headers:{'content-type':'application/json'},
       body:JSON.stringify({passcode:S.pass,text,speed:S.speed,voice:S.voice})});
-    if(r.ok){const a=new Audio(URL.createObjectURL(await r.blob()));a.crossOrigin='anonymous';return a}
+    if(r.ok){
+      const url=URL.createObjectURL(await r.blob());
+      // iOS refuses play() on elements it hasn't seen in a gesture, so reuse
+      // the one primed on the tap rather than minting a fresh Audio each time.
+      if(IS_IOS&&S.primed){S.primed.src=url;S.primed.volume=1;return S.primed}
+      const a=new Audio(url);a.crossOrigin='anonymous';return a;
+    }
   }catch(_){}
   return null;                                     // caller falls back to browser voice
 }
 function playClip(a,onStart){
   return new Promise(res=>{
+    // On a phone this is where things die quietly; say so out loud.
+    const why=()=>{
+      const st=audioCtx?audioCtx.state:'none';
+      if(st!=='running')setStatus('Audio is blocked ('+st+'). Tap the circle once.',true);
+    };
+    setTimeout(()=>{if(a.paused)why()},900);
     S.audioEl=a; ensureAudio(); attachTTS(a);      // orb rides the real waveform
     const go=()=>{if(onStart){onStart();onStart=null}};
     a.onplaying=go;
@@ -1058,6 +1105,7 @@ function resumeMicAfterSpeech(){
 
 /* ================= VOICE IN ================= */
 function toggleMic(){
+  unlockAudio();                             // tapping the orb is a gesture too
   if(S.listening){stopMic();return}
   S.micWasOn=false;                            // a manual tap overrides auto-resume
   stopSpeaking();                              // barge-in: talking over it stops it
