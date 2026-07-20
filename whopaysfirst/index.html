@@ -428,7 +428,7 @@ function enterApp(){
    last time and make the Strategist open by holding them to it. */
 async function loadPrior(){
   try{
-    const r=await fetch('/api/biz101/history',{method:'POST',headers:{'content-type':'application/json'},
+    const r=await fetch('/api/whopaysfirst/history',{method:'POST',headers:{'content-type':'application/json'},
       body:JSON.stringify({passcode:S.pass,name:S.name,sessionKey:S.sessionKey})});
     if(!r.ok)return null;
     const d=await r.json();
@@ -459,7 +459,7 @@ function gateError(msg){
 }
 async function checkPasscode(pass){
   try{
-    const r=await fetch('/api/biz101/chat',{method:'POST',headers:{'content-type':'application/json'},
+    const r=await fetch('/api/whopaysfirst/chat',{method:'POST',headers:{'content-type':'application/json'},
       body:JSON.stringify({passcode:pass,verify:true})});
     if(r.ok)return{ok:true};
     const d=await r.json().catch(()=>({}));
@@ -840,7 +840,7 @@ async function callClaude(planMode){
   const messages=S.history.length?[...S.history]:[{role:'user',content:'(The founder just sat down. Open the session.)'}];
   if(planMode) messages.push({role:'user',content:PLAN_PROMPT});
   try{
-    const r=await fetch('/api/biz101/chat',{
+    const r=await fetch('/api/whopaysfirst/chat',{
       method:'POST',
       headers:{'content-type':'application/json'},
       body:JSON.stringify({
@@ -909,7 +909,7 @@ function chunkText(text,max=1100,firstMax=180){
 
 async function fetchClip(text){
   try{
-    const r=await fetch('/api/biz101/tts',{method:'POST',headers:{'content-type':'application/json'},
+    const r=await fetch('/api/whopaysfirst/tts',{method:'POST',headers:{'content-type':'application/json'},
       body:JSON.stringify({passcode:S.pass,text,speed:S.speed,voice:S.voice})});
     if(r.ok){const a=new Audio(URL.createObjectURL(await r.blob()));a.crossOrigin='anonymous';return a}
   }catch(_){}
@@ -1109,7 +1109,7 @@ function renderPlan(html){
 /* Quietly bank what they promised, so the next session can open with it. */
 async function captureCommitments(){
   try{
-    const r=await fetch('/api/biz101/chat',{method:'POST',headers:{'content-type':'application/json'},
+    const r=await fetch('/api/whopaysfirst/chat',{method:'POST',headers:{'content-type':'application/json'},
       body:JSON.stringify({passcode:S.pass,name:S.name,sessionKey:S.sessionKey,web:false,
         messages:[{role:'system',content:SYSTEM_PROMPT},...S.history,{role:'user',content:COMMITMENT_PROMPT}]})});
     if(!r.ok)return;
@@ -1120,7 +1120,7 @@ async function captureCommitments(){
     const c=JSON.parse(raw.slice(s,e+1));
     if(!c||typeof c!=='object')return;
     // Commitment-only save: no model call on the server side.
-    await fetch('/api/biz101/chat',{method:'POST',headers:{'content-type':'application/json'},
+    await fetch('/api/whopaysfirst/chat',{method:'POST',headers:{'content-type':'application/json'},
       body:JSON.stringify({passcode:S.pass,name:S.name,sessionKey:S.sessionKey,commitments:c})})
       .catch(()=>{});
   }catch(_){/* never let this break the plan */}
@@ -1136,7 +1136,7 @@ function stopReading(){stopSpeaking();setMode('idle');finishReading()}
 function downloadPlan(){
   const sheet=document.getElementById('plansheet');
   // Carries the app's own type system; the system stack is only the offline fallback.
-  const doc='<!DOCTYPE html><html><head><meta charset="utf-8"><title>Biz101 Plan</title>'+
+  const doc='<!DOCTYPE html><html><head><meta charset="utf-8"><title>Who Pays First — Plan</title>'+
     '<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;700;900&family=Spectral:ital,wght@0,400;1,400&display=swap" rel="stylesheet">'+
     '<style>body{font-family:\'Spectral\',Georgia,serif;max-width:720px;margin:40px auto;padding:0 24px;color:#0a0a0a;line-height:1.6}'+
     'h2{font-family:\'Archivo\',system-ui,sans-serif;font-weight:900;text-transform:uppercase;border-bottom:3px solid #2447ff;padding-bottom:10px}'+
@@ -1144,7 +1144,7 @@ function downloadPlan(){
     'li{margin-bottom:4px}</style></head><body>'+sheet.innerHTML+'</body></html>';
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([doc],{type:'text/html'}));
-  a.download='biz101-plan-'+new Date().toISOString().slice(0,10)+'.html';
+  a.download='whopaysfirst-plan-'+new Date().toISOString().slice(0,10)+'.html';
   document.body.appendChild(a);a.click();a.remove();
   setStatus('Plan downloaded.');
 }

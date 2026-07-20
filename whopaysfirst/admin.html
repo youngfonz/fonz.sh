@@ -111,7 +111,7 @@ async function load(){
   st.textContent='Loading...';
   let d;
   try{
-    const r=await fetch('/api/biz101/sessions',{method:'POST',headers:{'content-type':'application/json'},
+    const r=await fetch('/api/whopaysfirst/sessions',{method:'POST',headers:{'content-type':'application/json'},
       body:JSON.stringify({passcode:pass})});
     d=await r.json();
     if(!r.ok){st.textContent=d.error||'Error';return}

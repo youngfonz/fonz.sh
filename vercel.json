@@ -1,15 +1,21 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "/biz101/:path*",
+      "has": [{ "type": "host", "value": "(www\\.)?fonz\\.sh" }],
+      "destination": "https://whopaysfirst.com",
+      "permanent": true
+    },
+    {
+      "source": "/whopaysfirst/:path*",
+      "has": [{ "type": "host", "value": "(www\\.)?fonz\\.sh" }],
+      "destination": "https://whopaysfirst.com",
+      "permanent": true
+    }
+  ],
   "rewrites": [
-    {
-      "source": "/biz101",
-      "destination": "/biz101/index.html"
-    },
-    {
-      "source": "/biz101/admin",
-      "destination": "/biz101/admin.html"
-    },
     {
       "source": "/ad-engine",
       "destination": "/ad-engine.html"

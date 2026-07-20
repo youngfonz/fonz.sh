@@ -18,8 +18,8 @@ export default function middleware(request) {
     if (!APP_HOSTS.has(host)) return next();
 
     const url = new URL(request.url);
-    if (url.pathname === '/') return rewrite(new URL('/biz101/index.html', url));
-    if (url.pathname === '/admin') return rewrite(new URL('/biz101/admin.html', url));
+    if (url.pathname === '/') return rewrite(new URL('/whopaysfirst/index.html', url));
+    if (url.pathname === '/admin') return rewrite(new URL('/whopaysfirst/admin.html', url));
     return next();
   } catch (_) {
     return next();
