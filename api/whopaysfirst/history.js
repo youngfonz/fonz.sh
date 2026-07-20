@@ -15,7 +15,7 @@ export default async function handler(req, res) {
     // Most recent session for this founder that actually produced a plan,
     // excluding the one they're sitting in right now.
     const url = SUPABASE_URL +
-      "/rest/v1/fonz_counselor_sessions" +
+      "/rest/v1/whopaysfirst_sessions" +
       "?select=session_key,member_name,commitments,plan_built_at,updated_at" +
       "&commitments=not.is.null" +
       "&order=plan_built_at.desc&limit=5";

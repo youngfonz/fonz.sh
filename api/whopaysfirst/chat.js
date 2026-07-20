@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   if (commitments && sessionKey && !messages) {
     if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return res.status(200).json({ ok: true });
     try {
-      await fetch(SUPABASE_URL + "/rest/v1/fonz_counselor_sessions?session_key=eq." + encodeURIComponent(String(sessionKey).slice(0, 100)), {
+      await fetch(SUPABASE_URL + "/rest/v1/whopaysfirst_sessions?session_key=eq." + encodeURIComponent(String(sessionKey).slice(0, 100)), {
         method: "PATCH",
         headers: {
           apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
@@ -58,7 +58,7 @@ export default async function handler(req, res) {
   try {
     if (process.env.SUPABASE_SERVICE_ROLE_KEY && sessionKey) {
       const transcript = [...messages.filter(m => m.role !== "system"), { role: "assistant", content: text }];
-      await fetch(SUPABASE_URL + "/rest/v1/fonz_counselor_sessions?on_conflict=session_key", {
+      await fetch(SUPABASE_URL + "/rest/v1/whopaysfirst_sessions?on_conflict=session_key", {
         method: "POST",
         headers: {
           apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
