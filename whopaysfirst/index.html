@@ -243,7 +243,7 @@ footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-t
   <details id="adv">
   <summary>Voice, research &amp; more</summary>
   <div class="field">
-    <label class="toggle" style="text-transform:none;letter-spacing:0"><input type="checkbox" id="k_web" checked> Web research on (it can search for competitors, pricing and market data)</label>
+    <label class="toggle" style="text-transform:none;letter-spacing:0"><input type="checkbox" id="k_web"> Deep web research (competitors and pricing, but every answer takes much longer)</label>
   </div>
   <div class="field">
     <label class="toggle" style="text-transform:none;letter-spacing:0"><input type="checkbox" id="k_hands" checked> Hands-free (just talk, it sends when you pause)</label>
@@ -421,7 +421,7 @@ const DEFAULT_MODEL="google/gemini-2.5-flash";
 const DEFAULT_ELEVEN_VOICE="pNInz6obpgDQGcFmaJgB";
 
 /* ================= STATE ================= */
-const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"nova",hands:true,founder:"",emailed:false};
+const S={name:"",pass:"",web:false,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"nova",hands:true,founder:"",emailed:false,fillers:[],primed:null};
 
 /* A typed name is not an identity. Two founders called John would have been
    matched as the same person, and the follow-up loop would have read one
@@ -567,6 +567,7 @@ async function startSession(ev){
   // Hands-free: pick the mic up as soon as the opening finishes, so the founder
   // never has to tap. The Start click is the gesture that unlocks mic access.
   if(S.hands)S.micWasOn=true;
+  prefetchFillers();                         // warm the "alright" clips
   const imported=document.getElementById('k_import').value.trim();
   if(imported && S.history.length===0){
     S.history.push({role:'user',content:"Here is the transcript of our previous session. Read it, keep everything I told you, and pick up exactly where we left off:\n\n"+imported});
@@ -580,7 +581,19 @@ async function startSession(ev){
       showPriorCard(prior);
     }
   }
-  if(S.history.length===0||imported||S.history.length===1) callClaude();
+  // A cold start used to mean a model call AND a TTS call before a single word
+  // came out - the worst silence in the whole product, right when someone is
+  // deciding whether this thing works. The opening never varies much, so say it
+  // straight away and let the model take over from the founder's first answer.
+  if(S.history.length===0&&!imported){
+    const hello="I'm the Strategist. Tell me the idea. Anything you don't know, I'll figure out. So what are you building?";
+    addMsg('bot',hello);
+    S.history.push({role:'assistant',content:hello});
+    persist();
+    if(document.getElementById('speakToggle').checked){
+      speakLong(hello,null,()=>{stopWaiting();showReply(hello)});
+    }else{showReply(hello)}
+  }else if(imported||S.history.length===1){ callClaude() }
 }
 
 /* ===== SESSION PERSISTENCE ===== */
@@ -899,10 +912,38 @@ function sendText(){
   const v=t.value.trim();if(!v||S.busy)return;
   t.value='';userTurn(v);
 }
+/* Dead air is what makes this feel broken. A real strategist grunts, says
+   "alright", shuffles paper - they don't go silent for fifteen seconds. These
+   are synthesised once at the start of the session in the same voice and
+   played the instant a turn is sent, so something answers immediately while
+   the real reply is still being written. */
+const FILLERS=["Alright.","Mm-hmm.","Okay, hang on.","Let me think on that.","Right."];
+async function prefetchFillers(){
+  if(S.fillers.length||!document.getElementById('speakToggle').checked)return;
+  const pick=FILLERS.slice().sort(()=>Math.random()-0.5).slice(0,3);
+  for(const line of pick){
+    try{
+      const r=await fetch('/api/whopaysfirst/tts',{method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({passcode:S.pass,text:line,speed:S.speed,voice:S.voice})});
+      if(r.ok)S.fillers.push(URL.createObjectURL(await r.blob()));
+    }catch(_){}
+  }
+}
+function playFiller(){
+  if(!S.fillers.length||!document.getElementById('speakToggle').checked)return;
+  try{
+    const url=S.fillers[Math.floor(Math.random()*S.fillers.length)];
+    const a=(IS_IOS&&S.primed)?S.primed:new Audio();
+    a.src=url;a.volume=1;
+    const p=a.play();if(p&&p.catch)p.catch(()=>{});
+  }catch(_){}
+}
+
 function userTurn(text){
   addMsg('user',text);
   S.history.push({role:'user',content:text});
   persist();
+  playFiller();            // answer instantly, then think
   callClaude();
 }
 
