@@ -406,7 +406,7 @@ const DEFAULT_MODEL="google/gemini-2.5-flash";
 const DEFAULT_ELEVEN_VOICE="pNInz6obpgDQGcFmaJgB";
 
 /* ================= STATE ================= */
-const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"nova",hands:true,founder:"",emailed:false};
+const S={name:"",pass:"",web:true,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"nova",hands:true,founder:"",emailed:false,recorder:null,vad:null,recStart:0};
 
 /* A typed name is not an identity. Two founders called John would have been
    matched as the same person, and the follow-up loop would have read one
@@ -1025,10 +1025,12 @@ function stopSpeaking(){
    founder had said it. */
 function pauseMicForSpeech(){
   disarmSilence();
+  clearInterval(S.vad);
   if(!S.listening)return;
   S.micWasOn=true;
   S.listening=false;                               // stops the onend auto-restart
   if(S.rec){S.rec.onend=null;S.rec.onresult=null;try{S.rec.stop()}catch(_){}}
+  if(S.recorder){S.recorder.onstop=null;try{S.recorder.stop()}catch(_){}S.recorder=null}
   detachMic();
 }
 function resumeMicAfterSpeech(){
@@ -1064,8 +1066,97 @@ function armSilence(){
 }
 function disarmSilence(){clearTimeout(silenceTimer);silenceTimer=null}
 
+/* iOS reports webkitSpeechRecognition but can't actually run it alongside the
+   waveform's mic capture, ignores continuous mode, and only starts from a
+   direct tap. Record-and-transcribe instead - works on every platform. */
+const IS_IOS=/iPad|iPhone|iPod/.test(navigator.userAgent)||
+  (navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+function useWhisper(){
+  return IS_IOS||!(window.SpeechRecognition||window.webkitSpeechRecognition);
+}
+function pickMime(){
+  const want=['audio/mp4','audio/webm;codecs=opus','audio/webm','audio/mpeg'];
+  for(const m of want){ if(window.MediaRecorder&&MediaRecorder.isTypeSupported(m))return m }
+  return '';
+}
+
+async function startWhisperMic(){
+  if(S.listening)return;
+  try{
+    if(!micStream){
+      ensureAudio();
+      micStream=await navigator.mediaDevices.getUserMedia({audio:true});
+      if(audioCtx)audioCtx.createMediaStreamSource(micStream).connect(analyser);
+    }
+  }catch(e){
+    setStatus('Microphone blocked. Check Settings → Safari → Microphone, or type instead.',true);
+    toggleType();return;
+  }
+  const mime=pickMime();
+  let rec;
+  try{ rec=new MediaRecorder(micStream, mime?{mimeType:mime}:undefined) }
+  catch(_){ setStatus('This browser can\'t record audio. Type instead.',true);toggleType();return }
+
+  const chunks=[];
+  rec.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data)};
+  rec.onstop=async()=>{
+    S.listening=false;disarmSilence();
+    const blob=new Blob(chunks,{type:mime||'audio/webm'});
+    if(blob.size<1200){setMode('idle');return}          // too short to be speech
+    setMode('thinking','TRANSCRIBING');
+    try{
+      const b64=await new Promise((res,rej)=>{
+        const fr=new FileReader();
+        fr.onload=()=>res(String(fr.result).split(',')[1]);
+        fr.onerror=rej;fr.readAsDataURL(blob);
+      });
+      const r=await fetch('/api/whopaysfirst/transcribe',{method:'POST',headers:{'content-type':'application/json'},
+        body:JSON.stringify({passcode:S.pass,audio:b64,mime:mime||'audio/webm'})});
+      const d=await r.json();
+      if(!r.ok)throw new Error(d.error||'failed');
+      const said=(d.text||'').trim();
+      if(!said){setMode('idle');setStatus('Didn\'t catch that. Try again.',true);if(S.hands)startMic();return}
+      showInterim(said);
+      S.micWasOn=S.hands;                                 // pick the mic back up after the reply
+      userTurn(said);
+    }catch(e){
+      setMode('idle');setStatus('Could not transcribe: '+e.message,true);
+    }
+  };
+  S.recorder=rec;
+  rec.start();
+  S.listening=true;
+  setMode('listening',S.hands?'Listening · just talk':'Listening · tap to send');
+  if(S.hands)watchSilence();                              // stop on a natural pause
+}
+
+/* Level-based silence detection for the recorder path. */
+function watchSilence(){
+  if(!analyser)return;
+  const buf=new Uint8Array(analyser.frequencyBinCount);
+  let quietFor=0,spoke=false,last=Date.now();
+  clearInterval(S.vad);
+  S.vad=setInterval(()=>{
+    if(!S.listening){clearInterval(S.vad);return}
+    analyser.getByteFrequencyData(buf);
+    let sum=0;for(let i=0;i<buf.length;i++)sum+=buf[i];
+    const level=sum/buf.length;
+    const now=Date.now(),dt=now-last;last=now;
+    if(level>14){spoke=true;quietFor=0}else if(spoke){quietFor+=dt}
+    // stop once they've said something and gone quiet, or after 60s
+    if((spoke&&quietFor>1400)||now-(S.recStart||now)>60000)stopWhisperMic();
+  },120);
+  S.recStart=Date.now();
+}
+function stopWhisperMic(){
+  clearInterval(S.vad);
+  if(S.recorder&&S.recorder.state!=='inactive'){try{S.recorder.stop()}catch(_){}}
+  S.recorder=null;
+}
+
 function startMic(){
   if(S.listening)return;
+  if(useWhisper()){startWhisperMic();return}
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){setStatus('Voice input needs Chrome or Edge. Type instead.',true);toggleType();return}
   attachMic();
@@ -1092,6 +1183,13 @@ function startMic(){
 }
 function stopMic(send=true){
   disarmSilence();
+  clearInterval(S.vad);
+  if(S.recorder){                                  // recorder path: onstop transcribes and sends
+    if(!send){S.recorder.onstop=null;S.listening=false}
+    stopWhisperMic();
+    if(!send){detachMic();setMode('idle')}
+    return;
+  }
   S.listening=false;
   if(S.rec){S.rec.onend=null;try{S.rec.stop()}catch(_){}}
   detachMic();
