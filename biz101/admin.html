@@ -2,58 +2,152 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biz101 Admin | Fonz Morris</title>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800&family=Archivo+Black&family=Spectral:wght@400;500&display=swap" rel="stylesheet">
+<title>Who Pays First · Sessions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=Archivo+Black&family=Spectral:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-:root{--ink:#131210;--paper:#f4efe6;--gold:#e8a020;--gold-deep:#c77f0a;--line:#d8d0c0;--mut:#6f6754}
+:root{--bg:#ffffff;--ink:#0a0a0a;--blue:#2447ff;--neon:#00e57a;--line:#e6e6e6;--mut:#7a7a7a}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Archivo',sans-serif;background:var(--paper);color:var(--ink);padding:40px 20px}
-.wrap{max-width:900px;margin:0 auto}
-h1{font-family:'Archivo Black',sans-serif;text-transform:uppercase;font-size:30px;border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:20px}
-h1 span{color:var(--gold);-webkit-text-stroke:1.5px var(--ink)}
-input,button{font-family:'Archivo',sans-serif;font-size:14px;border:2px solid var(--ink);padding:10px 14px}
-button{background:var(--ink);color:var(--paper);font-weight:800;text-transform:uppercase;letter-spacing:.08em;cursor:pointer}
-.gate{display:flex;gap:10px;margin-bottom:26px}
-.sess{background:#fff;border:2px solid var(--ink);box-shadow:5px 5px 0 var(--gold);margin-bottom:16px}
-.sess-head{padding:14px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;gap:10px;flex-wrap:wrap}
-.sess-head b{font-size:16px}
-.meta{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.1em}
-.body{display:none;border-top:2px solid var(--ink);padding:16px 18px;max-height:420px;overflow-y:auto}
-.turn{margin-bottom:12px;font-size:14px;white-space:pre-wrap}
-.turn b{display:block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-deep)}
-.plan{border-top:2px dashed var(--gold-deep);margin-top:14px;padding-top:14px;font-family:'Spectral',serif}
-#status{color:#c23b22;font-weight:700;margin-bottom:14px}
+::selection{background:var(--blue);color:#fff}
+body{font-family:'Archivo',sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;padding:0 24px 72px}
+.wrap{max-width:1000px;margin:0 auto}
+
+header{padding:clamp(30px,6vh,64px) 0 0}
+.eyebrow{font-weight:700;letter-spacing:.34em;text-transform:uppercase;font-size:10px;color:var(--blue);
+  display:flex;align-items:center;gap:12px}
+.eyebrow::after{content:'';flex:1;height:1px;background:var(--line)}
+h1{font-family:'Archivo Black',sans-serif;text-transform:uppercase;letter-spacing:-.035em;
+  font-size:clamp(38px,8vw,86px);line-height:.84;margin:clamp(14px,2.4vh,22px) 0 0}
+h1 .q{color:var(--blue)}
+.sub{font-family:'Spectral',serif;font-style:italic;color:var(--mut);font-size:17px;margin-top:14px}
+
+button{font-family:'Archivo',sans-serif;font-weight:700;text-transform:uppercase;letter-spacing:.12em;font-size:12px;
+  padding:14px 26px;border:1px solid var(--ink);cursor:pointer;background:var(--ink);color:#fff;border-radius:0;
+  transition:background .15s,color .15s,border-color .15s}
+button:hover{background:var(--blue);border-color:var(--blue)}
+input{font-family:'Archivo',sans-serif;font-size:14px;color:var(--ink);border:1px solid var(--line);
+  border-bottom:1px solid var(--ink);padding:14px 16px;background:#fff;border-radius:0}
+input:focus{outline:none;border-color:var(--blue)}
+input::placeholder{color:#b3b3b3}
+.gate{display:flex;gap:12px;margin:clamp(28px,5vh,52px) 0 0;max-width:520px}
+.gate input{flex:1}
+
+/* summary bar */
+.tally{display:flex;gap:clamp(24px,6vw,72px);flex-wrap:wrap;margin:clamp(30px,5vh,54px) 0 0;
+  border-top:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:22px 0}
+.tally div span{display:block}
+.tally .num{font-family:'Archivo Black',sans-serif;font-size:clamp(26px,4vw,44px);line-height:1;letter-spacing:-.02em}
+.tally .lbl{font-size:9.5px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--mut);margin-top:7px}
+.tally .hot .num{color:var(--blue)}
+
+/* session rows: editorial list, not cards */
+.sess{border-bottom:1px solid var(--line)}
+.sess-head{padding:20px 0;display:grid;grid-template-columns:auto 1fr auto;gap:clamp(12px,3vw,28px);
+  align-items:baseline;cursor:pointer}
+.sess-head:hover .who{color:var(--blue)}
+.idx{font-family:'Archivo Black',sans-serif;font-size:15px;color:transparent;-webkit-text-stroke:1.2px var(--blue);min-width:2.2em}
+.who{font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(16px,2vw,21px);letter-spacing:-.01em;
+  transition:color .15s}
+.idea{font-family:'Spectral',serif;font-style:italic;color:var(--mut);font-size:14.5px;margin-top:3px}
+.meta{font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);text-align:right;white-space:nowrap}
+.badge{color:var(--blue)}
+.badge.plan::before{content:'\25CF ';color:var(--neon)}
+.body{display:none;padding:4px 0 26px;max-height:520px;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+.body.on{display:block}
+.turn{margin-bottom:16px;font-size:14.5px;white-space:pre-wrap;max-width:74ch}
+.turn b{display:block;font-size:9px;letter-spacing:.24em;text-transform:uppercase;color:var(--blue);margin-bottom:5px}
+.turn.them{font-family:'Spectral',serif;font-size:15.5px}
+.turn.me b{color:var(--mut)}
+.commit{border:1px solid var(--ink);padding:16px 18px;margin:6px 0 20px;max-width:74ch}
+.commit .lbl{font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+.commit .mile{font-family:'Spectral',serif;font-size:16px}
+.commit ul{padding-left:18px;margin-top:8px;font-size:13.5px}
+.plan{border-top:1px solid var(--ink);margin-top:20px;padding-top:18px;font-family:'Spectral',serif;max-width:74ch}
+.plan h2,.plan h3{font-family:'Archivo Black',sans-serif;text-transform:uppercase}
+.plan h2{font-size:20px;border-bottom:3px solid var(--blue);padding-bottom:8px;margin-bottom:14px}
+.plan h3{font-size:11px;letter-spacing:.22em;color:var(--blue);margin:18px 0 5px}
+.plan ul{padding-left:20px}
+#status{font-size:11px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--blue);margin-top:16px;min-height:16px}
+.empty{font-family:'Spectral',serif;font-style:italic;color:var(--mut);padding:44px 0;font-size:17px}
+footer{margin-top:44px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-transform:uppercase}
 </style>
 </head>
 <body>
 <div class="wrap">
-<h1><span>Biz</span>101 &middot; Sessions</h1>
+<header>
+  <div class="eyebrow">Coach view</div>
+  <h1>Who Pays <span class="q">First</span></h1>
+  <p class="sub">Every founder who sat down, and where they got stuck.</p>
+</header>
+
 <div class="gate">
-  <input type="password" id="pass" placeholder="Admin passcode" style="flex:1">
-  <button onclick="load()">Load sessions</button>
+  <input type="password" id="pass" placeholder="Admin passcode" onkeydown="if(event.key==='Enter')load()">
+  <button onclick="load()">Load</button>
 </div>
 <div id="status"></div>
+<div id="tally"></div>
 <div id="list"></div>
+<footer>Built by Fonz Morris &middot; Strategy &rarr; Execution &rarr; Rollout</footer>
 </div>
+
 <script>
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+function toggle(i){document.getElementById('b'+i).classList.toggle('on')}
+
+function commitBlock(c){
+  if(!c)return '';
+  const wk=Array.isArray(c.thisWeek)&&c.thisWeek.length
+    ? '<ul>'+c.thisWeek.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>' : '';
+  return '<div class="commit"><div class="lbl">What they committed to</div>'+
+    (c.milestone?'<div class="mile">'+esc(c.milestone)+'</div>':'')+wk+
+    (c.blocker?'<div class="idea" style="margin-top:8px">Blocker: '+esc(c.blocker)+'</div>':'')+'</div>';
+}
+
 async function load(){
   const pass=document.getElementById('pass').value.trim();
-  document.getElementById('status').textContent='';
-  const r=await fetch('/api/biz101/sessions',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({passcode:pass})});
-  const d=await r.json();
-  if(!r.ok){document.getElementById('status').textContent=d.error||'Error';return}
-  const esc=s=>(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
-  document.getElementById('list').innerHTML=d.sessions.map((s,i)=>`
-    <div class="sess">
-      <div class="sess-head" onclick="document.getElementById('b${i}').style.display=document.getElementById('b${i}').style.display==='block'?'none':'block'">
-        <b>${esc(s.member_name)}</b>
-        <span class="meta">${(s.transcript||[]).length} turns &middot; ${s.plan_html?'PLAN BUILT &middot; ':''}${new Date(s.updated_at).toLocaleString()}</span>
-      </div>
-      <div class="body" id="b${i}">
-        ${(s.transcript||[]).map(t=>`<div class="turn"><b>${t.role==='user'?esc(s.member_name):'Strategist'}</b>${esc(t.content)}</div>`).join('')}
-        ${s.plan_html?`<div class="plan">${s.plan_html.replace(/<script[\s\S]*?<\/script>/gi,'')}</div>`:''}
-      </div>
-    </div>`).join('')||'No sessions yet.';
+  const st=document.getElementById('status');
+  st.textContent='Loading...';
+  let d;
+  try{
+    const r=await fetch('/api/biz101/sessions',{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({passcode:pass})});
+    d=await r.json();
+    if(!r.ok){st.textContent=d.error||'Error';return}
+  }catch(e){st.textContent='Could not reach the server.';return}
+  st.textContent='';
+
+  const s=d.sessions||[];
+  const plans=s.filter(x=>x.plan_html).length;
+  const turns=s.reduce((n,x)=>n+((x.transcript||[]).length),0);
+  document.getElementById('tally').innerHTML=
+    '<div class="tally">'+
+    '<div><span class="num">'+s.length+'</span><span class="lbl">Sessions</span></div>'+
+    '<div class="hot"><span class="num">'+plans+'</span><span class="lbl">Plans built</span></div>'+
+    '<div><span class="num">'+turns+'</span><span class="lbl">Turns</span></div>'+
+    '<div><span class="num">'+new Set(s.map(x=>(x.member_name||'').toLowerCase())).size+'</span><span class="lbl">Founders</span></div>'+
+    '</div>';
+
+  document.getElementById('list').innerHTML = s.length ? s.map((x,i)=>{
+    const c=x.commitments||null;
+    const when=new Date(x.updated_at).toLocaleDateString(undefined,{month:'short',day:'numeric'});
+    return '<div class="sess">'+
+      '<div class="sess-head" onclick="toggle('+i+')">'+
+        '<div class="idx">'+String(i+1).padStart(2,'0')+'</div>'+
+        '<div><div class="who">'+esc(x.member_name)+'</div>'+
+          (c&&c.idea?'<div class="idea">'+esc(c.idea)+'</div>':'')+'</div>'+
+        '<div class="meta">'+(x.plan_html?'<span class="badge plan">Plan</span> &middot; ':'')+
+          (x.transcript||[]).length+' turns &middot; '+when+'</div>'+
+      '</div>'+
+      '<div class="body" id="b'+i+'">'+
+        commitBlock(c)+
+        (x.transcript||[]).map(t=>'<div class="turn '+(t.role==='user'?'me':'them')+'"><b>'+
+          (t.role==='user'?esc(x.member_name):'The Strategist')+'</b>'+esc(t.content)+'</div>').join('')+
+        (x.plan_html?'<div class="plan">'+x.plan_html.replace(/<script[\s\S]*?<\/script>/gi,'')+'</div>':'')+
+      '</div>'+
+    '</div>';
+  }).join('') : '<div class="empty">Nobody has sat down yet.</div>';
 }
 </script>
 </body>

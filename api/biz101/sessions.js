@@ -7,7 +7,7 @@ export default async function handler(req, res) {
   if (!admin || pass !== admin) return res.status(401).json({ error: "Wrong passcode." });
   if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return res.status(500).json({ error: "SUPABASE_SERVICE_ROLE_KEY not set." });
   const r = await fetch(
-    SUPABASE_URL + "/rest/v1/fonz_counselor_sessions?select=session_key,member_name,model,created_at,updated_at,transcript,plan_html&order=updated_at.desc&limit=100",
+    SUPABASE_URL + "/rest/v1/fonz_counselor_sessions?select=session_key,member_name,model,created_at,updated_at,transcript,plan_html,commitments,plan_built_at&order=updated_at.desc&limit=100",
     { headers: { apikey: process.env.SUPABASE_SERVICE_ROLE_KEY, Authorization: "Bearer " + process.env.SUPABASE_SERVICE_ROLE_KEY } }
   );
   const rows = await r.json();
