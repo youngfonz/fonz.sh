@@ -99,6 +99,12 @@ button:disabled{opacity:.35;cursor:not-allowed}
 .msg ul{padding-left:18px;margin:6px 0}
 .msg .speaker{display:block;font-family:'Archivo',sans-serif;font-size:9px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;margin-bottom:7px;color:var(--blue)}
 .msg.user .speaker{color:var(--neon)}
+/* returning-founder card */
+#priorcard{display:none;border:1px solid var(--ink);padding:18px 20px;margin-top:26px;text-align:left;width:100%;max-width:600px}
+.priorhead{font-size:9.5px;font-weight:700;letter-spacing:.28em;text-transform:uppercase;color:var(--mut);margin-bottom:8px}
+.priormile{font-family:'Spectral',serif;font-size:17px;margin-bottom:8px}
+#priorcard ul{padding-left:18px;margin:0 0 12px;font-size:13.5px}
+#priorcard li{margin-bottom:3px}
 #status{font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);margin-top:14px;min-height:15px;text-align:center}
 #status.hot{color:var(--blue)}
 .toggle{display:flex;align-items:center;gap:7px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.14em;cursor:pointer;user-select:none;color:var(--mut)}
@@ -202,6 +208,7 @@ footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-t
     <label class="toggle" style="margin-left:4px"><input type="checkbox" id="speakToggle" checked> Voice</label>
   </div>
 
+  <div id="priorcard"></div>
   <div id="drawer"><div id="chat"></div></div>
 </div>
 
@@ -271,6 +278,11 @@ const PLAN_PROMPT = `The session is wrapping. Based on everything the founder to
 Structure: <h2>The 0-to-1 Plan</h2>, then sections with h3 headers: THE PLAY (idea, who, pain, their edge), THE MONEY (engine, price logic, first revenue milestone, delivery cost), FIRST BUYERS (profile, where they gather, hit list, door openers), 90-DAY ROLLOUT (days 1-30, 31-60, 61-90, known blocker), STRAIGHT TALK (what's strong, what's weak or missing, bluntly), THIS WEEK (4-5 concrete actions for the next 7 days).
 Where the founder never gave an answer, write the gap plainly in em tags as a to-do. Keep it tight and in Fonz's direct voice.`;
 
+/* Pulled from the plan so the next session can hold the founder to it. */
+const COMMITMENT_PROMPT = `From the plan you just wrote, extract what this founder committed to. Reply with ONLY raw JSON, no prose and no code fences, in exactly this shape:
+{"milestone":"first revenue milestone in one line, with the dollar amount and the date","deadline":"YYYY-MM-DD or empty string if none was set","thisWeek":["up to 4 concrete actions they said they'd do in the next 7 days"],"blocker":"the single biggest blocker they named, one line","idea":"their business in 6 words or fewer"}
+Use their own words where you can. If something never came up, use an empty string or empty list.`;
+
 const DEFAULT_MODEL="google/gemini-2.5-flash";
 const DEFAULT_ELEVEN_VOICE="pNInz6obpgDQGcFmaJgB";
 
@@ -303,6 +315,32 @@ try{
 }catch(_){}
 
 function toggleSettings(){const s=document.getElementById('settings');s.style.display=s.style.display==='none'?'block':'none'}
+
+/* ===== THE FOLLOW-UP LOOP =====
+   A returning founder shouldn't start from zero. Pull what they committed to
+   last time and make the Strategist open by holding them to it. */
+async function loadPrior(){
+  try{
+    const r=await fetch('/api/biz101/history',{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({passcode:S.pass,name:S.name,sessionKey:S.sessionKey})});
+    if(!r.ok)return null;
+    const d=await r.json();
+    return d&&d.prior&&d.prior.commitments?d.prior:null;
+  }catch(_){return null}
+}
+function priorBriefing(p){
+  const c=p.commitments||{};
+  const week=Array.isArray(c.thisWeek)&&c.thisWeek.length?c.thisWeek.map(x=>'- '+x).join('\n'):'(none recorded)';
+  const when=p.daysSince===0?'earlier today':(p.daysSince===1?'yesterday':p.daysSince+' days ago');
+  return `(SYSTEM NOTE, not from the founder. You met this founder before, ${when}. Do not greet them like a stranger and do not re-run phase one.
+Their business: ${c.idea||'(not captured)'}
+Their revenue milestone: ${c.milestone||'(not captured)'}${c.deadline?'\nDeadline they set: '+c.deadline:''}
+The blocker they named: ${c.blocker||'(not captured)'}
+What they said they would do that week:
+${week}
+
+Open this session by holding them to it. Name one specific thing off that list and ask straight out whether it happened. If they did it, get the numbers and push to the next milestone. If they did not, find out what actually got in the way and rebuild the plan around it - no lecture. Keep it to two or three sentences.)`;
+}
 
 /* The gate. Nothing gets past this without a passcode the server accepts. */
 function gateError(msg){
@@ -361,7 +399,15 @@ async function startSession(ev){
     S.history.push({role:'user',content:"Here is the transcript of our previous session. Read it, keep everything I told you, and pick up exactly where we left off:\n\n"+imported});
     addMsg('user','[Previous session loaded]');
   }
-  if(S.history.length===0||imported) callClaude();  // counselor opens or resumes
+  if(S.history.length===0 && !imported){
+    // Returning founder? Open on their last promise instead of a cold start.
+    const prior=await loadPrior();
+    if(prior){
+      S.history.push({role:'user',content:priorBriefing(prior)});
+      showPriorCard(prior);
+    }
+  }
+  if(S.history.length===0||imported||S.history.length===1) callClaude();
 }
 
 /* ===== SESSION PERSISTENCE ===== */
@@ -613,6 +659,19 @@ function showReply(text){
   }else{
     cap.textContent=clean; more.style.display='none';
   }
+}
+/* What you told it last time, sitting where you can see it. */
+function showPriorCard(p){
+  const c=p.commitments||{};
+  const el=document.getElementById('priorcard');
+  if(!el)return;
+  const when=p.daysSince===0?'Earlier today':(p.daysSince===1?'Yesterday':p.daysSince+' days ago');
+  const items=(Array.isArray(c.thisWeek)?c.thisWeek:[]).slice(0,4).map(x=>'<li>'+escHtml(x)+'</li>').join('');
+  el.innerHTML='<div class="priorhead">'+when+' you said</div>'+
+    (c.milestone?'<div class="priormile">'+escHtml(c.milestone)+'</div>':'')+
+    (items?'<ul>'+items+'</ul>':'')+
+    '<button class="tiny" onclick="document.getElementById(\'priorcard\').style.display=\'none\'">Dismiss</button>';
+  el.style.display='block';
 }
 function showInterim(text){
   const cap=document.getElementById('caption');
@@ -931,6 +990,7 @@ function renderPlan(html){
   sheet.style.display='block';
   document.getElementById('stage').style.display='none';
   sheet.scrollIntoView({behavior:'smooth'});
+  captureCommitments();                            // bank the promises, quietly
 
   // Read it back first, then offer the download.
   if(document.getElementById('speakToggle').checked){
@@ -942,6 +1002,26 @@ function renderPlan(html){
     finishReading();
   }
 }
+/* Quietly bank what they promised, so the next session can open with it. */
+async function captureCommitments(){
+  try{
+    const r=await fetch('/api/biz101/chat',{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({passcode:S.pass,name:S.name,sessionKey:S.sessionKey,web:false,
+        messages:[{role:'system',content:SYSTEM_PROMPT},...S.history,{role:'user',content:COMMITMENT_PROMPT}]})});
+    if(!r.ok)return;
+    const d=await r.json();
+    let raw=String(d.text||'').trim().replace(/^```(?:json)?/i,'').replace(/```$/,'').trim();
+    const s=raw.indexOf('{'),e=raw.lastIndexOf('}');
+    if(s<0||e<0)return;
+    const c=JSON.parse(raw.slice(s,e+1));
+    if(!c||typeof c!=='object')return;
+    // Commitment-only save: no model call on the server side.
+    await fetch('/api/biz101/chat',{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({passcode:S.pass,name:S.name,sessionKey:S.sessionKey,commitments:c})})
+      .catch(()=>{});
+  }catch(_){/* never let this break the plan */}
+}
+
 function finishReading(){
   document.getElementById('readrow').style.display='none';
   document.getElementById('planbtns').style.display='flex';

@@ -3,7 +3,7 @@ const SUPABASE_URL = process.env.SUPABASE_URL || "https://qrtvbclbrumsrwbugvrr.s
 
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "POST only" });
-  const { passcode, name, sessionKey, messages, planMode, web, model, verify } = req.body || {};
+  const { passcode, name, sessionKey, messages, planMode, web, model, verify, commitments } = req.body || {};
 
   if (!process.env.TEAM_PASSCODE || !process.env.OPENROUTER_API_KEY)
     return res.status(500).json({ error: "Server not configured. Add TEAM_PASSCODE and OPENROUTER_API_KEY in Vercel env settings." });
@@ -12,6 +12,24 @@ export default async function handler(req, res) {
 
   // Passcode-only check so the app can gate entry without spending a model call.
   if (verify) return res.status(200).json({ ok: true });
+
+  // Commitment-only save. No model call: this just banks what the founder
+  // promised so the next session can hold them to it.
+  if (commitments && sessionKey && !messages) {
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) return res.status(200).json({ ok: true });
+    try {
+      await fetch(SUPABASE_URL + "/rest/v1/fonz_counselor_sessions?session_key=eq." + encodeURIComponent(String(sessionKey).slice(0, 100)), {
+        method: "PATCH",
+        headers: {
+          apikey: process.env.SUPABASE_SERVICE_ROLE_KEY,
+          Authorization: "Bearer " + process.env.SUPABASE_SERVICE_ROLE_KEY,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({ commitments, updated_at: new Date().toISOString() }),
+      });
+    } catch (_) {}
+    return res.status(200).json({ ok: true });
+  }
   if (!Array.isArray(messages) || messages.length > 400)
     return res.status(400).json({ error: "Bad request." });
 
@@ -53,7 +71,9 @@ export default async function handler(req, res) {
           member_name: String(name || "unknown").slice(0, 100),
           transcript,
           model: chosenModel,
-          ...(planMode ? { plan_html: text } : {}),
+          ...(planMode ? { plan_html: text, plan_built_at: new Date().toISOString() } : {}),
+          ...(commitments ? { commitments } : {}),
+          last_seen_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         }),
       });
