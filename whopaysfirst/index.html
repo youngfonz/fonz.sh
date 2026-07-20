@@ -349,6 +349,21 @@ footer{margin-top:30px;font-size:9.5px;color:#b3b3b3;letter-spacing:.26em;text-t
 <footer>&copy; Who Pays First &middot; Strategy &rarr; Execution &rarr; Rollout</footer>
 </div>
 
+<!-- Separate block on purpose: a syntax error in the main script below cannot
+     be caught from inside that same script. An unsupported feature - a regex
+     lookbehind on Safari < 16.4, say - kills the whole file at parse time, and
+     the page just sits there dead with no clue why. This surfaces it. -->
+<script>
+window.addEventListener('error',function(e){
+  try{
+    var s=document.getElementById('status');
+    if(s){s.textContent='Script error: '+(e.message||'failed to load');s.className='hot'}
+    var g=document.getElementById('gateerr');
+    if(g){g.textContent='This browser couldn’t run the app. Tell Fonz what phone and browser you’re on.';g.className='on'}
+  }catch(_){}
+});
+</script>
+
 <script>
 /* ================= CONFIG ================= */
 const SYSTEM_PROMPT = `You are "The Strategist", the engine of the Who Pays First 0-to-1 Monetization Framework, which takes early-stage founders from a business idea to first revenue.
@@ -948,7 +963,10 @@ let speakToken=0;                                  // bumped to cancel an in-fli
    sentence) to start the voice fast, and every later chunk is synthesised
    while the previous one is still playing. */
 function chunkText(text,max=1100,firstMax=180){
-  const parts=String(text).split(/(?<=[.!?])\s+/);
+  // Split after sentence enders WITHOUT a lookbehind: Safari only gained
+  // lookbehind in 16.4, and an unsupported one is a parse error that kills the
+  // entire script - no intro, no buttons, nothing.
+  const parts=String(text).replace(/([.!?])\s+/g,'$1\u0001').split('\u0001');
   const out=[];let cur='';
   for(const p of parts){
     const cap=out.length===0?firstMax:max;
