@@ -563,6 +563,7 @@ async function startSession(ev){
   S.voice=document.getElementById('k_voice').value||S.voice;
   rememberName(S.name);
   if(!S.sessionKey) S.sessionKey=S.name.replace(/\s+/g,'-').toLowerCase()+'-'+Date.now().toString(36);
+  prefetchOpening();                         // warm the first words while we enter
   enterApp();
   // Hands-free: pick the mic up as soon as the opening finishes, so the founder
   // never has to tap. The Start click is the gesture that unlocks mic access.
@@ -586,7 +587,7 @@ async function startSession(ev){
   // deciding whether this thing works. The opening never varies much, so say it
   // straight away and let the model take over from the founder's first answer.
   if(S.history.length===0&&!imported){
-    const hello="I'm the Strategist. Tell me the idea. Anything you don't know, I'll figure out. So what are you building?";
+    const hello=OPENING;
     addMsg('bot',hello);
     S.history.push({role:'assistant',content:hello});
     persist();
@@ -957,7 +958,7 @@ function startWaiting(planMode){
   waitOverride=null;
   const beats=planMode
     ? ['Pulling the whole session together','Writing your plan','Pressure-testing it','Almost there']
-    : (S.web?['Thinking','Digging into it','Checking the research','Still going, this one is meaty']
+    : (S.web?['Thinking','Give me a sec','Working it out','Almost there']
             :['Thinking','Working it through','Still going']);
   document.getElementById('more').style.display='none';
   cap.className='interim';
@@ -1009,7 +1010,7 @@ async function callClaude(planMode){
       const reader=r.body.getReader(), dec=new TextDecoder();
       let full='',buf='',shown=false;
       const reveal=()=>{if(shown)return;shown=true;stopWaiting()};
-      setWaitBeat('Getting the voice ready');
+      setWaitBeat('One sec');
       const speaks=document.getElementById('speakToggle').checked;
       pauseMicForSpeech();
       if(speaks){setMode('speaking');sqReset(reveal,null)}
@@ -1047,7 +1048,7 @@ async function callClaude(planMode){
       if(document.getElementById('speakToggle').checked){
         // Hold the caption until the voice actually starts. Showing text first
         // and speaking seconds later made the whole thing feel laggy.
-        setWaitBeat('Getting the voice ready');
+        setWaitBeat('One sec');
         let shown=false;
         const reveal=()=>{if(shown)return;shown=true;stopWaiting();showReply(text)};
         setTimeout(reveal,8000);                 // never hold the text hostage
@@ -1098,8 +1099,28 @@ function chunkText(text,max=1100,firstMax=180){
   return out.filter(Boolean);
 }
 
+/* The opening line never changes, so we synthesise it during the passcode
+   check and it plays the instant the founder enters - no silent beat while the
+   very first words are generated. That first silence was the raggedest moment. */
+const OPENING="I'm the Strategist. Tell me the idea. Anything you don't know, I'll figure out. So what are you building?";
+let openingURL=null;
+async function prefetchOpening(){
+  if(openingURL||!document.getElementById('speakToggle').checked)return;
+  try{
+    const r=await fetch('/api/whopaysfirst/tts',{method:'POST',headers:{'content-type':'application/json'},
+      body:JSON.stringify({passcode:S.pass,text:OPENING,speed:S.speed,voice:S.voice})});
+    if(r.ok)openingURL=URL.createObjectURL(await r.blob());
+  }catch(_){}
+}
+
 async function fetchClip(text){
   try{
+    // Warmed opening: skip the round-trip entirely.
+    if(openingURL&&text===OPENING){
+      const url=openingURL;openingURL=null;
+      if(IS_IOS&&S.primed){S.primed.src=url;S.primed.volume=1;return S.primed}
+      const a=new Audio(url);a.crossOrigin='anonymous';return a;
+    }
     const r=await fetch('/api/whopaysfirst/tts',{method:'POST',headers:{'content-type':'application/json'},
       body:JSON.stringify({passcode:S.pass,text,speed:S.speed,voice:S.voice})});
     if(r.ok){
@@ -1303,7 +1324,7 @@ async function startWhisperMic(){
     S.listening=false;clearInterval(S.vad);
     const blob=new Blob(chunks,{type:mime||'audio/webm'});
     if(blob.size<1500){setMode('idle');if(S.hands)startMic();return}   // too short to be speech
-    setMode('thinking','TRANSCRIBING');
+    setMode('thinking','GOT IT');
     try{
       const b64=await new Promise((res,rej)=>{
         const fr=new FileReader();
