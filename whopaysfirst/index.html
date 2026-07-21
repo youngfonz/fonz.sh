@@ -985,6 +985,15 @@ async function callClaude(planMode){
   startWaiting(planMode);
   const messages=S.history.length?[...S.history]:[{role:'user',content:'(The founder just sat down. Open the session.)'}];
   if(planMode) messages.push({role:'user',content:PLAN_PROMPT});
+  // The opening line is pre-written and stored as an assistant turn, so the
+  // model never generated it - and its instructions tell it to introduce
+  // itself on the first turn. Without this it re-introduces on turn two,
+  // gluing a duplicate greeting onto an otherwise good answer, which reads as
+  // "it ignored me and reset". Tell it the intro already happened.
+  const alreadyOpened=S.history.some(m=>m.role==='assistant');
+  const sys=(alreadyOpened&&!planMode)
+    ? SYSTEM_PROMPT+"\n\nCONTINUE THE CONVERSATION. You have already introduced yourself and asked what they're building; the founder has now answered. Do NOT introduce yourself again, do NOT repeat the opening, do NOT restate your name. Respond directly to what they just said and keep moving through the framework."
+    : SYSTEM_PROMPT;
   try{
     const r=await fetch('/api/whopaysfirst/chat',{
       method:'POST',
@@ -992,7 +1001,7 @@ async function callClaude(planMode){
       body:JSON.stringify({
         passcode:S.pass,name:S.name,founderKey:S.founder,sessionKey:S.sessionKey,planMode:!!planMode,web:S.web,
         stream:canStream&&!planMode,
-        messages:[{role:'system',content:SYSTEM_PROMPT},...messages]
+        messages:[{role:'system',content:sys},...messages]
       })
     });
     // Streamed conversational turns: speak each sentence as it arrives.
