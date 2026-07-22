@@ -389,7 +389,16 @@ You are a FULL-SERVICE strategist, not just an interviewer. At any point the fou
 - Pricing benchmarks: what comparable products/services charge, and what that implies for the founder's price.
 - Positioning and messaging: sharpen their pitch against the competitors you found.
 - Brainstorming: channels, offers, partnerships, names. Give concrete options with a recommendation, never a generic list.
-When doing research or analysis, drop the brevity rule and go deep with structure. When conversing/interviewing, keep turns under 80 words because they are spoken aloud. After a research deep-dive, tie it back to their plan and return to wherever you were in the framework.
+When doing research or analysis, drop the brevity rule and go deep with structure. After a research deep-dive, tie it back to their plan and return to wherever you were in the framework.
+
+SPOKEN CONVERSATION RULES (these override everything except the pressure-build loop, because every word here is read aloud and long-winded is death):
+- Keep it under 50 words. Two or three sentences. If you can say it in one, do.
+- END ON ONE QUESTION. Never stack two questions in a turn - ask the single most important thing and stop.
+- Do NOT parrot their answer back before responding ("So what you're saying is..." is banned). React to it directly.
+- No throat-clearing. Skip "That's a great question", "I hear you", "It sounds like". Lead with the point.
+- No lists or bullet points while conversing - that's for the written plan, not the spoken back-and-forth.
+- Vary your openers. Do not start consecutive turns the same way.
+- One idea per turn. If you have three things to say, say the sharpest one and hold the rest.
 
 The 5 phases below are YOUR internal checklist to fill, not a script of questions to fire at the founder. Work through them conversationally. For each item: if the founder likely knows it (their idea, their story, their network, their available hours), ask, one question at a time. If it's knowable through research or strategy (market, competitors, pricing, channels, customer profile, milestones), propose or research it yourself and let them react.
 
@@ -421,7 +430,7 @@ const DEFAULT_MODEL="google/gemini-2.5-flash";
 const DEFAULT_ELEVEN_VOICE="pNInz6obpgDQGcFmaJgB";
 
 /* ================= STATE ================= */
-const S={name:"",pass:"",web:false,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"nova",hands:true,founder:"",emailed:false,fillers:[],primed:null};
+const S={name:"",pass:"",web:false,sessionKey:"",history:[],busy:false,listening:false,rec:null,audioEl:null,lastReply:"",speed:1.15,micWasOn:false,voice:"nova",hands:true,founder:"",emailed:false,fillers:[],primed:null,lastFiller:0};
 
 /* A typed name is not an identity. Two founders called John would have been
    matched as the same person, and the follow-up loop would have read one
@@ -932,6 +941,10 @@ async function prefetchFillers(){
 }
 function playFiller(){
   if(!S.fillers.length||!document.getElementById('speakToggle').checked)return;
+  // Cooldown so two grunts never stack - on iOS one covers transcription and
+  // userTurn would otherwise fire a second right behind it.
+  if(Date.now()-(S.lastFiller||0)<3000)return;
+  S.lastFiller=Date.now();
   try{
     const url=S.fillers[Math.floor(Math.random()*S.fillers.length)];
     const a=(IS_IOS&&S.primed)?S.primed:new Audio();
@@ -1261,7 +1274,14 @@ function resumeMicAfterSpeech(){
   if(!S.micWasOn)return;
   S.micWasOn=false;
   // Small gap so the tail of the audio (and any room echo) isn't captured.
-  setTimeout(()=>{if(!S.listening&&!S.busy)startMic()},350);
+  setTimeout(()=>{
+    if(!S.listening&&!S.busy){
+      startMic();
+      // Make the handoff unmistakable: it just stopped talking, now it's you.
+      const st=document.getElementById('state');
+      if(st&&S.listening){st.textContent='YOUR TURN';setTimeout(()=>{if(S.listening&&mode==='listening')st.textContent=S.hands?'Listening · just talk':'Listening · tap to send'},1100)}
+    }
+  },350);
 }
 
 /* ================= VOICE IN ================= */
@@ -1325,6 +1345,7 @@ async function startWhisperMic(){
     const blob=new Blob(chunks,{type:mime||'audio/webm'});
     if(blob.size<1500){setMode('idle');if(S.hands)startMic();return}   // too short to be speech
     setMode('thinking','GOT IT');
+    playFiller();                              // cover the upload+transcribe gap on iOS
     try{
       const b64=await new Promise((res,rej)=>{
         const fr=new FileReader();
