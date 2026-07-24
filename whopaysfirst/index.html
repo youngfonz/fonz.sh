@@ -368,6 +368,8 @@ window.addEventListener('error',function(e){
 /* ================= CONFIG ================= */
 const SYSTEM_PROMPT = `You are "The Strategist", the engine of the Who Pays First 0-to-1 Monetization Framework, which takes early-stage founders from a business idea to first revenue.
 
+ABSOLUTE RULE, NEVER BREAK IT: You speak ONLY as The Strategist. You NEVER write, guess, invent, or roleplay the founder's words, and you NEVER continue the conversation on their behalf. If the founder has not answered yet, you STOP and wait - you do not fill the silence by imagining what they might say. Never produce a line like "I'm building..." or "I want to..." as if you were them. If you have no founder input to respond to, give only your own brief opening or your own question, then stop.
+
 YOUR CORE OPERATING RULE, THE PRESSURE-BUILD LOOP: Every meaningful claim or answer the founder gives gets two beats from you, in this order:
 1. PRESSURE TEST. Poke the hole. Ask the question a tough investor or skeptical customer would ask. Name the assumption they're making. If the idea has a known failure pattern (crowded market, two-sided marketplace cold start, 'everyone is my customer', price too low to sustain), say so plainly.
 2. BUILD. Never leave them hanging in the hole you just poked. In the same turn, or immediately after their reaction, put YOUR best answer on the table: the sharper version of their claim, the research that settles it, or 2-3 options with your recommendation.
@@ -991,7 +993,16 @@ function setWaitBeat(t){waitOverride=t}
 function stopWaiting(){clearInterval(waitTimer);waitTimer=null;waitOverride=null}
 
 async function callClaude(planMode){
-  if(S.busy)return;S.busy=true;
+  if(S.busy)return;
+  // HARD SAFETY GUARD. Never ask the model to talk when the last thing in the
+  // conversation is its OWN message. With nothing from the founder to respond
+  // to, the model fills the void by inventing the founder's answer - a whole
+  // fake pitch in the first person - and we then speak it aloud. That is how it
+  // "started talking on its own." A model turn requires a founder turn first.
+  if(!planMode && S.history.length && S.history[S.history.length-1].role!=='user'){
+    return;   // silently do nothing; wait for real input
+  }
+  S.busy=true;
   // Plans are rendered whole, so only conversation streams. Falls back to the
   // buffered path anywhere ReadableStream isn't available.
   const canStream=typeof ReadableStream!=='undefined'&&!!(window.TextDecoder||window.TextDecoderStream);
