@@ -1423,7 +1423,13 @@ function startMic(){
     showInterim(all);                          // you see your words land live
     if(S.hands)armSilence();
   };
-  S.rec.onerror=e=>{if(e.error!=='aborted')setStatus('Mic error: '+e.error,true);stopMic(false)};
+  S.rec.onerror=e=>{
+    // "no-speech" just means it heard nothing yet - that's normal, not an error.
+    // Keep listening and show a calm cue instead of an alarming message.
+    if(e.error==='no-speech'){setStatus('');setMode('listening','Waiting for you');return}
+    if(e.error==='aborted')return;
+    setStatus('Mic hiccup. Tap the circle to try again.',true);stopMic(false);
+  };
   S.rec.onend=()=>{ if(S.listening){/*auto-restart while listening*/ try{S.rec.start()}catch(_){}} };
   try{S.rec.start()}catch(_){return}
   S.listening=true;
