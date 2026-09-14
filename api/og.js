@@ -6,15 +6,38 @@ const WHITE = '#FFFFFF';
 const BLACK = '#000000';
 const BLUE = '#2A52FF';
 
-export default function handler() {
+// Google Fonts serves a static TTF instance to user agents without variable-font support.
+async function loadFont(family, weight) {
+  const css = await fetch(
+    `https://fonts.googleapis.com/css2?family=${family}:wght@${weight}`,
+    { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0' } }
+  ).then(r => r.text());
+  const url = css.match(/src:\s*url\(([^)]+)\)/)?.[1];
+  if (!url) throw new Error(`No font URL for ${family} ${weight}`);
+  return fetch(url).then(r => r.arrayBuffer());
+}
+
+const fontsPromise = Promise.all([
+  loadFont('Bricolage+Grotesque', 800),
+  loadFont('Plus+Jakarta+Sans', 500),
+]).then(([display, body]) => [
+  { name: 'Bricolage', data: display, weight: 800, style: 'normal' },
+  { name: 'Jakarta', data: body, weight: 500, style: 'normal' },
+]);
+
+export default async function handler() {
+  let fonts = [];
+  try { fonts = await fontsPromise; } catch (_) { fonts = []; }
+
   const word = (text, color, alignRight) => ({
     type: 'div',
     props: {
       style: {
-        fontSize: 158,
+        fontFamily: fonts.length ? 'Bricolage' : 'sans-serif',
+        fontSize: 168,
         fontWeight: 800,
-        lineHeight: 0.86,
-        letterSpacing: '-0.02em',
+        lineHeight: 0.84,
+        letterSpacing: '-0.03em',
         textTransform: 'uppercase',
         color,
         alignSelf: alignRight ? 'flex-end' : 'flex-start',
@@ -36,7 +59,8 @@ export default function handler() {
           justifyContent: 'space-between',
           background: WHITE,
           color: BLACK,
-          fontFamily: 'sans-serif',
+          fontFamily: fonts.length ? 'Jakarta' : 'sans-serif',
+          fontWeight: 500,
         },
         children: [
           {
@@ -81,7 +105,7 @@ export default function handler() {
                 fontSize: 26,
               },
               children: [
-                { type: 'div', props: { style: { maxWidth: 760, lineHeight: 1.25 }, children: 'I deploy AI inside your business. Then I prove it moved a number.' } },
+                { type: 'div', props: { style: { maxWidth: 820, lineHeight: 1.25 }, children: 'I deploy AI inside your business. Then I prove it moved a number.' } },
                 { type: 'div', props: { style: { color: BLUE, fontWeight: 700 }, children: 'hello@fonzmorris.com' } },
               ],
             },
@@ -89,6 +113,6 @@ export default function handler() {
         ],
       },
     },
-    { width: 1200, height: 630 }
+    { width: 1200, height: 630, fonts }
   );
 }
