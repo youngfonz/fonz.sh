@@ -3,6 +3,19 @@
    Palette is exactly four colors. Type does the work.
    ========================================================== */
 
+/* ==========================================================
+   Self-hosted type: New York (display) and SF Pro Text (body).
+   Latin subsets, woff2. New York weights map to optical sizes:
+   700 = Extra Large Bold, 600 = Large Semibold, 500 = Medium Medium.
+   ========================================================== */
+
+@font-face { font-family: 'New York'; font-weight: 700; font-style: normal; font-display: swap; src: url('../fonts/new-york-xl-bold.woff2') format('woff2'); }
+@font-face { font-family: 'New York'; font-weight: 600; font-style: normal; font-display: swap; src: url('../fonts/new-york-l-semibold.woff2') format('woff2'); }
+@font-face { font-family: 'New York'; font-weight: 500; font-style: normal; font-display: swap; src: url('../fonts/new-york-m-medium.woff2') format('woff2'); }
+@font-face { font-family: 'SF Pro Text'; font-weight: 400; font-style: normal; font-display: swap; src: url('../fonts/sf-pro-text-regular.woff2') format('woff2'); }
+@font-face { font-family: 'SF Pro Text'; font-weight: 500; font-style: normal; font-display: swap; src: url('../fonts/sf-pro-text-medium.woff2') format('woff2'); }
+@font-face { font-family: 'SF Pro Text'; font-weight: 600; font-style: normal; font-display: swap; src: url('../fonts/sf-pro-text-semibold.woff2') format('woff2'); }
+
 :root {
   --white: #FFFFFF;
   --black: #000000;
@@ -12,10 +25,8 @@
   --rule: 1px solid var(--black);
   --rule-inv: 1px solid var(--white);
 
-  /* Apple system faces: New York for display, SF for everything else.
-     Non-Apple devices fall back to Newsreader and the platform sans. */
-  --display: ui-serif, 'New York', 'Newsreader', Georgia, 'Times New Roman', serif;
-  --body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --display: 'New York', ui-serif, Georgia, 'Times New Roman', serif;
+  --body: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   /* one gutter, used everywhere */
@@ -263,6 +274,29 @@ h1, h2, h3 {
   max-width: 44em;
 }
 
+
+/* ==========================================================
+   Deployments — three case studies, ruled, three columns
+   ========================================================== */
+
+.cases { border-bottom: var(--rule); }
+.case { border-top: var(--rule); padding: 1.75rem var(--gutter) 2.25rem; display: grid; gap: 1.5rem; }
+.case__title { font-size: clamp(2rem, 4.5vw, 3.75rem); letter-spacing: -0.02em; }
+.case__meta { margin-top: 0.5rem; }
+.case__meta a { border-bottom: 1px solid var(--blue); color: var(--blue); }
+.case__cols { display: grid; gap: 1.5rem; }
+.case__cols p { font-size: 0.98rem; }
+.case__label { margin-bottom: 0.5rem; padding-top: 0.5rem; border-top: var(--rule); color: var(--blue); }
+.case__figure {
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(3rem, 6vw, 5.5rem) !important;
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.75rem;
+}
+.case__figure span { font-size: 0.4em; font-weight: 600; letter-spacing: -0.01em; }
+
 /* ==========================================================
    Videos — feature poster + index table
    ========================================================== */
@@ -476,6 +510,9 @@ a.repo:hover .repo__status { color: var(--sky); }
   .offer__length { grid-area: len; padding-top: 0.6rem; }
   .offer__name { grid-area: name; }
   .offer__body { grid-area: body; grid-template-columns: 1fr 1fr; gap: var(--gutter); align-items: start; }
+
+  .case { grid-template-columns: 1fr 3fr; align-items: start; }
+  .case__cols { grid-template-columns: 1fr 1fr 1fr; gap: var(--gutter); }
 
   .videos__head { grid-template-columns: 1fr 1fr; }
   .feature { display: grid; grid-template-columns: 3fr 2fr; }

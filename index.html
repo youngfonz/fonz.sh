@@ -31,10 +31,8 @@
   <!-- Favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%232A52FF'/><path d='M14 16h30v9H25v7h16v9H25v11H14z' fill='%23FFFFFF'/></svg>">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Fallback serif for devices without New York; Apple devices never download it -->
-  <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600;6..72,700&display=swap" rel="stylesheet">
+  <link rel="preload" href="fonts/new-york-xl-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/sf-pro-text-regular.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="css/style.css">
 
   <!-- Structured Data -->
@@ -50,6 +48,7 @@
     "description": "Forward Deployed Engineer and consultant. Deploys AI inside real businesses and proves it moved revenue, risk, or cost. Former Lead Product Designer, Global Conversion at Netflix.",
     "knowsAbout": ["Forward Deployed Engineering", "AI deployment", "Agent evaluation", "Conversion architecture", "Revenue growth"],
     "alumniOf": [
+      { "@type": "CollegeOrUniversity", "name": "Quantic School of Business and Technology" },
       { "@type": "CollegeOrUniversity", "name": "Stanford University" },
       { "@type": "CollegeOrUniversity", "name": "Morehouse College" }
     ],
@@ -96,6 +95,7 @@
     <nav class="masthead__cell masthead__cell--index" aria-label="Sections">
       <a href="#method">Method</a>
       <a href="#engagements">Engagements</a>
+      <a href="#cases">Deployments</a>
       <a href="#videos">Videos</a>
       <a href="#work">Work</a>
       <a href="#about">About</a>
@@ -229,6 +229,80 @@
       <p class="engagements__fit">Best fit: a technical product meeting a non-technical team, real volume in the workflow, and an executive who owns the number. If the ask is “we're understaffed,” I will say so on the first call.</p>
     </section>
 
+    <!-- Cases -->
+    <section class="cases" id="cases" aria-labelledby="cases-title">
+      <header class="ledger__head">
+        <h2 class="section-word" id="cases-title">Deployments</h2>
+        <p class="ledger__note">Three systems I built and run. Each one replaced a process that lived in spreadsheets, inboxes, and one person's head. Two of them run inside organizations I am part of, so the numbers are mine to stand behind.</p>
+      </header>
+
+      <article class="case">
+        <div class="case__head">
+          <h3 class="case__title">BCC Academy</h3>
+          <p class="case__meta">Cohort program platform · Beyond Code Collective · <a href="https://bccacademy.io" target="_blank" rel="noopener">bccacademy.io ↗</a></p>
+        </div>
+        <div class="case__cols">
+          <div>
+            <p class="case__label">The problem</p>
+            <p>High-touch training programs for Black Girls Code, Upskill Bahamas, Catalyst, and After The Game were running on a spreadsheet, a Google Form, a Zoom account, and a part-time coordinator. Funders asked for outcome data nobody could produce.</p>
+          </div>
+          <div>
+            <p class="case__label">What I built</p>
+            <p>One multi-tenant platform for enrollment, live sessions, attendance, certificates, and reporting. Zoom recordings import themselves. An Eventbrite ticket becomes an account and a magic link. New organizations are database rows, not deploys. An opt-in AI tutor runs per program, with row-level security, a PII audit log, and a weekly automated security check posted to Slack.</p>
+          </div>
+          <div>
+            <p class="case__label">What moved</p>
+            <p class="case__figure">66<span>/66</span></p>
+            <p>Every finished cohort to date completed at 100 percent. Five organizations live on one codebase, built in about nine weeks. It now also hosts the Forward Deploy training program for staff.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case__head">
+          <h3 class="case__title">GFX1000</h3>
+          <p class="case__meta">Design and video production pipeline · BGC and BCC marketing</p>
+        </div>
+        <div class="case__cols">
+          <div>
+            <p class="case__label">The problem</p>
+            <p>Every design and video request was hand-built, and every review round meant three Slack messages per job. Reviewers were drowning and requesters had no idea where anything stood.</p>
+          </div>
+          <div>
+            <p class="case__label">What I built</p>
+            <p>A request row in Notion comes out the other end as finished, delivered assets, with one human approval in the middle. A webhook crawler on Vercel catches the row and asks for missing fields in Slack, a Claude routine plans the work, a Cloud Run studio renders it, and delivery lands in Drive, Notion, Canva, and Slack. Nobody opens a terminal. The Forward Deploy channel publishes from the same system every morning.</p>
+          </div>
+          <div>
+            <p class="case__label">What moved</p>
+            <p class="case__figure">136</p>
+            <p>Rendered videos across 35 registered projects, plus every still that came with them. One short published daily and a weekly analytics digest, unattended.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="case">
+        <div class="case__head">
+          <h3 class="case__title">PulsePro</h3>
+          <p class="case__meta">Project management for solo operators, plus an ad engine · <a href="https://pulsepro.work" target="_blank" rel="noopener">pulsepro.work ↗</a></p>
+        </div>
+        <div class="case__cols">
+          <div>
+            <p class="case__label">The problem</p>
+            <p>Freelancers and consultants with five clients were paying for tools designed for five hundred employees, and spending more time maintaining the tracker than doing client work. Their Shopify stores also needed fresh ad creative every week with nobody to make it.</p>
+          </div>
+          <div>
+            <p class="case__label">What I built</p>
+            <p>PulsePro.work: projects, tasks, clients, billing through Polar, daily reminders over Telegram, and Claude-generated insights on the dashboard. Beside it, the Ad Engine: it reads a store's Shopify and Meta Ads data, has Claude write five Instagram video ad scripts a week, renders them with HeyGen, and hands back a performance report.</p>
+          </div>
+          <div>
+            <p class="case__label">What moved</p>
+            <p class="case__figure">5<span> ads / week</span></p>
+            <p>End to end in under thirty minutes of machine time, at fifty to one hundred fifty dollars a month in marginal cost per client. The creative problem disappears from the owner's week.</p>
+          </div>
+        </div>
+      </article>
+    </section>
+
     <!-- Videos -->
     <section class="videos" id="videos" aria-labelledby="videos-title">
       <header class="videos__head">
@@ -289,8 +363,11 @@
       <h2 class="about__name" id="about-title"><span>Fonz</span><span>Morris</span></h2>
       <div class="about__body">
         <p>For nearly five years I was Lead Product Designer for Global Conversion at Netflix: the team responsible for how hundreds of millions of people sign up, pick a plan, and pay across 190 countries. I architected the conversion systems behind the password-sharing crackdown, which turned tens of millions of sharers into paying subscribers and drove billions in new revenue.</p>
-        <p>Before that I led Growth Design at Coursera. I have founded three companies, invest as an LP, and studied at Stanford and Morehouse. Today I do the job the market is finally naming: embed with a business, decide where intelligence belongs in its workflows, build it, own the result.</p>
+        <p>Before Netflix I led Growth Design at Coursera. I have founded three companies, invest as an LP, hold an MBA from Quantic, and studied at Stanford and Morehouse. Today I do the job the market is finally naming: embed with a business, decide where intelligence belongs in its workflows, build it, own the result.</p>
         <dl class="about__facts">
+          <div><dt>Netflix</dt><dd>Lead Product Designer, Global Conversion</dd></div>
+          <div><dt>Coursera</dt><dd>Growth Design Lead</dd></div>
+          <div><dt>Education</dt><dd>MBA, Quantic. Stanford. Morehouse.</dd></div>
           <div><dt>Based</dt><dd>United States. Remote and on-site.</dd></div>
           <div><dt>Stack</dt><dd>Claude, Python, TypeScript, Vercel, AWS, and whatever you already run.</dd></div>
           <div><dt>Strategy work</dt><dd><a href="https://fonzmorris.com" rel="me">fonzmorris.com</a></dd></div>

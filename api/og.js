@@ -6,31 +6,27 @@ const WHITE = '#FFFFFF';
 const BLACK = '#000000';
 const BLUE = '#2A52FF';
 
-// Google Fonts serves a static TTF instance to user agents without variable-font support.
-async function loadFont(family, weight) {
-  const css = await fetch(
-    `https://fonts.googleapis.com/css2?family=${family}:wght@${weight}`,
-    { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0' } }
-  ).then(r => r.text());
-  const url = css.match(/src:\s*url\(([^)]+)\)/)?.[1];
-  if (!url) throw new Error(`No font URL for ${family} ${weight}`);
-  return fetch(url).then(r => r.arrayBuffer());
+// Latin subsets of the site's own display and body faces, served as static files.
+async function loadFonts(origin) {
+  const [display, body] = await Promise.all([
+    fetch(`${origin}/fonts/og/new-york-xl-bold.otf`).then(r => r.arrayBuffer()),
+    fetch(`${origin}/fonts/og/sf-pro-text-regular.otf`).then(r => r.arrayBuffer()),
+  ]);
+  return [
+    { name: 'New York', data: display, weight: 700, style: 'normal' },
+    { name: 'SF Pro Text', data: body, weight: 400, style: 'normal' },
+  ];
 }
 
-// New York and SF are Apple-only; Newsreader is the same serif fallback the site uses.
-const fontsPromise = loadFont('Newsreader', 700).then(display => [
-  { name: 'Newsreader', data: display, weight: 700, style: 'normal' },
-]);
-
-export default async function handler() {
+export default async function handler(req) {
   let fonts = [];
-  try { fonts = await fontsPromise; } catch (_) { fonts = []; }
+  try { fonts = await loadFonts(new URL(req.url).origin); } catch (_) { fonts = []; }
 
   const word = (text, color, alignRight) => ({
     type: 'div',
     props: {
       style: {
-        fontFamily: fonts.length ? 'Newsreader' : 'serif',
+        fontFamily: fonts.length ? 'New York' : 'serif',
         fontSize: 150,
         fontWeight: 700,
         lineHeight: 0.9,
@@ -56,7 +52,7 @@ export default async function handler() {
           justifyContent: 'space-between',
           background: WHITE,
           color: BLACK,
-          fontFamily: 'sans-serif',
+          fontFamily: fonts.length ? 'SF Pro Text' : 'sans-serif',
           fontWeight: 400,
         },
         children: [
