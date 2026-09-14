@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What Is a Forward Deployed Engineer? The Role, the Method, and When to Hire One</title>
+  <meta name="description" content="A Forward Deployed Engineer embeds with a business, deploys AI inside its real workflows, and proves the result in revenue, risk, or cost. What the role is, why it exists, the seven-stage method, what it is not, and how to hire one. By Fonz Morris.">
+  <meta name="author" content="Fonz Morris">
+  <meta name="theme-color" content="#2A52FF">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" href="https://www.fonz.sh/forward-deployed-engineer">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Fonz.sh">
+  <meta property="og:title" content="What Is a Forward Deployed Engineer?">
+  <meta property="og:description" content="The role, why it exists, the seven-stage method, what it is not, and how to hire one. By Fonz Morris, Forward Deployed Engineer.">
+  <meta property="og:url" content="https://www.fonz.sh/forward-deployed-engineer">
+  <meta property="og:image" content="https://www.fonz.sh/api/og">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="article:author" content="https://www.fonz.sh/">
+  <meta property="article:published_time" content="2026-09-14">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@youngfonz">
+  <meta name="twitter:title" content="What Is a Forward Deployed Engineer?">
+  <meta name="twitter:description" content="The role, why it exists, the seven-stage method, what it is not, and how to hire one.">
+  <meta name="twitter:image" content="https://www.fonz.sh/api/og">
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%232A52FF'/><path d='M14 16h30v9H25v7h16v9H25v11H14z' fill='%23FFFFFF'/></svg>">
+  <link rel="preload" href="fonts/new-york-xl-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/sf-pro-text-regular.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Article",
+        "@id": "https://www.fonz.sh/forward-deployed-engineer#article",
+        "headline": "What Is a Forward Deployed Engineer?",
+        "alternativeHeadline": "The role, the method, and when to hire one",
+        "description": "A Forward Deployed Engineer embeds with a business, deploys AI inside its real workflows, and proves the result in revenue, risk, or cost.",
+        "url": "https://www.fonz.sh/forward-deployed-engineer",
+        "datePublished": "2026-09-14",
+        "dateModified": "2026-09-14",
+        "inLanguage": "en",
+        "image": "https://www.fonz.sh/api/og",
+        "author": { "@type": "Person", "@id": "https://www.fonz.sh/#person", "name": "Fonz Morris", "url": "https://www.fonz.sh/", "jobTitle": "Forward Deployed Engineer" },
+        "publisher": { "@type": "Person", "@id": "https://www.fonz.sh/#person", "name": "Fonz Morris" },
+        "mainEntityOfPage": "https://www.fonz.sh/forward-deployed-engineer",
+        "about": { "@type": "Thing", "name": "Forward Deployed Engineer" },
+        "keywords": ["Forward Deployed Engineer", "FDE", "forward deployed engineering", "AI deployment", "hire a forward deployed engineer", "AI consultant"]
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Fonz Morris", "item": "https://www.fonz.sh/" },
+          { "@type": "ListItem", "position": 2, "name": "What Is a Forward Deployed Engineer?", "item": "https://www.fonz.sh/forward-deployed-engineer" }
+        ]
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "What is a Forward Deployed Engineer?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A Forward Deployed Engineer is a customer-facing software engineer who works inside a client's business rather than at a vendor's headquarters. The role combines consultant, product manager, and engineer: discover the real bottleneck, decide where AI belongs in the workflow, build it on the systems the business already runs, and own the result until a business metric moves." }
+          },
+          {
+            "@type": "Question",
+            "name": "What does FDE stand for?",
+            "acceptedAnswer": { "@type": "Answer", "text": "FDE stands for Forward Deployed Engineer. Palantir popularized the title, where the engineers were also called Deltas. It is now used by Anthropic, OpenAI, Databricks, Cursor, Sierra, and many startups." }
+          },
+          {
+            "@type": "Question",
+            "name": "How is a Forward Deployed Engineer different from a consultant?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A consultant's deliverable is advice, usually a deck. A Forward Deployed Engineer's deliverable is working software running in the client's environment, with an evaluation report and a measured before-and-after. The FDE also stays on after launch to monitor, tune, and take on the next workflow." }
+          },
+          {
+            "@type": "Question",
+            "name": "When does it make sense to hire a Forward Deployed Engineer?",
+            "acceptedAnswer": { "@type": "Answer", "text": "When a technical capability is meeting a non-technical team, there is real volume in the workflow, and an executive owns the number that should move. It does not make sense when the real problem is headcount, or when the request is a demo rather than a deployment." }
+          },
+          {
+            "@type": "Question",
+            "name": "How long does a forward deployment take?",
+            "acceptedAnswer": { "@type": "Answer", "text": "A discovery sprint takes about two weeks. A first deployment typically takes six to ten weeks of build, followed by a longer trust period where the system runs in shadow mode, then makes suggestions, then takes gated actions. Practitioners consistently report that earning trust takes longer than the build." }
+          },
+          {
+            "@type": "Question",
+            "name": "Why do most AI pilots fail?",
+            "acceptedAnswer": { "@type": "Answer", "text": "An MIT study put the failure rate of enterprise AI pilots near 95 percent. The pattern is consistent: the pilot was built for the demo instead of the messy real process, it forced a migration, it only handled the happy path, nobody owned it after launch, and it was never tied to a revenue, risk, or cost number." }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="masthead">
+    <a class="masthead__cell masthead__cell--name" href="/">Fonz Morris</a>
+    <div class="masthead__cell masthead__cell--role">Guide</div>
+    <nav class="masthead__cell masthead__cell--index" aria-label="Sections">
+      <a href="#what">What it is</a>
+      <a href="#why">Why now</a>
+      <a href="#method">Method</a>
+      <a href="#not">What it is not</a>
+      <a href="#hire">Hiring</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="masthead__cell masthead__cell--mail" href="mailto:hello@fonz.sh">hello@fonz.sh</a>
+  </header>
+
+  <main id="main" class="article">
+
+    <header class="article__head">
+      <p class="article__kicker">A working definition · Updated September 2026</p>
+      <h1 class="article__title">What is a Forward Deployed Engineer?</h1>
+      <p class="article__lede">The role that companies are hiring for at a pace up several hundred percent year over year, that almost nobody can define in one sentence. Here is the one sentence, then the rest.</p>
+      <p class="article__byline">By <a href="/">Fonz Morris</a>, Forward Deployed Engineer. I do this work for clients and explain it on the <a href="https://www.youtube.com/@ForwardDeploy" target="_blank" rel="noopener me">Forward Deploy</a> channel.</p>
+    </header>
+
+    <section class="article__section" id="what">
+      <h2>The one-sentence version</h2>
+      <p class="article__big">A Forward Deployed Engineer is a customer-facing software engineer who works inside your business, deploys AI into the workflow where the money actually leaks, and proves it moved a number.</p>
+      <p>The job is three roles in one person: consultant, product manager, and engineer. Not the average of the three. The best of each. The consultant part discovers what the business actually needs. The product manager part decides what to build and what to leave alone. The engineer part ships it into your systems and keeps it running.</p>
+      <p>Palantir invented the role. Their framing still holds: a product engineer builds one capability for many customers, a Forward Deployed Engineer builds many capabilities for one customer. The output of an engagement is working software in the customer's environment. Not a slide deck, which is consulting. Not a demo, which is sales engineering. Not a ticket queue, which is staff augmentation.</p>
+    </section>
+
+    <section class="article__section" id="why">
+      <h2>Why the role exists now</h2>
+      <p>Intelligence became a commodity. Every company can buy the same models from the same handful of providers. Whatever advantage a business gets from AI no longer comes from having it. It comes from where, how, and why it gets deployed. That last mile is the job.</p>
+      <p>The evidence that the last mile is where things break is not subtle. An MIT study put the failure rate of enterprise AI pilots near 95 percent, and the failures are rarely the model's fault. Across the practitioner talks I have studied, from Anthropic, Cursor, Sierra, and Palantir alumni, the same five deaths repeat:</p>
+      <ol class="article__list">
+        <li><strong>Built for the demo.</strong> It worked on clean inputs in a sales call and fell over on the forty-sender inbox, the forwarded PDF, and the screenshot of a spreadsheet.</li>
+        <li><strong>Forced a migration.</strong> The vendor asked the client to move off the system they spent two years and two million dollars installing. The client said no, correctly.</li>
+        <li><strong>Handled the happy path only.</strong> There is one way a workflow goes right and a thousand ways it goes wrong. The exceptions are the actual job.</li>
+        <li><strong>Nobody owned it after launch.</strong> Models change, costs drift, edge cases arrive. Without an owner the system decays and gets quietly abandoned.</li>
+        <li><strong>Moved no metric.</strong> Nobody agreed on the number before building, so nobody could prove anything after.</li>
+      </ol>
+      <p>Palantir was mocked for a decade for running an unscalable consulting business. It now has the highest average contract value among public software companies. OpenAI, Anthropic, Databricks, Microsoft, and more than a hundred startups have since adopted the role. The market caught up to the idea that deployment is the product.</p>
+    </section>
+
+    <section class="article__section" id="method">
+      <h2>The method: one loop, run in order</h2>
+      <p>Every serious account of the role converges on the same loop. Each stage gates the next, and skipping one is how pilots die.</p>
+      <dl class="article__loop">
+        <div><dt>Discover</dt><dd>The documented process is fiction. The real one lives in one veteran's head. Sit next to the person doing the work, pull ten to twenty real completed cases, and walk the stated problem back to the actual bottleneck. Get an executive in the room, because mid-level contacts hand you pre-filtered requests.</dd></div>
+        <div><dt>Triage</dt><dd>Run every step of the mapped workflow through three filters. A fixed rule that must be right every time becomes deterministic software. A messy input that needs judgment goes to the model. Anything expensive to get wrong stays with a human. Most real solutions are mostly deterministic, with the model at a few points and a person approving the rest.</dd></div>
+        <div><dt>Build</dt><dd>The smallest scope that proves value, shipped fast and iterated with the user watching. On top of the ERP, CRM, or spreadsheet they already run. Keep their steps visible: a one-step black box replacing an eleven-step process gets abandoned.</dd></div>
+        <div><dt>Evaluate</dt><dd>Build an eval suite from real historical cases with known answers. The pass rate is not the deliverable. The failure analysis is: of the nine failures, five were missing data and four pulled the wrong record. Each becomes a fix, a guardrail, or a routing rule to a person.</dd></div>
+        <div><dt>Deploy</dt><dd>Production is cultural. Shadow mode, then suggestions, then gated actions, then autonomy. Private inference, access control, audit logs, and the client's compliance rules are part of the build. Budget more time for trust than for code.</dd></div>
+        <div><dt>Prove</dt><dd>Businesses measure three things: revenue, risk, cost. State the impact in one of them with a before-and-after number, and agree on that number at scoping time, not after.</dd></div>
+        <div><dt>Scale</dt><dd>One proven workflow exposes the next bottleneck upstream or downstream. The loop runs again. That is how one deployment compounds across a business.</dd></div>
+      </dl>
+    </section>
+
+    <section class="article__section" id="not">
+      <h2>What a Forward Deployed Engineer is not</h2>
+      <p>Because the title is new, it gets attached to work that is not the job. Four things to rule out:</p>
+      <ul class="article__list">
+        <li><strong>Not pre-sales.</strong> A demo that never runs in production is sales engineering. Useful, but a different job.</li>
+        <li><strong>Not advice without building.</strong> If the engagement ends with recommendations and no running software, it was consulting.</li>
+        <li><strong>Not one-to-many product engineering.</strong> An FDE builds for one customer's reality. Patterns that repeat across customers get fed back into a platform, but the engagement is bespoke.</li>
+        <li><strong>Not staff augmentation.</strong> When the ask begins with “we're understaffed,” the problem is headcount, and an FDE will tell you so on the first call.</li>
+      </ul>
+    </section>
+
+    <section class="article__section" id="hire">
+      <h2>When and how to hire one</h2>
+      <p>The role fits when three things are true at once. A technical capability is meeting a non-technical team. There is real volume in the workflow, enough that recovering days or dollars per case adds up to something a budget meeting cares about. And an executive owns the number that should move.</p>
+      <p>Questions worth asking any Forward Deployed Engineer before you engage them:</p>
+      <ul class="article__list">
+        <li>Which of my systems will you build on, and which will you ask me to replace? The right answer to the second half is none.</li>
+        <li>What number do we agree on before you write code, and how will you measure the baseline?</li>
+        <li>What does your eval report look like, and what happens to the cases that fail?</li>
+        <li>Who owns this six months after launch?</li>
+        <li>Show me something you deployed that is still running.</li>
+      </ul>
+      <p>This is the work I do. It starts with a two-week discovery sprint and ends with software running on your systems and a number you can defend. <a href="/#engagements">See the three engagement shapes</a>, or <a href="mailto:hello@fonz.sh?subject=Forward%20deployment%20for%20our%20team">email me</a> a description of the workflow that leaks money.</p>
+    </section>
+
+    <section class="article__section" id="watch">
+      <h2>Watch the method explained</h2>
+      <p>I run <a href="https://www.youtube.com/@ForwardDeploy" target="_blank" rel="noopener me">Forward Deploy</a>, a YouTube channel on how this job actually works, with long-form breakdowns and a daily short. Start with <a href="https://www.youtube.com/watch?v=5x0isKiD914" target="_blank" rel="noopener">The $10M Autopsy: Why 95% of AI Pilots Fail</a>, then <a href="https://www.youtube.com/watch?v=7EoQ6i5gv4I" target="_blank" rel="noopener">The Sommelier's Job: What a Forward Deployed Engineer Actually Is</a>. The full series is in <a href="https://www.youtube.com/playlist?list=PLQedN6LjbrkI" target="_blank" rel="noopener">The FDE Roadmap playlist</a>, and the free 30-day plan for doing the job before you have the title is at <a href="https://forwarddeploy.fonz.sh" target="_blank" rel="noopener">forwarddeploy.fonz.sh</a>.</p>
+    </section>
+
+    <section class="article__section" id="faq">
+      <h2>Questions people ask</h2>
+      <dl class="faq">
+        <div><dt>What is a Forward Deployed Engineer?</dt><dd>A customer-facing software engineer who works inside a client's business rather than at a vendor's headquarters. The role combines consultant, product manager, and engineer: discover the real bottleneck, decide where AI belongs, build it on the systems the business already runs, and own the result until a metric moves.</dd></div>
+        <div><dt>What does FDE stand for?</dt><dd>Forward Deployed Engineer. Palantir popularized the title, where the engineers were also called Deltas. It is now used by Anthropic, OpenAI, Databricks, Cursor, Sierra, and many startups.</dd></div>
+        <div><dt>How is it different from a consultant?</dt><dd>A consultant's deliverable is advice, usually a deck. A Forward Deployed Engineer's deliverable is working software in the client's environment, with an evaluation report and a measured before-and-after. The FDE also stays on after launch.</dd></div>
+        <div><dt>When does it make sense to hire one?</dt><dd>When a technical capability is meeting a non-technical team, there is real volume in the workflow, and an executive owns the number that should move. Not when the real problem is headcount, and not when the request is a demo.</dd></div>
+        <div><dt>How long does a forward deployment take?</dt><dd>About two weeks of discovery, then six to ten weeks of build, then a longer trust period of shadow mode, suggestions, and gated actions. Trust takes longer than the build.</dd></div>
+        <div><dt>Why do most AI pilots fail?</dt><dd>An MIT study put the failure rate near 95 percent. The pattern: built for the demo, forced a migration, happy path only, no owner after launch, and no number agreed up front.</dd></div>
+      </dl>
+    </section>
+
+  </main>
+
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <p class="contact__lead">Have a workflow that leaks money? Describe the process, who does it, and roughly how often. I will tell you within a day whether a forward deployment fits.</p>
+    <h2 class="contact__title" id="contact-title">Send me<br>an email</h2>
+    <a class="contact__mail" href="mailto:hello@fonz.sh?subject=Forward%20deployment%20for%20our%20team">hello@fonz.sh</a>
+  </section>
+
+  <footer class="colophon">
+    <span>© 2026 Fonz Morris</span>
+    <span class="colophon__links">
+      <a href="/">Home</a>
+      <a href="https://www.youtube.com/@ForwardDeploy" target="_blank" rel="noopener me">YouTube</a>
+      <a href="https://www.linkedin.com/in/fonzmorris" target="_blank" rel="noopener me">LinkedIn</a>
+      <a href="https://github.com/youngfonz" target="_blank" rel="noopener me">GitHub</a>
+    </span>
+    <span>fonz.sh</span>
+  </footer>
+
+</body>
+</html>

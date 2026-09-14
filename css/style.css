@@ -298,6 +298,42 @@ h1, h2, h3 {
 .case__figure span { font-size: 0.4em; font-weight: 600; letter-spacing: -0.01em; }
 
 /* ==========================================================
+   Definition — a plain text block, the page's one paragraph of "what"
+   ========================================================== */
+
+.define { padding: clamp(2.5rem, 6vw, 5rem) var(--gutter); border-bottom: var(--rule); }
+.define__inner { display: grid; gap: 1.25rem; }
+.define__title { font-size: clamp(1.75rem, 3.6vw, 3rem); font-weight: 600; letter-spacing: -0.02em; max-width: 14ch; }
+.define__body p { max-width: 40em; margin-bottom: 1rem; font-size: clamp(1.02rem, 1.3vw, 1.2rem); line-height: 1.5; }
+.define__body .text-link { font-family: var(--display); font-weight: 500; font-size: clamp(1.05rem, 1.5vw, 1.35rem); border-bottom: 2px solid var(--blue); color: var(--blue); }
+.define__body .text-link:hover { color: var(--black); border-color: var(--black); }
+
+/* ==========================================================
+   Article (guide page) + FAQ
+   ========================================================== */
+
+.article { padding: 0 var(--gutter) clamp(3rem, 6vw, 5rem); }
+.article__head { padding: clamp(2rem, 6vw, 5rem) 0 clamp(2rem, 4vw, 3rem); border-bottom: var(--rule); margin-bottom: clamp(1rem, 2vw, 2rem); }
+.article__kicker { font-family: var(--mono); font-size: 0.75rem; letter-spacing: 0.04em; text-transform: uppercase; color: var(--blue); margin-bottom: 1.25rem; }
+.article__title { font-size: clamp(2.6rem, 7.5vw, 7rem); font-weight: 700; letter-spacing: -0.025em; line-height: 0.95; max-width: 14ch; margin-bottom: 1.5rem; }
+.article__lede { font-size: clamp(1.15rem, 1.7vw, 1.5rem); line-height: 1.4; max-width: 36em; margin-bottom: 1.25rem; }
+.article__byline { font-size: 0.95rem; }
+.article__byline a, .article__section p a { border-bottom: 1px solid var(--blue); color: var(--blue); }
+.article__section { display: grid; gap: 1rem; padding: clamp(1.5rem, 3vw, 2.5rem) 0; border-bottom: var(--rule); }
+.article__section h2 { font-size: clamp(1.6rem, 3vw, 2.5rem); font-weight: 600; letter-spacing: -0.02em; }
+.article__section p { max-width: 42em; font-size: 1.05rem; line-height: 1.55; }
+.article__big { font-family: var(--display); font-weight: 500; font-size: clamp(1.4rem, 2.6vw, 2.2rem) !important; line-height: 1.2 !important; letter-spacing: -0.015em; max-width: 30em !important; }
+.article__list { max-width: 42em; display: grid; gap: 0.75rem; counter-reset: item; }
+.article__list li { padding-left: 2.25rem; position: relative; font-size: 1.05rem; line-height: 1.5; }
+ol.article__list li { counter-increment: item; }
+ol.article__list li::before { content: counter(item); position: absolute; left: 0; top: 0; font-family: var(--display); font-weight: 600; color: var(--blue); font-size: 1.3rem; line-height: 1.2; }
+ul.article__list li::before { content: ''; position: absolute; left: 0.5rem; top: 0.7rem; width: 0.6rem; height: 0.6rem; background: var(--blue); }
+.article__loop, .faq { border-top: var(--rule); max-width: 52em; }
+.article__loop div, .faq div { display: grid; gap: 0.5rem; padding: 1rem 0; border-bottom: var(--rule); }
+.article__loop dt, .faq dt { font-family: var(--display); font-weight: 600; font-size: 1.35rem; letter-spacing: -0.015em; }
+.article__loop dd, .faq dd { font-size: 1.02rem; line-height: 1.55; }
+
+/* ==========================================================
    Videos — feature poster + index table
    ========================================================== */
 
@@ -511,6 +547,8 @@ a.repo:hover .repo__status { color: var(--sky); }
   .offer__name { grid-area: name; }
   .offer__body { grid-area: body; grid-template-columns: 1fr 1fr; gap: var(--gutter); align-items: start; }
 
+  .define__inner { grid-template-columns: 1fr 2fr; gap: var(--gutter); }
+  .article__loop div, .faq div { grid-template-columns: 12rem 1fr; gap: var(--gutter); }
   .case { grid-template-columns: 1fr 3fr; align-items: start; }
   .case__cols { grid-template-columns: 1fr 1fr 1fr; gap: var(--gutter); }
 

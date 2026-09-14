@@ -5,25 +5,42 @@
     {
       "source": "/whopaysfirst/(.*)",
       "headers": [
-        { "key": "Cache-Control", "value": "no-cache, must-revalidate" }
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, must-revalidate"
+        }
       ]
     }
   ],
   "redirects": [
     {
       "source": "/biz101/:path*",
-      "has": [{ "type": "host", "value": "(www\\.)?fonz\\.sh" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?fonz\\.sh"
+        }
+      ],
       "destination": "https://whopaysfirst.com",
       "permanent": true
     },
     {
       "source": "/whopaysfirst/:path*",
-      "has": [{ "type": "host", "value": "(www\\.)?fonz\\.sh" }],
+      "has": [
+        {
+          "type": "host",
+          "value": "(www\\.)?fonz\\.sh"
+        }
+      ],
       "destination": "https://whopaysfirst.com",
       "permanent": true
     }
   ],
   "rewrites": [
+    {
+      "source": "/forward-deployed-engineer",
+      "destination": "/forward-deployed-engineer.html"
+    },
     {
       "source": "/ad-engine",
       "destination": "/ad-engine.html"

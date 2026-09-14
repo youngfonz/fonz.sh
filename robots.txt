@@ -3,4 +3,4 @@ Allow: /
 Disallow: /ad-engine
 Disallow: /api/
 
-Sitemap: https://fonz.sh/sitemap.xml
+Sitemap: https://www.fonz.sh/sitemap.xml
