@@ -12,15 +12,17 @@
   --rule: 1px solid var(--black);
   --rule-inv: 1px solid var(--white);
 
-  --display: 'Bricolage Grotesque', 'Helvetica Neue', Arial, sans-serif;
-  --body: 'Plus Jakarta Sans', 'Helvetica Neue', Arial, sans-serif;
-  --mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  /* Apple system faces: New York for display, SF for everything else.
+     Non-Apple devices fall back to Newsreader and the platform sans. */
+  --display: ui-serif, 'New York', 'Newsreader', Georgia, 'Times New Roman', serif;
+  --body: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   /* one gutter, used everywhere */
   --gutter: clamp(1rem, 3vw, 2.5rem);
   /* the giant sizes */
-  --cover-size: clamp(3.4rem, 15.5vw, 15rem);
-  --word-size: clamp(3rem, 9vw, 8.5rem);
+  --cover-size: clamp(3rem, 12.6vw, 12.5rem);
+  --word-size: clamp(2.4rem, 6.6vw, 6.25rem);
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,8 +46,9 @@ ul, ol { list-style: none; }
 h1, h2, h3 {
   font-family: var(--display);
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   line-height: 0.95;
+  font-feature-settings: 'kern' 1, 'liga' 1;
 }
 
 .visually-hidden {
@@ -106,11 +109,10 @@ h1, h2, h3 {
   display: flex;
   flex-direction: column;
   font-size: var(--cover-size);
-  font-weight: 800;
-  font-variation-settings: 'wdth' 82, 'opsz' 96;
+  font-weight: 700;
   text-transform: uppercase;
-  line-height: 0.84;
-  letter-spacing: -0.015em;
+  line-height: 0.86;
+  letter-spacing: -0.02em;
   margin-bottom: clamp(2rem, 6vw, 5rem);
 }
 .cover__word { display: block; }
@@ -126,13 +128,13 @@ h1, h2, h3 {
   align-items: start;
 }
 .cover__meta { line-height: 1.7; }
-.cover__lede { font-size: clamp(1.1rem, 1.6vw, 1.45rem); line-height: 1.4; max-width: 34em; letter-spacing: -0.01em; }
+.cover__lede { font-size: clamp(1.1rem, 1.6vw, 1.45rem); line-height: 1.4; max-width: 34em; letter-spacing: -0.012em; }
 .cover__cta {
   font-family: var(--display);
-  font-weight: 700;
-  font-size: 1.35rem;
-  letter-spacing: -0.02em;
-  border-bottom: 3px solid var(--blue);
+  font-weight: 600;
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  border-bottom: 2px solid var(--blue);
   align-self: start;
   justify-self: start;
   padding-bottom: 0.1em;
@@ -168,9 +170,9 @@ h1, h2, h3 {
   padding: 0.85rem 0;
   border-bottom: var(--rule-inv);
   font-family: var(--display);
-  font-weight: 600;
-  font-size: clamp(1.15rem, 2vw, 1.6rem);
-  letter-spacing: -0.02em;
+  font-weight: 500;
+  font-size: clamp(1.2rem, 2vw, 1.65rem);
+  letter-spacing: -0.01em;
 }
 .claim__list li::before {
   content: counter(fail, decimal-leading-zero);
@@ -186,11 +188,10 @@ h1, h2, h3 {
 
 .section-word {
   font-size: var(--word-size);
-  font-weight: 800;
-  font-variation-settings: 'wdth' 82, 'opsz' 96;
+  font-weight: 700;
   text-transform: uppercase;
-  line-height: 0.85;
-  letter-spacing: -0.015em;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
 }
 .section-word--split { display: flex; flex-direction: column; }
 .section-word--split span:last-child { color: var(--blue); }
@@ -225,7 +226,7 @@ h1, h2, h3 {
 .ledger__num {
   grid-area: num;
   font-family: var(--display);
-  font-weight: 800;
+  font-weight: 500;
   font-size: clamp(2.6rem, 5vw, 4.5rem);
   line-height: 0.8;
   color: var(--blue);
@@ -297,7 +298,7 @@ h1, h2, h3 {
   border-top: var(--rule);
   background: var(--white);
 }
-.feature__title { font-family: var(--display); font-weight: 700; font-size: clamp(1.4rem, 2.6vw, 2.25rem); letter-spacing: -0.03em; line-height: 1; }
+.feature__title { font-family: var(--display); font-weight: 600; font-size: clamp(1.4rem, 2.6vw, 2.25rem); letter-spacing: -0.03em; line-height: 1; }
 .feature__play { font-weight: 600; color: var(--blue); }
 
 .index {
@@ -313,7 +314,7 @@ h1, h2, h3 {
   vertical-align: baseline;
 }
 .index th { font-weight: 400; }
-.index td:nth-child(2) { font-family: var(--display); font-weight: 600; font-size: clamp(1.05rem, 1.6vw, 1.35rem); letter-spacing: -0.02em; line-height: 1.15; }
+.index td:nth-child(2) { font-family: var(--display); font-weight: 500; font-size: clamp(1.05rem, 1.6vw, 1.35rem); letter-spacing: -0.02em; line-height: 1.15; }
 .index td:last-child { text-align: right; color: var(--blue); }
 .index tbody tr { transition: background-color 0.15s, color 0.15s; }
 .index tbody tr:hover { background: var(--blue); color: var(--white); }
@@ -364,11 +365,10 @@ a.repo:hover .repo__status { color: var(--sky); }
   display: flex;
   flex-direction: column;
   font-size: var(--word-size);
-  font-weight: 800;
-  font-variation-settings: 'wdth' 82, 'opsz' 96;
+  font-weight: 700;
   text-transform: uppercase;
-  line-height: 0.85;
-  letter-spacing: -0.015em;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
 }
 .about__name span:last-child { color: var(--sky); }
 .about__body p { max-width: 38em; margin-bottom: 1.25rem; }
@@ -395,19 +395,18 @@ a.repo:hover .repo__status { color: var(--sky); }
 .contact__lead { max-width: 40em; margin-bottom: 2rem; }
 .contact__title {
   font-size: var(--word-size);
-  font-weight: 800;
-  font-variation-settings: 'wdth' 82, 'opsz' 96;
+  font-weight: 700;
   text-transform: uppercase;
-  line-height: 0.85;
-  letter-spacing: -0.015em;
+  line-height: 0.88;
+  letter-spacing: -0.02em;
   margin-bottom: 1.5rem;
 }
 .contact__mail {
   display: inline-block;
   font-family: var(--display);
-  font-weight: 700;
+  font-weight: 600;
   font-size: clamp(1.4rem, 5.2vw, 5rem);
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
   line-height: 1;
   color: var(--blue);
   border-bottom: 0.08em solid var(--blue);

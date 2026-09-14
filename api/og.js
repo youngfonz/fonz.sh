@@ -17,12 +17,9 @@ async function loadFont(family, weight) {
   return fetch(url).then(r => r.arrayBuffer());
 }
 
-const fontsPromise = Promise.all([
-  loadFont('Bricolage+Grotesque', 800),
-  loadFont('Plus+Jakarta+Sans', 500),
-]).then(([display, body]) => [
-  { name: 'Bricolage', data: display, weight: 800, style: 'normal' },
-  { name: 'Jakarta', data: body, weight: 500, style: 'normal' },
+// New York and SF are Apple-only; Newsreader is the same serif fallback the site uses.
+const fontsPromise = loadFont('Newsreader', 700).then(display => [
+  { name: 'Newsreader', data: display, weight: 700, style: 'normal' },
 ]);
 
 export default async function handler() {
@@ -33,11 +30,11 @@ export default async function handler() {
     type: 'div',
     props: {
       style: {
-        fontFamily: fonts.length ? 'Bricolage' : 'sans-serif',
-        fontSize: 168,
-        fontWeight: 800,
-        lineHeight: 0.84,
-        letterSpacing: '-0.03em',
+        fontFamily: fonts.length ? 'Newsreader' : 'serif',
+        fontSize: 150,
+        fontWeight: 700,
+        lineHeight: 0.9,
+        letterSpacing: '-0.02em',
         textTransform: 'uppercase',
         color,
         alignSelf: alignRight ? 'flex-end' : 'flex-start',
@@ -59,8 +56,8 @@ export default async function handler() {
           justifyContent: 'space-between',
           background: WHITE,
           color: BLACK,
-          fontFamily: fonts.length ? 'Jakarta' : 'sans-serif',
-          fontWeight: 500,
+          fontFamily: 'sans-serif',
+          fontWeight: 400,
         },
         children: [
           {
