@@ -1,3 +1,4 @@
 node_modules/
 docs/assets/_b64.json
 .vercel
+.env*
