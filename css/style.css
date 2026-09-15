@@ -95,6 +95,7 @@ h1, h2, h3 {
   border-bottom: var(--rule);
 }
 .masthead__cell {
+  min-width: 0;
   padding: 0.9rem var(--gutter);
   border-right: var(--rule);
   white-space: nowrap;
@@ -103,7 +104,11 @@ h1, h2, h3 {
 }
 .masthead__cell:nth-child(2n) { border-right: 0; }
 .masthead__cell--name { font-weight: 500; }
-.masthead__cell--index { display: flex; gap: 1.25rem; grid-column: 1 / -1; border-top: var(--rule); border-right: 0; overflow-x: auto; }
+.masthead__cell--index {
+  display: flex; flex-wrap: wrap; gap: 0.6rem 1.25rem;
+  grid-column: 1 / -1; border-top: var(--rule); border-right: 0;
+  white-space: normal; overflow: visible;
+}
 .masthead__cell--index a:hover, .masthead__cell--mail:hover { color: var(--blue); }
 
 /* ==========================================================
@@ -520,10 +525,12 @@ a.repo:hover .repo__status { color: var(--sky); }
    ========================================================== */
 
 @media (min-width: 720px) {
-  .masthead { grid-template-columns: 1fr 1.4fr 2fr 1.4fr; }
+  /* tablet: name | index | mail. The role cell repeats the h1, so it waits for wide screens. */
+  .masthead { grid-template-columns: auto 1fr auto; }
   .masthead__cell:nth-child(2n) { border-right: var(--rule); }
-  .masthead__cell:last-child { border-right: 0; text-align: right; }
+  .masthead__cell--role { display: none; }
   .masthead__cell--index { grid-column: auto; border-top: 0; border-right: var(--rule); }
+  .masthead__cell:last-child { border-right: 0; text-align: right; }
 
   .cover__foot { grid-template-columns: 1fr 2fr; }
   .cover__cta { grid-column: 2; }
@@ -572,6 +579,8 @@ a.repo:hover .repo__status { color: var(--sky); }
 }
 
 @media (min-width: 1100px) {
+  .masthead { grid-template-columns: auto auto 1fr auto; }
+  .masthead__cell--role { display: block; }
   .cover__foot { grid-template-columns: 1fr 1fr 1fr; }
   .cover__lede { grid-column: 2; }
   .cover__cta { grid-column: 3; justify-self: end; }
