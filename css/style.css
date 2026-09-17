@@ -338,6 +338,9 @@ ul.article__list li::before { content: ''; position: absolute; left: 0.5rem; top
 .article__loop dt, .faq dt { font-family: var(--display); font-weight: 600; font-size: 1.35rem; letter-spacing: -0.015em; }
 .article__loop dd, .faq dd { font-size: 1.02rem; line-height: 1.55; }
 
+/* feature block inside an article: same look, article rhythm */
+.feature--article { margin: 0 0 clamp(1.5rem, 3vw, 2.5rem); }
+
 /* ==========================================================
    Videos — feature poster + index table
    ========================================================== */
