@@ -38,7 +38,9 @@ const REPO_OVERRIDES = {
   'pulsepro-adsmanager': { tags: ['TypeScript', 'Next.js', 'Meta API'] },
   'pulsepro-converter': { hidden: true },
   'pulsepro-flight-app': { hidden: true },
-  'bcc-academy-lxp': { status: 'hidden' },
+  'bcc-academy-lxp': { name: 'BCC Academy', homepage: 'https://bccacademy.io', tags: ['Next.js', 'Supabase', 'Cohort programs'] },
+  'course-builder': { name: 'Forward Deploy Course Builder', tags: ['FDE program', 'TypeScript'] },
+  'wearebcc.org': { homepage: 'https://wearebcc.org' },
   'bccacademy.io': { status: 'hidden', homepage: 'https://bccacademy.io' },
   'fonz.sh': { hidden: true },
 };

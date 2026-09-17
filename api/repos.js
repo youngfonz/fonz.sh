@@ -3,6 +3,23 @@ const SOURCES = [
   { tokenEnv: 'GITHUB_TOKEN_BCC', org: 'BeyondCodeCollective' },
 ];
 
+// Accounts whose *public* repos are listed even without their own token.
+// BeyondCodeCollective is a separate GitHub user, so /user/repos on the
+// personal token never sees it; its public repos are readable by anyone.
+const PUBLIC_ACCOUNTS = ['BeyondCodeCollective'];
+
+async function fetchPublicRepos(login, token) {
+  const headers = {
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+    'User-Agent': 'fonz.sh-portfolio',
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+  const r = await fetch(`https://api.github.com/users/${login}/repos?per_page=100&sort=pushed&type=owner`, { headers });
+  if (!r.ok) return [];
+  return (await r.json()).map(x => ({ ...x, _org: login }));
+}
+
 async function fetchReposForToken(token, orgLabel) {
   const headers = {
     Accept: 'application/vnd.github+json',
@@ -37,17 +54,21 @@ export default async function handler(req, res) {
   }
 
   try {
-    const results = await Promise.all(
-      sources.map(s => fetchReposForToken(process.env[s.tokenEnv], s.org))
-    );
+    const covered = new Set(sources.map(s => s.org.toLowerCase()));
+    const publicAccounts = PUBLIC_ACCOUNTS.filter(a => !covered.has(a.toLowerCase()));
+    const results = await Promise.all([
+      ...sources.map(s => fetchReposForToken(process.env[s.tokenEnv], s.org)),
+      ...publicAccounts.map(a => fetchPublicRepos(a, process.env.GITHUB_TOKEN)),
+    ]);
     const merged = results.flat();
+    const allowedOwners = new Set([...sources.map(s => s.org.toLowerCase()), ...publicAccounts.map(a => a.toLowerCase())]);
     const seen = new Set();
     const repos = merged
       .filter(r => {
         if (r.fork) return false;
         if (seen.has(r.full_name)) return false;
         seen.add(r.full_name);
-        return r.owner && r.owner.login && sources.some(s => s.org.toLowerCase() === r.owner.login.toLowerCase());
+        return r.owner && r.owner.login && allowedOwners.has(r.owner.login.toLowerCase());
       })
       .map(r => ({
         name: r.name,
