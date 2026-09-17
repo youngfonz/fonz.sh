@@ -42,6 +42,10 @@
       "destination": "/forward-deployed-engineer.html"
     },
     {
+      "source": "/hire-a-forward-deployed-engineer",
+      "destination": "/hire-a-forward-deployed-engineer.html"
+    },
+    {
       "source": "/ad-engine",
       "destination": "/ad-engine.html"
     },
