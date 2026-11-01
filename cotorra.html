@@ -55,7 +55,7 @@ button:focus-visible,.w:focus-visible{outline:3px solid var(--sun);outline-offse
 .meta{position:absolute;left:16px;right:16px;top:64px;display:flex;justify-content:space-between;align-items:center;font-size:14px;font-weight:600}
 .meta .who{display:flex;align-items:center;gap:8px}
 .av{width:28px;height:28px;border-radius:50%;background:var(--fg);color:var(--bg);display:grid;place-items:center;font-family:var(--disp);font-size:14px}
-.newc{font-size:13px;font-weight:600;border:2px solid currentColor;border-radius:999px;padding:2px 10px;opacity:.9}
+.newc{font-size:13px;font-weight:600;opacity:.8}
 .prop{flex:1;min-height:0;display:grid;place-items:center;padding:112px 28px 6px}
 .prop svg{height:100%;max-height:300px;width:auto;max-width:100%;overflow:visible}
 .a{fill:var(--ac)} .f{fill:var(--fg)} .d{fill:var(--dk)}
@@ -67,10 +67,17 @@ button:focus-visible,.w:focus-visible{outline:3px solid var(--sun);outline-offse
 .w.on{background:var(--fg);color:var(--bg);border-bottom-color:transparent}
 .en{margin:10px 0 0;font-size:16px;line-height:1.35;font-weight:600;opacity:.9;display:none}
 #feed.showEn .en{display:block}
-.clip.showOne .en{display:block}
-.enbtn{margin:10px 0 0;padding:7px 14px;border-radius:999px;border:1.5px solid color-mix(in srgb,var(--fg) 55%,transparent);background:transparent;color:var(--fg);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
-.enbtn[aria-pressed="true"]{background:color-mix(in srgb,var(--fg) 22%,transparent)}
-#feed.showEn .enbtn{display:none}
+.tools{display:flex;gap:8px;margin:12px 0 0}
+.tbtn{padding:7px 15px;border-radius:999px;border:2px solid color-mix(in srgb,var(--fg) 60%,transparent);background:transparent;color:var(--fg);font:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s,color .15s}
+.tbtn[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.w{text-align:center;vertical-align:top}
+.w{border-bottom:0}
+.w .t{display:block;border-bottom:3px dotted color-mix(in srgb,var(--fg) 55%,transparent)}
+.w.saved .t{border-bottom:3px solid var(--ac)}
+.w.on .t{border-bottom-color:transparent}
+.pr{display:none;font-style:normal;font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:.05em;line-height:1.15;margin-top:3px;opacity:.9;white-space:nowrap}
+#feed.showPr .pr{display:block}
+#feed.showPr .es{line-height:1.45}
 .hint{margin:10px 0 0;font-size:14px;font-weight:600;opacity:.85}
 .acts{display:flex;gap:10px;padding:0 18px 16px;align-items:stretch}
 .btn{border:2px solid currentColor;border-radius:999px;padding:11px 18px;font-weight:800;font-size:16px;display:inline-flex;align-items:center;gap:8px;line-height:1}
@@ -184,7 +191,6 @@ button:focus-visible,.w:focus-visible{outline:3px solid var(--sun);outline-offse
       <div class="top">
         <span class="logo">cotorra</span>
         <div class="chips">
-          <button class="chip" id="bEn" aria-pressed="false"><span>English</span></button>
           <button class="chip" id="bLvl"><span>Starter</span></button>
         </div>
       </div>
@@ -605,6 +611,7 @@ const GLOSS={
  "zona":"area / zone",
  "último":"last"
 };
+const PRON={"a":"ah","abierto":"ah-BYEHR-toh","abren":"AH-brehn","abuela":"ah-BWEH-lah","aceptan":"ah-SEHP-tahn","afuera":"ah-FWEH-rah","agua":"AH-gwah","ahora":"ah-OH-rah","al":"ahl","algo":"AHL-goh","alguna":"ahl-GOO-nah","allá":"ah-YAH","alérgico":"ah-LEHR-hee-koh","amable":"ah-MAH-bleh","anoche":"ah-NOH-cheh","antes":"AHN-tehs","aprender":"ah-prehn-DEHR","aprendería":"ah-prehn-deh-REE-ah","aprendiendo":"ah-prehn-DYEHN-doh","aquí":"ah-KEE","asada":"ah-SAH-dah","así":"ah-SEE","aunque":"OWN-keh","autobús":"ow-toh-BOOS","avenida":"ah-beh-NEE-dah","avísame":"ah-BEE-sah-meh","ayer":"ah-YEHR","ayuda":"ah-YOO-dah","años":"AH-nyohs","bailando":"beye-LAHN-doh","bailar":"beye-LAHR","banco":"BAHN-koh","bar":"bahr","barato":"bah-RAH-toh","baño":"BAH-nyoh","bien":"byehn","bloqueador":"bloh-keh-ah-DOHR","boda":"BOH-dah","botella":"boh-TEH-yah","buen":"bwehn","buena":"BWEH-nah","buenos":"BWEH-nohs","buenísimos":"bweh-NEE-see-mohs","cabeza":"kah-BEH-sah","cada":"KAH-dah","caes":"KAH-ehs","café":"kah-FEH","calor":"kah-LOHR","cambio":"KAHM-byoh","caminar":"kah-mee-NAHR","camisa":"kah-MEE-sah","camión":"kah-MYOHN","canción":"kahn-SYOHN","cansado":"kahn-SAH-doh","caro":"KAH-roh","carretera":"kah-rreh-TEH-rah","cartera":"kahr-TEH-rah","casa":"KAH-sah","cebolla":"seh-BOH-yah","cenamos":"seh-NAH-mohs","cenar":"seh-NAHR","centro":"SEHN-troh","cerca":"SEHR-kah","cerveza":"sehr-BEH-sah","chicago":"chee-KAH-goh","chico":"CHEE-koh","cierran":"SYEH-rrahn","cierre":"SYEH-rreh","ciudad":"syoo-DAHD","cobraron":"koh-BRAH-rohn","cocinado":"koh-see-NAH-doh","comer":"koh-MEHR","compré":"kohm-PREH","con":"kohn","concierto":"kohn-SYEHR-toh","conmigo":"kohn-MEE-goh","conocer":"koh-noh-SEHR","conocerte":"koh-noh-SEHR-teh","creo":"KREH-oh","cruzar":"kroo-SAHR","cuando":"KWAHN-doh","cuarto":"KWAHR-toh","cuba":"KOO-bah","cuenta":"KWEHN-tah","cuesta":"KWEHS-tah","cuánto":"KWAHN-toh","cómo":"KOH-moh","da":"dah","de":"deh","deja":"DEH-hah","dejado":"deh-HAH-doh","dejar":"deh-HAHR","dejé":"deh-HEH","del":"dehl","demasiado":"deh-mah-SYAH-doh","desayuno":"deh-sah-YOO-noh","descuento":"dehs-KWEHN-toh","despacio":"dehs-PAH-syoh","devuelvan":"deh-BWEHL-bahn","di":"dee","dice":"DEE-seh","dicen":"DEE-sehn","diego":"DYEH-goh","diez":"dyehs","diferencia":"dee-feh-REHN-syah","dirección":"dee-rehk-SYOHN","disculpe":"dees-KOOL-peh","domingos":"doh-MEEN-gohs","dos":"dohs","dudo":"DOO-doh","duele":"DWEH-leh","día":"DEE-ah","días":"DEE-ahs","dólares":"DOH-lah-rehs","dónde":"DOHN-deh","el":"ehl","empieza":"ehm-PYEH-sah","en":"ehn","encanta":"ehn-KAHN-tah","encantaría":"ehn-kahn-tah-REE-ah","encuentro":"ehn-KWEHN-troh","enseñó":"ehn-seh-NYOH","entiendo":"ehn-TYEHN-doh","equivoqué":"eh-kee-boh-KEH","era":"EH-rah","eres":"EH-rehs","es":"ehs","esa":"EH-sah","escribir":"ehs-kree-BEER","eso":"EH-soh","español":"ehs-pah-NYOHL","esperando":"ehs-peh-RAHN-doh","espere":"ehs-PEH-reh","espero":"ehs-PEH-roh","esquina":"ehs-KEE-nah","esta":"EHS-tah","estaba":"ehs-TAH-bah","estados":"ehs-TAH-dohs","este":"EHS-teh","esto":"EHS-toh","estos":"EHS-tohs","estoy":"EHS-toy","estudio":"ehs-TOO-dyoh","está":"ehs-TAH","están":"ehs-TAHN","esté":"ehs-TEH","explicarme":"ehks-plee-KAHR-meh","familia":"fah-MEE-lyah","farmacia":"fahr-MAH-syah","favor":"fah-BOHR","fila":"FEE-lah","fin":"feen","frontera":"frohn-TEH-rah","fue":"fweh","fuerte":"FWEHR-teh","fui":"fwee","fuimos":"FWEE-mohs","funciona":"foon-SYOH-nah","fútbol":"FOOT-bohl","garita":"gah-REE-tah","gente":"HEHN-teh","gracias":"GRAH-syahs","guitarra":"gee-TAH-rrah","gusta":"GOOS-tah","gustado":"goos-TAH-doh","gustaría":"goos-tah-REE-ah","gusto":"GOOS-toh","hablar":"ah-BLAHR","hablo":"AH-bloh","habría":"ah-BREE-ah","había":"ah-BEE-ah","hace":"AH-seh","hambre":"AHM-breh","hasta":"AHS-tah","hay":"eye","haya":"AH-yah","hayas":"AH-yahs","he":"eh","hermana":"ehr-MAH-nah","hijos":"EE-hohs","historia":"ees-TOH-ryah","hizo":"EE-soh","hola":"OH-lah","hora":"OH-rah","hotel":"oh-TEHL","hoy":"oy","hubiera":"oo-BYEH-rah","importante":"eem-pohr-TAHN-teh","incluido":"een-KLWEE-doh","increíble":"een-kreh-EE-bleh","inglés":"een-GLEHS","intente":"een-TEHN-teh","invito":"een-BEE-toh","ir":"eer","irnos":"EER-nohs","jugaba":"hoo-GAH-bah","la":"lah","las":"lahs","le":"leh","lejos":"LEH-hohs","leí":"leh-EE","listo":"LEES-toh","llamo":"YAH-moh","llave":"YAH-beh","llaves":"YAH-behs","llega":"YEH-gah","llegamos":"yeh-GAH-mohs","llegues":"YEH-gehs","llegué":"yeh-GEH","llene":"YEH-neh","lleva":"YEH-bah","llevamos":"yeh-BAH-mohs","llevar":"yeh-BAHR","llevo":"YEH-boh","lloviendo":"yoh-BYEHN-doh","llueve":"YWEH-beh","lluvia":"YOO-byah","lo":"loh","los":"lohs","lugar":"loo-GAHR","mangos":"MAHN-gohs","mariscos":"mah-REES-kohs","mañana":"mah-NYAH-nah","me":"meh","mejor":"meh-HOHR","mejores":"meh-HOH-rehs","menú":"meh-NOO","mercado":"mehr-KAH-doh","mes":"mehs","mesa":"MEH-sah","mesero":"meh-SEH-roh","mi":"mee","minutos":"mee-NOO-tohs","mitad":"mee-TAHD","molesta":"moh-LEHS-tah","momento":"moh-MEHN-toh","mucho":"MOO-choh","muy":"mwee","más":"mahs","médico":"MEH-dee-koh","música":"MOO-see-kah","necesito":"neh-seh-SEE-toh","niña":"NEE-nyah","niño":"NEE-nyoh","no":"noh","noche":"NOH-cheh","nos":"nohs","o":"oh","oaxaca":"oh-ahk-SAH-kah","ocho":"OH-choh","ojalá":"oh-hah-LAH","otra":"OH-trah","paga":"PAH-gah","pagar":"pah-GAHR","pagas":"PAH-gahs","para":"PAH-rah","paraguas":"pah-RAH-gwahs","partido":"pahr-TEE-doh","pasaba":"pah-SAH-bah","pasaporte":"pah-sah-POHR-teh","pasé":"pah-SEH","pedí":"peh-DEE","pega":"PEH-gah","pensar":"pehn-SAHR","perdemos":"pehr-DEH-mohs","perdida":"pehr-DEE-dah","perdí":"pehr-DEE","perdón":"pehr-DOHN","perfecto":"pehr-FEHK-toh","permiso":"pehr-MEE-soh","pero":"PEH-roh","pesos":"PEH-sohs","picante":"pee-KAHN-teh","pides":"PEE-dehs","playa":"PLAH-yah","poco":"POH-koh","podría":"poh-DREE-ah","podrían":"poh-DREE-ahn","policía":"poh-lee-SEE-ah","ponte":"POHN-teh","por":"pohr","porque":"POHR-keh","posible":"poh-SEE-bleh","prefiero":"preh-FYEH-roh","preocupes":"preh-oh-KOO-pehs","probar":"proh-BAHR","pronto":"PROHN-toh","pronunciación":"proh-noon-syah-SYOHN","próxima":"PROHK-see-mah","próximo":"PROHK-see-moh","pudiéramos":"poo-DYEH-rah-mohs","pueda":"PWEH-dah","puede":"PWEH-deh","puedes":"PWEH-dehs","puedo":"PWEH-doh","pídele":"PEE-deh-leh","que":"keh","quedarnos":"keh-DAHR-nohs","quedo":"KEH-doh","quien":"kyehn","quieres":"KYEH-rehs","quiero":"KYEH-roh","quisiera":"kee-SYEH-rah","qué":"keh","quédese":"KEH-deh-seh","rato":"RAH-toh","receta":"reh-SEH-tah","recomendar":"reh-koh-mehn-DAHR","recomienda":"reh-koh-MYEHN-dah","regreso":"reh-GREH-soh","repetirlo":"reh-peh-TEER-loh","reservación":"reh-sehr-bah-SYOHN","reservemos":"reh-sehr-BEH-mohs","restaurante":"rehs-tow-RAHN-teh","retraso":"reh-TRAH-soh","revolución":"reh-boh-loo-SYOHN","rico":"REE-koh","robaron":"roh-BAH-rohn","rosarito":"roh-sah-REE-toh","sabido":"sah-BEE-doh","sale":"SAH-leh","salga":"SAHL-gah","salimos":"sah-LEE-mohs","salió":"sah-LYOH","salsa":"SAHL-sah","san":"sahn","se":"seh","semana":"seh-MAH-nah","sentemos":"sehn-TEH-mohs","separar":"seh-pah-RAHR","si":"see","siempre":"SYEHM-preh","siento":"SYEHN-toh","sin":"seen","sobre":"SOH-breh","sofía":"soh-FEE-ah","sol":"sohl","sola":"SOH-lah","solo":"SOH-loh","son":"sohn","soy":"soy","sus":"soos","suyo":"SOO-yoh","sé":"seh","taco":"TAH-koh","tacos":"TAH-kohs","tarda":"TAHR-dah","tarde":"TAHR-deh","tarjeta":"tahr-HEH-tah","taxi":"TAHK-see","taxista":"tahk-SEES-tah","taxímetro":"tahk-SEE-meh-troh","te":"teh","teléfono":"teh-LEH-foh-noh","temprano":"tehm-PRAH-noh","ten":"tehn","tenemos":"teh-NEH-mohs","tengas":"TEHN-gahs","tengo":"TEHN-goh","terminamos":"tehr-mee-NAH-mohs","tiempo":"TYEHM-poh","tiene":"TYEH-neh","tienes":"TYEH-nehs","tocar":"toh-KAHR","tocaras":"toh-KAH-rahs","todavía":"toh-dah-BEE-ah","todo":"TOH-doh","todos":"TOH-dohs","tomar":"toh-MAHR","trabajé":"trah-bah-HEH","trae":"TRAH-eh","trajera":"trah-HEH-rah","treinta":"TRAYN-tah","tren":"trehn","tres":"trehs","tráfico":"TRAH-fee-koh","tu":"too","tuviera":"too-BYEH-rah","típico":"TEE-pee-koh","tú":"too","un":"oon","una":"OO-nah","unidos":"oo-NEE-dohs","use":"OO-seh","va":"bah","vamos":"BAH-mohs","veamos":"beh-AH-mohs","veces":"BEH-sehs","veinte":"BAYN-teh","vemos":"BEH-mohs","venido":"beh-NEE-doh","venías":"beh-NEE-ahs","ver":"behr","veranos":"beh-RAH-nohs","verdad":"behr-DAHD","vez":"behs","viajar":"byah-HAHR","viaje":"BYAH-heh","visitado":"bee-see-TAH-doh","vista":"BEES-tah","vive":"BEE-beh","vives":"BEE-behs","volver":"bohl-BEHR","voy":"boy","vuelo":"BWEH-loh","vuelvas":"BWEHL-bahs","vuelves":"BWEHL-behs","y":"ee","ya":"yah","yo":"yoh","zona":"SOH-nah","último":"OOL-tee-moh"};
 const BASE=new Set("hola por favor un el la no y a en con mi si los al me".split(" "));
 const norm=w=>w.toLowerCase().replace(/[¿?¡!,.;:"“”]/g,"");
 const plain=w=>norm(w).normalize("NFD").replace(/[\u0300-\u036f]/g,"");
@@ -651,7 +658,7 @@ let S={lvl:0,en:false,slow:false,dict:{}};
 let auto=false, active=null, ctx=null;
 try{Object.assign(S,JSON.parse(localStorage.getItem(KEY)||"{}"))}catch(e){}
 let cloud=null,cloudT=null;
-const snapState=()=>({lvl:S.lvl,en:S.en,slow:S.slow,dict:S.dict,seen:!!S.seen,scores:S.scores||{},upd:S.upd||0});
+const snapState=()=>({lvl:S.lvl,en:S.en,pr:S.pr!==false,slow:S.slow,dict:S.dict,seen:!!S.seen,scores:S.scores||{},upd:S.upd||0});
 const persist=()=>{
   S.upd=Date.now();
   try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
@@ -668,7 +675,7 @@ async function initCloud(){
     const r=snap.exists?snap.data():null;
     cloud=ref;
     if(r&&(r.upd||0)>(S.upd||0)){
-      Object.assign(S,{lvl:r.lvl||0,en:!!r.en,slow:!!r.slow,dict:r.dict||{},seen:!!r.seen,scores:r.scores||{},upd:r.upd});
+      Object.assign(S,{lvl:r.lvl||0,en:!!r.en,pr:r.pr!==false,slow:!!r.slow,dict:r.dict||{},seen:!!r.seen,scores:r.scores||{},upd:r.upd});
       try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}
       buildFeed();badges();
       if(S.lvl)closeSheet();
@@ -754,13 +761,14 @@ function buildFeed(){
   const list=CLIPS.filter(c=>c.lvl<=lv).sort((a,b)=>b.lvl-a.lvl||ratio(a)-ratio(b));
   const feed=$("#feed");
   feed.classList.toggle("showEn",S.en);
+  feed.classList.toggle("showPr",S.pr!==false);
   feed.innerHTML=list.map((c,i)=>{
-    const toks=c.es.split(" ").map(t=>{const k=norm(t);return `<button class="w${S.dict[k]?" saved":""}" data-k="${esc(k)}">${esc(t)}</button>`}).join(" ");
+    const toks=c.es.split(" ").map(t=>{const k=norm(t);return `<button class="w${S.dict[k]?" saved":""}" data-k="${esc(k)}"><span class="t">${esc(t)}</span><i class="pr" aria-hidden="true">${esc(PRON[k]||"")}</i></button>`}).join(" ");
     const n=newCount(c);
     return `<section class="clip" data-id="${c.id}" style="--bg:${c.bg};--fg:${c.fg};--ac:${c.ac}">
       <div class="meta"><span class="who"><span class="av">${esc(c.who[0])}</span>${esc(c.who)}, ${esc(c.city)}</span><span class="newc">${n} new word${n===1?"":"s"}</span></div>
       <div class="prop"><svg viewBox="0 0 240 220" aria-hidden="true">${SCENES[c.scene]()}</svg></div>
-      <div class="sub"><p class="es" lang="es">${toks}</p><button class="enbtn" data-act="en" aria-pressed="false">Show English</button><p class="en">${esc(c.en)}</p>${i===0&&!S.seen?`<p class="hint">Press play, then tap any word to see what it means.</p>`:""}</div>
+      <div class="sub"><p class="es" lang="es">${toks}</p><div class="tools"><button class="tbtn" data-act="pr" aria-pressed="${S.pr!==false}">Sounds</button><button class="tbtn" data-act="en" aria-pressed="${S.en}">English</button></div><p class="en">${esc(c.en)}</p>${i===0&&!S.seen?`<p class="hint">Press play, then tap any word to see what it means.</p>`:""}</div>
       <div class="acts">
         <button class="btn main" data-act="play" aria-label="Play or stop audio">${ICON.play}${ICON.stop}<span>Play</span><i class="bars"><b></b><b></b><b></b><b></b></i></button>
         <button class="btn" data-act="slow" aria-pressed="${S.slow}">Slow</button>
@@ -798,11 +806,10 @@ $("#feed").addEventListener("click",e=>{
   if(act==="play")play(sec);
   else if(act==="slow"){S.slow=!S.slow;persist();document.querySelectorAll('[data-act="slow"]').forEach(x=>x.setAttribute("aria-pressed",S.slow));toast(S.slow?"Slow speech on":"Slow speech off")}
   else if(act==="say")sayIt(clipOf(+sec.dataset.id));
-  else if(act==="en"){const on=sec.classList.toggle("showOne");b.setAttribute("aria-pressed",on);b.textContent=on?"Hide English":"Show English"}
+  else if(act==="en"||act==="pr"){if(act==="en")S.en=!S.en;else S.pr=S.pr===false;persist();const f=$("#feed");f.classList.toggle("showEn",S.en);f.classList.toggle("showPr",S.pr!==false);document.querySelectorAll('[data-act="en"]').forEach(x=>x.setAttribute("aria-pressed",S.en));document.querySelectorAll('[data-act="pr"]').forEach(x=>x.setAttribute("aria-pressed",S.pr!==false))}
   else if(act==="up"){S.lvl=Math.min(3,Math.max(S.lvl,1)+1);persist();buildFeed();$("#feed").scrollTo({top:0});toast(LV[S.lvl]+": "+CLIPS.filter(c=>c.lvl===S.lvl).length+" clips")}
   else if(act==="top")$("#feed").scrollTo({top:0,behavior:"smooth"});
 });
-$("#bEn").addEventListener("click",e=>{S.en=!S.en;persist();$("#feed").classList.toggle("showEn",S.en);e.currentTarget.setAttribute("aria-pressed",S.en)});
 $("#bLvl").addEventListener("click",()=>levelPicker(false));
 
 /* ---------- word sheet ---------- */
