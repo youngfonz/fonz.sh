@@ -46,6 +46,7 @@ button:focus-visible,.w:focus-visible{outline:3px solid var(--sun);outline-offse
 .chips{display:flex;gap:8px}
 .chip{border:2px solid currentColor;border-radius:999px;padding:5px 12px;font-size:13px;font-weight:600;line-height:1.1}
 .chip[aria-pressed="true"]{background:currentColor}
+@media (max-width:400px){#bHF{padding:5px 9px}}
 .chip[aria-pressed="true"] span{color:var(--hbg,#17133A)}
 
 /* feed */
@@ -68,6 +69,11 @@ button:focus-visible,.w:focus-visible{outline:3px solid var(--sun);outline-offse
 .pr{margin:16px 0 0;font-family:var(--body);font-size:15px;font-weight:600;letter-spacing:.02em;line-height:1.5;color:color-mix(in srgb,var(--fg) 72%,transparent)}
 .en{margin:8px 0 0;font-family:var(--body);font-size:18px;line-height:1.35;font-weight:700}
 .hint{margin:14px 0 0;font-size:13px;font-weight:600;opacity:.65}
+.turn{display:none;align-items:center;gap:12px;margin-top:16px;font-size:14px;font-weight:800}
+.clip.turn .turn{display:flex}
+.turn i{flex:1;height:8px;border-radius:4px;background:color-mix(in srgb,var(--fg) 20%,transparent);position:relative;overflow:hidden}
+.turn i::after{content:"";position:absolute;inset:0;background:var(--fg);transform-origin:left;animation:drain var(--d,4s) linear forwards}
+@keyframes drain{from{transform:scaleX(1)}to{transform:scaleX(0)}}
 .acts{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:0 22px 20px}
 .btn{border:2px solid currentColor;border-radius:999px;padding:11px 18px;font-weight:800;font-size:16px;display:inline-flex;align-items:center;gap:8px;line-height:1}
 .btn svg{width:18px;height:18px;fill:currentColor}
@@ -189,6 +195,7 @@ button:focus-visible,.w:focus-visible{outline:3px solid var(--sun);outline-offse
       <div class="top">
         <span class="logo">cotorra</span>
         <div class="chips">
+          <button class="chip" id="bHF" aria-pressed="false" aria-label="Hands-free mode: plays each clip, then slow, then waits for you to repeat"><span>Hands-free</span></button>
           <button class="chip" id="bLvl"><span>Starter</span></button>
         </div>
       </div>
@@ -344,6 +351,36 @@ const CLIPS=[
  {id:128,lvl:3,bg:"#FFB400",fg:"#17133A",ac:"#2347D6",scene:"hello",who:"Elena",city:"Tijuana",es:"Gracias por todo, ojalá nos veamos pronto.",en:"Thanks for everything, I hope we see each other soon."},
  {id:129,lvl:3,bg:"#2347D6",fg:"#FFFFFF",ac:"#FFB400",scene:"plane",who:"Tomás",city:"Tijuana",es:"Si todo sale bien, regreso el próximo mes.",en:"If all goes well, I’ll be back next month."},
  {id:130,lvl:3,bg:"#FFB400",fg:"#17133A",ac:"#E6335F",scene:"hello",who:"Gabriela",city:"Tijuana",es:"Fue un gusto conocerte, y espero que vuelvas pronto.",en:"It was a pleasure meeting you, and I hope you come back soon."},
+ {id:131,lvl:1,bg:"#2347D6",fg:"#FFFFFF",ac:"#FFB400",scene:"coffee",who:"Elena",city:"Tijuana",es:"¿Tiene leche de avena?",en:"Do you have oat milk?"},
+ {id:132,lvl:1,bg:"#FFB400",fg:"#17133A",ac:"#E6335F",scene:"taco",who:"Mateo",city:"Tijuana",es:"Dos de asada, por favor.",en:"Two carne asada, please."},
+ {id:133,lvl:1,bg:"#0E8F72",fg:"#FFFFFF",ac:"#FFD84A",scene:"sun",who:"Ana",city:"Rosarito",es:"Hace mucho calor hoy.",en:"It’s really hot today."},
+ {id:134,lvl:1,bg:"#E6335F",fg:"#FFFFFF",ac:"#FFB400",scene:"bus",who:"Carlos",city:"Tijuana",es:"¿Dónde está la parada?",en:"Where is the stop?"},
+ {id:135,lvl:1,bg:"#FF6A1F",fg:"#17133A",ac:"#FFE08A",scene:"wave",who:"Lucía",city:"Ensenada",es:"Me gusta mucho el mar.",en:"I really like the sea."},
+ {id:136,lvl:1,bg:"#17133A",fg:"#FFFFFF",ac:"#5CE0C0",scene:"plate",who:"Diego",city:"Tijuana",es:"Está muy rico.",en:"It’s really good."},
+ {id:137,lvl:1,bg:"#2347D6",fg:"#FFFFFF",ac:"#FFB400",scene:"clock",who:"Sofía",city:"Tijuana",es:"Nos vemos a las ocho.",en:"See you at eight."},
+ {id:138,lvl:1,bg:"#FFB400",fg:"#17133A",ac:"#E6335F",scene:"keys",who:"Pablo",city:"Tijuana",es:"No encuentro mis llaves.",en:"I can’t find my keys."},
+ {id:139,lvl:1,bg:"#0E8F72",fg:"#FFFFFF",ac:"#FFD84A",scene:"music",who:"Paola",city:"Tijuana",es:"Me encanta esta canción.",en:"I love this song."},
+ {id:140,lvl:1,bg:"#E6335F",fg:"#FFFFFF",ac:"#FFB400",scene:"door",who:"Tomás",city:"Tijuana",es:"Pase, está abierto.",en:"Come in, it’s open."},
+ {id:141,lvl:2,bg:"#FF6A1F",fg:"#17133A",ac:"#FFE08A",scene:"market",who:"Gabriela",city:"Tijuana",es:"¿Me puede dar un kilo de tomates?",en:"Can you give me a kilo of tomatoes?"},
+ {id:142,lvl:2,bg:"#17133A",fg:"#FFFFFF",ac:"#5CE0C0",scene:"bus",who:"Javier",city:"Tijuana",es:"La fila para cruzar está muy larga hoy.",en:"The line to cross is really long today."},
+ {id:143,lvl:2,bg:"#2347D6",fg:"#FFFFFF",ac:"#FFB400",scene:"pot",who:"Natalia",city:"Ensenada",es:"Mi abuela hace el mejor pozole del barrio.",en:"My grandma makes the best pozole in the neighborhood."},
+ {id:144,lvl:2,bg:"#FFB400",fg:"#17133A",ac:"#E6335F",scene:"ball",who:"Rodrigo",city:"Tijuana",es:"¿Vas a ver el partido de los Xolos?",en:"Are you going to watch the Xolos game?"},
+ {id:145,lvl:2,bg:"#0E8F72",fg:"#FFFFFF",ac:"#FFD84A",scene:"sun",who:"Camila",city:"Rosarito",es:"Vamos a la playa el sábado temprano.",en:"We’re going to the beach early on Saturday."},
+ {id:146,lvl:2,bg:"#E6335F",fg:"#FFFFFF",ac:"#FFB400",scene:"tag",who:"Fernando",city:"Tijuana",es:"¿Cuánto cuesta si compro tres?",en:"How much is it if I buy three?"},
+ {id:147,lvl:2,bg:"#FF6A1F",fg:"#17133A",ac:"#FFE08A",scene:"rain",who:"Valeria",city:"Tijuana",es:"Trae una chamarra, va a hacer frío en la noche.",en:"Bring a jacket, it’s going to be cold tonight."},
+ {id:148,lvl:2,bg:"#17133A",fg:"#FFFFFF",ac:"#5CE0C0",scene:"coffee",who:"Iván",city:"Tijuana",es:"Siempre pido un café de olla en este lugar.",en:"I always order café de olla at this place."},
+ {id:149,lvl:2,bg:"#2347D6",fg:"#FFFFFF",ac:"#FFB400",scene:"book",who:"Marta",city:"Tijuana",es:"Estoy aprendiendo español con canciones y videos.",en:"I’m learning Spanish with songs and videos."},
+ {id:150,lvl:2,bg:"#FFB400",fg:"#17133A",ac:"#E6335F",scene:"plate",who:"Andrés",city:"Ensenada",es:"Probamos tres vinos en el Valle de Guadalupe.",en:"We tried three wines in the Valle de Guadalupe."},
+ {id:151,lvl:3,bg:"#0E8F72",fg:"#FFFFFF",ac:"#FFD84A",scene:"house",who:"Isabela",city:"Tijuana",es:"Si encuentras un departamento cerca del trabajo, avísame.",en:"If you find an apartment near work, let me know."},
+ {id:152,lvl:3,bg:"#E6335F",fg:"#FFFFFF",ac:"#FFB400",scene:"clock",who:"Sebastián",city:"Tijuana",es:"Llevo media hora esperando el taxi y todavía no llega.",en:"I’ve been waiting for the taxi for half an hour and it still hasn’t come."},
+ {id:153,lvl:3,bg:"#FF6A1F",fg:"#17133A",ac:"#FFE08A",scene:"heart",who:"Daniela",city:"Tijuana",es:"Me alegra que hayas podido venir a la fiesta.",en:"I’m glad you were able to come to the party."},
+ {id:154,lvl:3,bg:"#17133A",fg:"#FFFFFF",ac:"#5CE0C0",scene:"wave",who:"Miguel",city:"Ensenada",es:"Si el mar está tranquilo mañana, salimos a pescar.",en:"If the sea is calm tomorrow, we’ll go fishing."},
+ {id:155,lvl:3,bg:"#2347D6",fg:"#FFFFFF",ac:"#FFB400",scene:"pot",who:"Carmen",city:"Tijuana",es:"Te dejé tamales en el refri por si te da hambre.",en:"I left you tamales in the fridge in case you get hungry."},
+ {id:156,lvl:3,bg:"#FFB400",fg:"#17133A",ac:"#E6335F",scene:"plane",who:"Joaquín",city:"Tijuana",es:"Tuve que cambiar el vuelo porque cancelaron el mío.",en:"I had to change my flight because they canceled mine."},
+ {id:157,lvl:3,bg:"#0E8F72",fg:"#FFFFFF",ac:"#FFD84A",scene:"music",who:"Renata",city:"Tijuana",es:"Cuando era niña, mi papá ponía música de banda los domingos.",en:"When I was a girl, my dad played banda music on Sundays."},
+ {id:158,lvl:3,bg:"#E6335F",fg:"#FFFFFF",ac:"#FFB400",scene:"huh",who:"Emilio",city:"Tijuana",es:"Perdón, no entendí bien, ¿me lo puedes repetir?",en:"Sorry, I didn’t quite catch that, can you say it again?"},
+ {id:159,lvl:3,bg:"#FF6A1F",fg:"#17133A",ac:"#FFE08A",scene:"dance",who:"Valentina",city:"Rosarito",es:"Nos quedamos bailando hasta que cerraron el lugar.",en:"We stayed dancing until they closed the place."},
+ {id:160,lvl:3,bg:"#17133A",fg:"#FFFFFF",ac:"#5CE0C0",scene:"guitar",who:"Mateo",city:"Tijuana",es:"Dudo que encontremos boletos para el concierto a estas alturas.",en:"I doubt we’ll find tickets for the concert at this point."},
 ];
 const GLOSS={
  "hola":"hello","me":"me / myself","llamo":"call (me llamo = my name is)","sofía":"Sofía (a name)",
@@ -607,7 +644,61 @@ const GLOSS={
  "vuelves":"you come back",
  "yo":"I",
  "zona":"area / zone",
- "último":"last"
+ "último":"last",
+ "alegra":"makes glad (me alegra = I’m glad)",
+ "alturas":"heights (a estas alturas = at this point)",
+ "avena":"oats",
+ "banda":"banda (brass band music from Mexico)",
+ "barrio":"neighborhood",
+ "boletos":"tickets",
+ "cambiar":"to change",
+ "cancelaron":"they canceled",
+ "canciones":"songs",
+ "cerraron":"they closed",
+ "chamarra":"jacket (Mexico)",
+ "compro":"I buy",
+ "dar":"to give",
+ "departamento":"apartment",
+ "encontremos":"we find (after dudo que)",
+ "encuentras":"you find",
+ "entendí":"I understood",
+ "estas":"these",
+ "fiesta":"party",
+ "frío":"cold",
+ "guadalupe":"Guadalupe (Valle de Guadalupe, Baja wine country)",
+ "hacer":"to do / to make (va a hacer frío = it’s going to be cold)",
+ "kilo":"kilo",
+ "larga":"long",
+ "leche":"milk",
+ "mar":"sea",
+ "media":"half (media hora = half an hour)",
+ "mis":"my (plural)",
+ "mío":"mine",
+ "olla":"clay pot (café de olla = spiced pot coffee)",
+ "papá":"dad",
+ "parada":"stop (bus stop)",
+ "pase":"come in (polite)",
+ "pescar":"to fish",
+ "pido":"I order / I ask for",
+ "podido":"been able (hayas podido = you were able)",
+ "ponía":"used to put on / play",
+ "pozole":"pozole (hominy stew)",
+ "probamos":"we tried / we tasted",
+ "quedamos":"we stayed",
+ "refri":"fridge",
+ "repetir":"to repeat",
+ "sábado":"Saturday",
+ "tamales":"tamales",
+ "tomates":"tomatoes",
+ "trabajo":"work / job",
+ "tranquilo":"calm",
+ "tuve":"I had (tuve que = I had to)",
+ "valle":"valley",
+ "vas":"you go / you’re going (vas a = you’re going to)",
+ "venir":"to come",
+ "videos":"videos",
+ "vinos":"wines",
+ "xolos":"Xolos (Tijuana’s soccer team)"
 };
 const PRON={"a":"ah","abierto":"ah-BYEHR-toh","abren":"AH-brehn","abuela":"ah-BWEH-lah","aceptan":"ah-SEHP-tahn","afuera":"ah-FWEH-rah","agua":"AH-gwah","ahora":"ah-OH-rah","al":"ahl","algo":"AHL-goh","alguna":"ahl-GOO-nah","allá":"ah-YAH","alérgico":"ah-LEHR-hee-koh","amable":"ah-MAH-bleh","anoche":"ah-NOH-cheh","antes":"AHN-tehs","aprender":"ah-prehn-DEHR","aprendería":"ah-prehn-deh-REE-ah","aprendiendo":"ah-prehn-DYEHN-doh","aquí":"ah-KEE","asada":"ah-SAH-dah","así":"ah-SEE","aunque":"OWN-keh","autobús":"ow-toh-BOOS","avenida":"ah-beh-NEE-dah","avísame":"ah-BEE-sah-meh","ayer":"ah-YEHR","ayuda":"ah-YOO-dah","años":"AH-nyohs","bailando":"beye-LAHN-doh","bailar":"beye-LAHR","banco":"BAHN-koh","bar":"bahr","barato":"bah-RAH-toh","baño":"BAH-nyoh","bien":"byehn","bloqueador":"bloh-keh-ah-DOHR","boda":"BOH-dah","botella":"boh-TEH-yah","buen":"bwehn","buena":"BWEH-nah","buenos":"BWEH-nohs","buenísimos":"bweh-NEE-see-mohs","cabeza":"kah-BEH-sah","cada":"KAH-dah","caes":"KAH-ehs","café":"kah-FEH","calor":"kah-LOHR","cambio":"KAHM-byoh","caminar":"kah-mee-NAHR","camisa":"kah-MEE-sah","camión":"kah-MYOHN","canción":"kahn-SYOHN","cansado":"kahn-SAH-doh","caro":"KAH-roh","carretera":"kah-rreh-TEH-rah","cartera":"kahr-TEH-rah","casa":"KAH-sah","cebolla":"seh-BOH-yah","cenamos":"seh-NAH-mohs","cenar":"seh-NAHR","centro":"SEHN-troh","cerca":"SEHR-kah","cerveza":"sehr-BEH-sah","chicago":"chee-KAH-goh","chico":"CHEE-koh","cierran":"SYEH-rrahn","cierre":"SYEH-rreh","ciudad":"syoo-DAHD","cobraron":"koh-BRAH-rohn","cocinado":"koh-see-NAH-doh","comer":"koh-MEHR","compré":"kohm-PREH","con":"kohn","concierto":"kohn-SYEHR-toh","conmigo":"kohn-MEE-goh","conocer":"koh-noh-SEHR","conocerte":"koh-noh-SEHR-teh","creo":"KREH-oh","cruzar":"kroo-SAHR","cuando":"KWAHN-doh","cuarto":"KWAHR-toh","cuba":"KOO-bah","cuenta":"KWEHN-tah","cuesta":"KWEHS-tah","cuánto":"KWAHN-toh","cómo":"KOH-moh","da":"dah","de":"deh","deja":"DEH-hah","dejado":"deh-HAH-doh","dejar":"deh-HAHR","dejé":"deh-HEH","del":"dehl","demasiado":"deh-mah-SYAH-doh","desayuno":"deh-sah-YOO-noh","descuento":"dehs-KWEHN-toh","despacio":"dehs-PAH-syoh","devuelvan":"deh-BWEHL-bahn","di":"dee","dice":"DEE-seh","dicen":"DEE-sehn","diego":"DYEH-goh","diez":"dyehs","diferencia":"dee-feh-REHN-syah","dirección":"dee-rehk-SYOHN","disculpe":"dees-KOOL-peh","domingos":"doh-MEEN-gohs","dos":"dohs","dudo":"DOO-doh","duele":"DWEH-leh","día":"DEE-ah","días":"DEE-ahs","dólares":"DOH-lah-rehs","dónde":"DOHN-deh","el":"ehl","empieza":"ehm-PYEH-sah","en":"ehn","encanta":"ehn-KAHN-tah","encantaría":"ehn-kahn-tah-REE-ah","encuentro":"ehn-KWEHN-troh","enseñó":"ehn-seh-NYOH","entiendo":"ehn-TYEHN-doh","equivoqué":"eh-kee-boh-KEH","era":"EH-rah","eres":"EH-rehs","es":"ehs","esa":"EH-sah","escribir":"ehs-kree-BEER","eso":"EH-soh","español":"ehs-pah-NYOHL","esperando":"ehs-peh-RAHN-doh","espere":"ehs-PEH-reh","espero":"ehs-PEH-roh","esquina":"ehs-KEE-nah","esta":"EHS-tah","estaba":"ehs-TAH-bah","estados":"ehs-TAH-dohs","este":"EHS-teh","esto":"EHS-toh","estos":"EHS-tohs","estoy":"EHS-toy","estudio":"ehs-TOO-dyoh","está":"ehs-TAH","están":"ehs-TAHN","esté":"ehs-TEH","explicarme":"ehks-plee-KAHR-meh","familia":"fah-MEE-lyah","farmacia":"fahr-MAH-syah","favor":"fah-BOHR","fila":"FEE-lah","fin":"feen","frontera":"frohn-TEH-rah","fue":"fweh","fuerte":"FWEHR-teh","fui":"fwee","fuimos":"FWEE-mohs","funciona":"foon-SYOH-nah","fútbol":"FOOT-bohl","garita":"gah-REE-tah","gente":"HEHN-teh","gracias":"GRAH-syahs","guitarra":"gee-TAH-rrah","gusta":"GOOS-tah","gustado":"goos-TAH-doh","gustaría":"goos-tah-REE-ah","gusto":"GOOS-toh","hablar":"ah-BLAHR","hablo":"AH-bloh","habría":"ah-BREE-ah","había":"ah-BEE-ah","hace":"AH-seh","hambre":"AHM-breh","hasta":"AHS-tah","hay":"eye","haya":"AH-yah","hayas":"AH-yahs","he":"eh","hermana":"ehr-MAH-nah","hijos":"EE-hohs","historia":"ees-TOH-ryah","hizo":"EE-soh","hola":"OH-lah","hora":"OH-rah","hotel":"oh-TEHL","hoy":"oy","hubiera":"oo-BYEH-rah","importante":"eem-pohr-TAHN-teh","incluido":"een-KLWEE-doh","increíble":"een-kreh-EE-bleh","inglés":"een-GLEHS","intente":"een-TEHN-teh","invito":"een-BEE-toh","ir":"eer","irnos":"EER-nohs","jugaba":"hoo-GAH-bah","la":"lah","las":"lahs","le":"leh","lejos":"LEH-hohs","leí":"leh-EE","listo":"LEES-toh","llamo":"YAH-moh","llave":"YAH-beh","llaves":"YAH-behs","llega":"YEH-gah","llegamos":"yeh-GAH-mohs","llegues":"YEH-gehs","llegué":"yeh-GEH","llene":"YEH-neh","lleva":"YEH-bah","llevamos":"yeh-BAH-mohs","llevar":"yeh-BAHR","llevo":"YEH-boh","lloviendo":"yoh-BYEHN-doh","llueve":"YWEH-beh","lluvia":"YOO-byah","lo":"loh","los":"lohs","lugar":"loo-GAHR","mangos":"MAHN-gohs","mariscos":"mah-REES-kohs","mañana":"mah-NYAH-nah","me":"meh","mejor":"meh-HOHR","mejores":"meh-HOH-rehs","menú":"meh-NOO","mercado":"mehr-KAH-doh","mes":"mehs","mesa":"MEH-sah","mesero":"meh-SEH-roh","mi":"mee","minutos":"mee-NOO-tohs","mitad":"mee-TAHD","molesta":"moh-LEHS-tah","momento":"moh-MEHN-toh","mucho":"MOO-choh","muy":"mwee","más":"mahs","médico":"MEH-dee-koh","música":"MOO-see-kah","necesito":"neh-seh-SEE-toh","niña":"NEE-nyah","niño":"NEE-nyoh","no":"noh","noche":"NOH-cheh","nos":"nohs","o":"oh","oaxaca":"oh-ahk-SAH-kah","ocho":"OH-choh","ojalá":"oh-hah-LAH","otra":"OH-trah","paga":"PAH-gah","pagar":"pah-GAHR","pagas":"PAH-gahs","para":"PAH-rah","paraguas":"pah-RAH-gwahs","partido":"pahr-TEE-doh","pasaba":"pah-SAH-bah","pasaporte":"pah-sah-POHR-teh","pasé":"pah-SEH","pedí":"peh-DEE","pega":"PEH-gah","pensar":"pehn-SAHR","perdemos":"pehr-DEH-mohs","perdida":"pehr-DEE-dah","perdí":"pehr-DEE","perdón":"pehr-DOHN","perfecto":"pehr-FEHK-toh","permiso":"pehr-MEE-soh","pero":"PEH-roh","pesos":"PEH-sohs","picante":"pee-KAHN-teh","pides":"PEE-dehs","playa":"PLAH-yah","poco":"POH-koh","podría":"poh-DREE-ah","podrían":"poh-DREE-ahn","policía":"poh-lee-SEE-ah","ponte":"POHN-teh","por":"pohr","porque":"POHR-keh","posible":"poh-SEE-bleh","prefiero":"preh-FYEH-roh","preocupes":"preh-oh-KOO-pehs","probar":"proh-BAHR","pronto":"PROHN-toh","pronunciación":"proh-noon-syah-SYOHN","próxima":"PROHK-see-mah","próximo":"PROHK-see-moh","pudiéramos":"poo-DYEH-rah-mohs","pueda":"PWEH-dah","puede":"PWEH-deh","puedes":"PWEH-dehs","puedo":"PWEH-doh","pídele":"PEE-deh-leh","que":"keh","quedarnos":"keh-DAHR-nohs","quedo":"KEH-doh","quien":"kyehn","quieres":"KYEH-rehs","quiero":"KYEH-roh","quisiera":"kee-SYEH-rah","qué":"keh","quédese":"KEH-deh-seh","rato":"RAH-toh","receta":"reh-SEH-tah","recomendar":"reh-koh-mehn-DAHR","recomienda":"reh-koh-MYEHN-dah","regreso":"reh-GREH-soh","repetirlo":"reh-peh-TEER-loh","reservación":"reh-sehr-bah-SYOHN","reservemos":"reh-sehr-BEH-mohs","restaurante":"rehs-tow-RAHN-teh","retraso":"reh-TRAH-soh","revolución":"reh-boh-loo-SYOHN","rico":"REE-koh","robaron":"roh-BAH-rohn","rosarito":"roh-sah-REE-toh","sabido":"sah-BEE-doh","sale":"SAH-leh","salga":"SAHL-gah","salimos":"sah-LEE-mohs","salió":"sah-LYOH","salsa":"SAHL-sah","san":"sahn","se":"seh","semana":"seh-MAH-nah","sentemos":"sehn-TEH-mohs","separar":"seh-pah-RAHR","si":"see","siempre":"SYEHM-preh","siento":"SYEHN-toh","sin":"seen","sobre":"SOH-breh","sofía":"soh-FEE-ah","sol":"sohl","sola":"SOH-lah","solo":"SOH-loh","son":"sohn","soy":"soy","sus":"soos","suyo":"SOO-yoh","sé":"seh","taco":"TAH-koh","tacos":"TAH-kohs","tarda":"TAHR-dah","tarde":"TAHR-deh","tarjeta":"tahr-HEH-tah","taxi":"TAHK-see","taxista":"tahk-SEES-tah","taxímetro":"tahk-SEE-meh-troh","te":"teh","teléfono":"teh-LEH-foh-noh","temprano":"tehm-PRAH-noh","ten":"tehn","tenemos":"teh-NEH-mohs","tengas":"TEHN-gahs","tengo":"TEHN-goh","terminamos":"tehr-mee-NAH-mohs","tiempo":"TYEHM-poh","tiene":"TYEH-neh","tienes":"TYEH-nehs","tocar":"toh-KAHR","tocaras":"toh-KAH-rahs","todavía":"toh-dah-BEE-ah","todo":"TOH-doh","todos":"TOH-dohs","tomar":"toh-MAHR","trabajé":"trah-bah-HEH","trae":"TRAH-eh","trajera":"trah-HEH-rah","treinta":"TRAYN-tah","tren":"trehn","tres":"trehs","tráfico":"TRAH-fee-koh","tu":"too","tuviera":"too-BYEH-rah","típico":"TEE-pee-koh","tú":"too","un":"oon","una":"OO-nah","unidos":"oo-NEE-dohs","use":"OO-seh","va":"bah","vamos":"BAH-mohs","veamos":"beh-AH-mohs","veces":"BEH-sehs","veinte":"BAYN-teh","vemos":"BEH-mohs","venido":"beh-NEE-doh","venías":"beh-NEE-ahs","ver":"behr","veranos":"beh-RAH-nohs","verdad":"behr-DAHD","vez":"behs","viajar":"byah-HAHR","viaje":"BYAH-heh","visitado":"bee-see-TAH-doh","vista":"BEES-tah","vive":"BEE-beh","vives":"BEE-behs","volver":"bohl-BEHR","voy":"boy","vuelo":"BWEH-loh","vuelvas":"BWEHL-bahs","vuelves":"BWEHL-behs","y":"ee","ya":"yah","yo":"yoh","zona":"SOH-nah","último":"OOL-tee-moh"};
 const BASE=new Set("hola por favor un el la no y a en con mi si los al me".split(" "));
@@ -766,7 +857,7 @@ function buildFeed(){
     return `<section class="clip" data-id="${c.id}" style="--bg:${c.bg};--fg:${c.fg};--ac:${c.ac}">
       <div class="meta"><span class="who"><span class="av">${esc(c.who[0])}</span>${esc(c.who)}, ${esc(c.city)}</span><span class="newc">${n} new word${n===1?"":"s"}</span></div>
       <div class="prop"><svg viewBox="0 0 240 220" aria-hidden="true">${SCENES[c.scene]()}</svg></div>
-      <div class="sub"><p class="es" lang="es">${toks}</p><p class="pr" aria-label="How to say it">${pronLine(c).replace(/-/g,"\u2011")}</p><p class="en">${esc(c.en)}</p>${i===0&&!S.seen?`<p class="hint">Tap any word to see what it means.</p>`:""}</div>
+      <div class="sub"><p class="es" lang="es">${toks}</p><p class="pr" aria-label="How to say it">${pronLine(c).replace(/-/g,"\u2011")}</p><p class="en">${esc(c.en)}</p><div class="turn" aria-live="polite"><span>Your turn</span><i></i></div>${i===0&&!S.seen?`<p class="hint">Tap any word to see what it means.</p>`:""}</div>
       <div class="acts">
         <button class="btn main" data-act="play" aria-label="Play or stop audio">${ICON.play}${ICON.stop}<span>Play</span><i class="bars"><b></b><b></b><b></b><b></b></i></button>
         <button class="btn" data-act="slow" aria-pressed="${S.slow}">Slow</button>
@@ -786,7 +877,7 @@ function observe(){
         const fg=dark?"#FFFFFF":sec.style.getPropertyValue("--fg");const bg=dark?"#17133A":sec.style.getPropertyValue("--bg");
         const app=$("#app");app.style.setProperty("--hfg",fg);app.style.setProperty("--hbg",bg);
         $(".top").style.setProperty("--hfg",fg);$(".top").style.setProperty("--hbg",bg);
-        if(auto&&!dark&&sec.dataset.id){setTimeout(()=>{if(active===sec)play(sec)},350)}
+        if(HF){if(dark)hfOff("That’s every clip. Hands-free is off.");else if(sec.dataset.id)setTimeout(()=>{if(active===sec)hfStart(sec)},500)}else if(auto&&!dark&&sec.dataset.id){setTimeout(()=>{if(active===sec)play(sec)},350)}
       }
     });
   },{root:$("#feed"),threshold:[.65]});
@@ -800,7 +891,7 @@ $("#feed").addEventListener("click",e=>{
   const w=e.target.closest(".w");
   if(w){openWord(w);return}
   const b=e.target.closest("[data-act]");if(!b)return;
-  const sec=b.closest(".clip");const act=b.dataset.act;
+  const sec=b.closest(".clip");const act=b.dataset.act;if(HF&&(act==="play"||act==="slow"||act==="say"))hfCancel();
   if(act==="play")play(sec);
   else if(act==="slow"){S.slow=!S.slow;persist();document.querySelectorAll('[data-act="slow"]').forEach(x=>x.setAttribute("aria-pressed",S.slow));toast(S.slow?"Slow speech on":"Slow speech off")}
   else if(act==="say")sayIt(clipOf(+sec.dataset.id));
@@ -808,6 +899,38 @@ $("#feed").addEventListener("click",e=>{
   else if(act==="top")$("#feed").scrollTo({top:0,behavior:"smooth"});
 });
 $("#bLvl").addEventListener("click",()=>levelPicker(false));
+// Hands-free: normal speed, slow, a pause to repeat, then on to the next clip by itself.
+let HF=false,hfTok=0,wakeLock=null;
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const hfWait=async(ms,tok)=>{await sleep(ms);return tok===hfTok};
+function hfCancel(){hfTok++;document.querySelectorAll(".clip.turn").forEach(x=>x.classList.remove("turn"))}
+async function hfSpeak(c,sec,slow,tok){
+  const keep=S.slow;S.slow=slow;speak(c.es,sec);
+  let t=0;while(!sec.classList.contains("speaking")&&t<4000){await sleep(100);t+=100;if(tok!==hfTok){S.slow=keep;return false}}
+  const started=sec.classList.contains("speaking");
+  while(started&&sec.classList.contains("speaking")){await sleep(120);if(tok!==hfTok){S.slow=keep;return false}}
+  S.slow=keep;return started;
+}
+function hfStart(sec){hfCancel();const tok=hfTok;hfRun(sec,tok)}
+async function hfRun(sec,tok){
+  const c=clipOf(+sec.dataset.id);
+  if(!await hfSpeak(c,sec,false,tok))return;
+  if(!await hfWait(900,tok))return;
+  if(!await hfSpeak(c,sec,true,tok))return;
+  const d=isFinite(SHARED.duration)&&SHARED.duration>0?SHARED.duration*1000:3000;
+  const pause=Math.min(9000,Math.max(4000,d*1.5+1000));
+  sec.style.setProperty("--d",pause+"ms");sec.classList.add("turn");
+  const ok=await hfWait(pause,tok);sec.classList.remove("turn");
+  if(!ok)return;
+  const next=sec.nextElementSibling;
+  if(next)next.scrollIntoView({behavior:"smooth",block:"start"});
+}
+async function keepAwake(){try{if("wakeLock" in navigator&&!wakeLock){wakeLock=await navigator.wakeLock.request("screen");wakeLock.addEventListener("release",()=>{wakeLock=null})}}catch(e){}}
+function hfOn(){HF=true;auto=true;$("#bHF").setAttribute("aria-pressed","true");keepAwake();toast("Hands-free on");if(active&&active.dataset.id)hfStart(active)}
+function hfOff(msg){HF=false;hfCancel();stopSpeech();$("#bHF").setAttribute("aria-pressed","false");try{wakeLock&&wakeLock.release()}catch(e){}wakeLock=null;if(msg)toast(msg)}
+$("#bHF").addEventListener("click",()=>{HF?hfOff("Hands-free off"):hfOn()});
+document.addEventListener("visibilitychange",()=>{if(HF&&document.visibilityState==="visible")keepAwake()});
+
 
 /* ---------- word sheet ---------- */
 function openWord(wEl){
