@@ -364,7 +364,9 @@ function speak(text,sec){
 function newCount(c){return c.es.split(" ").map(norm).filter(w=>!(BASE.has(w)||(S.dict[w]&&S.dict[w].box>=1))).length}
 function buildFeed(){
   const lv=Math.max(S.lvl,1);
-  const list=CLIPS.filter(c=>c.lvl<=lv).sort((a,b)=>newCount(a)/a.es.split(" ").length-newCount(b)/b.es.split(" ").length);
+  // The level he's on leads, then the easier levels behind it as review; within a level, fewest new words first.
+  const ratio=c=>newCount(c)/c.es.split(" ").length;
+  const list=CLIPS.filter(c=>c.lvl<=lv).sort((a,b)=>b.lvl-a.lvl||ratio(a)-ratio(b));
   const feed=$("#feed");
   feed.classList.toggle("showEn",S.en);
   feed.innerHTML=list.map((c,i)=>{
@@ -411,7 +413,7 @@ $("#feed").addEventListener("click",e=>{
   if(act==="play")play(sec);
   else if(act==="slow"){S.slow=!S.slow;persist();document.querySelectorAll('[data-act="slow"]').forEach(x=>x.setAttribute("aria-pressed",S.slow));toast(S.slow?"Slow speech on":"Slow speech off")}
   else if(act==="say")sayIt(clipOf(+sec.dataset.id));
-  else if(act==="up"){S.lvl=Math.min(3,Math.max(S.lvl,1)+1);persist();buildFeed();$("#feed").scrollTo({top:0})}
+  else if(act==="up"){S.lvl=Math.min(3,Math.max(S.lvl,1)+1);persist();buildFeed();$("#feed").scrollTo({top:0});toast(LV[S.lvl]+": "+CLIPS.filter(c=>c.lvl===S.lvl).length+" clips")}
   else if(act==="top")$("#feed").scrollTo({top:0,behavior:"smooth"});
 });
 $("#bEn").addEventListener("click",e=>{S.en=!S.en;persist();$("#feed").classList.toggle("showEn",S.en);e.currentTarget.setAttribute("aria-pressed",S.en)});
@@ -436,7 +438,7 @@ function saveWord(k,c){
 }
 $("#sheet").addEventListener("click",e=>{
   const b=e.target.closest("[data-sh]");const o=e.target.closest("[data-lv]");
-  if(o){S.lvl=+o.dataset.lv;persist();buildFeed();$("#feed").scrollTo({top:0});closeSheet();return}
+  if(o){S.lvl=+o.dataset.lv;persist();buildFeed();$("#feed").scrollTo({top:0});closeSheet();toast(LV[S.lvl]+": "+CLIPS.filter(c=>c.lvl===S.lvl).length+" clips");return}
   if(!b)return;const a=b.dataset.sh;
   if(a==="save"){saveWord(ctx.k,ctx.c);b.textContent="Saved";closeSheet()}
   else if(a==="hearw")speak(ctx.k,null);
