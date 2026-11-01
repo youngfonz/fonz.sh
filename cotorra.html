@@ -329,14 +329,44 @@ function closeSheet(){$("#sheetWrap").classList.remove("open");stopListen()}
 $("#sheetBd").addEventListener("click",()=>{if($("#sheetWrap").dataset.lock!=="1")closeSheet()});
 
 /* ---------- speech out ---------- */
+/* Recorded once with ElevenLabs (scripts/cotorra-audio.py): every clip at normal and slow
+   speed with word timings, and every word on its own. The browser's voice is only a fallback. */
+const AUD="cotorra-audio/";let MAN=null,el=null;
+fetch(AUD+"manifest.json").then(r=>r.ok?r.json():null).then(m=>{MAN=m}).catch(()=>{});
+function recorded(text,sec){
+  if(!MAN)return null;
+  const c=sec?clipOf(+sec.dataset.id):CLIPS.find(x=>x.es===text);
+  if(c&&MAN.c[c.id]){const m=MAN.c[c.id];return S.slow?{src:m.s,t:m.st,rate:1}:{src:m.n,t:m.t,rate:1}}
+  const w=MAN.w[norm(text)];
+  return w?{src:w,t:null,rate:S.slow?0.8:1}:null;
+}
+function speak(text,sec){
+  const r=recorded(text,sec);
+  if(!r)return speakSynth(text,sec);
+  stopSpeech();
+  const a=new Audio(AUD+r.src);a.playbackRate=r.rate;a.preservesPitch=true;el=a;
+  const words=sec?[...sec.querySelectorAll(".es .w")]:[];
+  const me={sec,timer:null,t0:null,got:true};cur=me;
+  const hi=i=>words.forEach((w,j)=>w.classList.toggle("on",j===i));
+  a.onplaying=()=>{
+    if(cur!==me)return;
+    if(sec)sec.classList.add("speaking");
+    // Light up each word as she says it, from the recording's own timings.
+    if(words.length&&r.t)me.timer=setInterval(()=>{let i=0;for(let j=0;j<r.t.length;j++)if(r.t[j]<=a.currentTime)i=j;hi(i)},60);
+  };
+  a.onended=()=>{if(cur===me)stopSpeech()};
+  a.onerror=()=>{if(cur===me){cur=null;el=null;speakSynth(text,sec)}};
+  a.play().catch(()=>{if(cur===me){stopSpeech();toast("Tap play to hear it")}});
+}
 let voice=null,cur=null;
 function pickVoice(){const v=speechSynthesis.getVoices();voice=v.find(x=>x.lang==="es-MX")||v.find(x=>x.lang==="es-US")||v.find(x=>/^es/i.test(x.lang))||null}
 if("speechSynthesis" in window){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
 function stopSpeech(){
+  if(el){el.onended=el.onerror=null;el.pause();el=null}
   if("speechSynthesis" in window)speechSynthesis.cancel();
   if(cur){clearInterval(cur.timer);clearTimeout(cur.t0);if(cur.sec){cur.sec.classList.remove("speaking");cur.sec.querySelectorAll(".w.on").forEach(x=>x.classList.remove("on"))}cur=null}
 }
-function speak(text,sec){
+function speakSynth(text,sec){
   if(!("speechSynthesis" in window)){toast("This browser can’t play audio");return}
   stopSpeech();
   if(!voice)pickVoice();
