@@ -845,7 +845,8 @@ function levelPicker(first){
 
 /* ---------- parrot back ---------- */
 let rec=null;
-function stopListen(){if(rec){rec.onend=null;rec.onerror=null;rec.onresult=null;try{rec.abort()}catch(e){}rec=null}if(macRec){macRec.cancel();macRec=null}}
+let recPoll=null;
+function stopListen(){clearInterval(recPoll);if(rec){rec.onend=null;rec.onerror=null;rec.onresult=null;try{rec.abort()}catch(e){}rec=null}if(macRec){macRec.cancel();macRec=null}}
 
 /* No recognizer in this browser (every browser on iPhone refuses with service-not-allowed):
    record instead, and VoiceStudio's Whisper on Fonz's Mac transcribes. That's the Cadence
@@ -873,12 +874,12 @@ async function sayItMac(c){
   const began=Date.now();let spoke=0,loud=0,raf=0,cancelled=false;
   const end=()=>{cancelAnimationFrame(raf);if(mr.state!=="inactive")mr.stop()};
   const me={cancel(){cancelled=true;end()},finish(){if(!spoke)spoke=Date.now();end()}};macRec=me;
-  // Ends after a short pause once he has spoken, or if he says nothing, or at 12 s.
+  // Waits 3 s of quiet after he has spoken (slow speech has long gaps), 10 s if he says nothing, 25 s at most.
   const tick=()=>{
     an.getByteTimeDomainData(buf);let sum=0;for(const v of buf)sum+=((v-128)/128)**2;
     const lv=Math.min(1,Math.sqrt(sum/buf.length)*6),now=Date.now();
     if(lv>.12){loud=now;if(!spoke)spoke=now}
-    if((spoke&&now-loud>1200)||(!spoke&&now-began>7000)||now-began>12000)return end();
+    if((spoke&&now-loud>3000)||(!spoke&&now-began>10000)||now-began>25000)return end();
     raf=requestAnimationFrame(tick);
   };
   mr.onstop=async()=>{
@@ -906,17 +907,22 @@ function sayIt(c){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR)return sayItMac(c);
   openSheet(`<div class="grab"></div><div class="mic pulse">${ICON.mic}</div><p class="big sm">Say it</p><p class="line" lang="es">${esc(c.es)}</p><p class="mut">Listening…</p><div class="row"><button class="btn" data-sh="close">Cancel</button></div>`);
-  stopListen();rec=new SR();rec.lang="es-MX";rec.interimResults=false;rec.maxAlternatives=3;
-  let done=false;
-  rec.onresult=e=>{done=true;const alts=[...e.results[0]].map(a=>a.transcript);showScore(c,alts)};
+  stopListen();rec=new SR();rec.lang="es-MX";rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=3;
+  let done=false,finals=[],interim="",lastAt=Date.now();const began=Date.now();
+  const heard=()=>[...finals,interim].filter(Boolean).join(" ").trim();
+  // Keeps listening through slow speech: finishes on 3 s of quiet after he spoke, the moment every word matched, or 25 s.
+  const finish=()=>{if(done)return;done=true;clearInterval(recPoll);const t=heard();try{rec.abort()}catch(e){}t?showScore(c,[t]):retry(c,"Didn’t hear anything.")};
+  rec.onresult=e=>{lastAt=Date.now();finals=[];interim="";for(let i=0;i<e.results.length;i++){const r=e.results[i];if(r.isFinal)finals.push(r[0].transcript.trim());else interim=r[0].transcript.trim()}if(scoreWords(c,heard()).every(Boolean))finish()};
   rec.onerror=e=>{
-    if(done)return;done=true;
-    if(e.error==="service-not-allowed"&&window.MediaRecorder)sayItMac(c);
-    else if(e.error==="not-allowed"||e.error==="service-not-allowed")selfRate(c,"Mic access is blocked here. Allow it in your browser, or rate yourself.");
-    else if(e.error==="no-speech")retry(c,"Didn’t hear anything.");
-    else if(e.error!=="aborted")selfRate(c,"Speech recognition isn’t working here.");
+    if(done)return;
+    if(e.error==="service-not-allowed"&&window.MediaRecorder){done=true;clearInterval(recPoll);sayItMac(c)}
+    else if(e.error==="not-allowed"||e.error==="service-not-allowed"){done=true;clearInterval(recPoll);selfRate(c,"Mic access is blocked here. Allow it in your browser, or rate yourself.")}
+    else if(e.error==="no-speech"||e.error==="aborted"){}
+    else{done=true;clearInterval(recPoll);selfRate(c,"Speech recognition isn’t working here.")}
   };
-  rec.onend=()=>{if(!done){done=true;retry(c,"Didn’t catch that.")}};
+  // The browser can stop on its own at a pause: take what was heard, or listen again.
+  rec.onend=()=>{if(done)return;if(heard())return finish();try{rec.start()}catch(err){finish()}};
+  clearInterval(recPoll);recPoll=setInterval(()=>{const now=Date.now(),t=heard();if((t&&now-lastAt>3000)||(!t&&now-began>12000)||now-began>25000)finish()},250);
   try{rec.start()}catch(err){selfRate(c,"Couldn’t start the mic.")}
 }
 function retry(c,msg){openSheet(`<div class="grab"></div><p class="big sm">${esc(msg)}</p><p class="line" lang="es">${esc(c.es)}</p><div class="row"><button class="btn solid" data-sh="retry">Try again</button><button class="btn" data-sh="hear">${ICON.spk}Hear it</button></div>`)}
