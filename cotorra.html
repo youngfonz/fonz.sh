@@ -408,6 +408,7 @@ $("#sheet").addEventListener("click",e=>{
   else if(a==="hear")speak(ctx.c.es,null);
   else if(a==="close")closeSheet();
   else if(a==="retry")sayIt(ctx.c);
+  else if(a==="done")macRec?.finish();
 });
 
 /* ---------- level picker ---------- */
@@ -418,7 +419,57 @@ function levelPicker(first){
 
 /* ---------- parrot back ---------- */
 let rec=null;
-function stopListen(){if(rec){rec.onend=null;rec.onerror=null;rec.onresult=null;try{rec.abort()}catch(e){}rec=null}}
+function stopListen(){if(rec){rec.onend=null;rec.onerror=null;rec.onresult=null;try{rec.abort()}catch(e){}rec=null}if(macRec){macRec.cancel();macRec=null}}
+
+/* No recognizer in this browser (every browser on iPhone refuses with service-not-allowed):
+   record instead, and VoiceStudio's Whisper on Fonz's Mac transcribes. That's the Cadence
+   voice bridge, local on the Mac and over Tailscale everywhere else. */
+const BRIDGES=["http://127.0.0.1:3901","https://jnjgq9ld96.tailec2309.ts.net"];
+let bridgeAt=null,macRec=null;
+async function bridge(){
+  if(bridgeAt)return bridgeAt;
+  const ok=await Promise.all(BRIDGES.map(b=>fetch(b+"/health",{signal:AbortSignal.timeout(3000)}).then(r=>r.ok).catch(()=>false)));
+  const i=ok.indexOf(true);return i<0?null:(bridgeAt=BRIDGES[i]);
+}
+async function sayItMac(c){
+  openSheet(`<div class="grab"></div><div class="mic pulse">${ICON.mic}</div><p class="big sm">Say it</p><p class="line" lang="es">${esc(c.es)}</p><p class="mut">Listening…</p><div class="row"><button class="btn solid" data-sh="done">Done</button><button class="btn" data-sh="close">Cancel</button></div>`);
+  const base=await bridge();
+  if(!ctx||ctx.c!==c)return;
+  if(!base)return selfRate(c,"Couldn’t reach your Mac to listen. Turn on Tailscale and keep the Mac awake, or rate yourself.");
+  let stream;
+  try{stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}})}
+  catch(e){return selfRate(c,"Mic access is blocked here. Allow it in your browser, or rate yourself.")}
+  const type=["audio/webm;codecs=opus","audio/mp4","audio/webm"].find(t=>MediaRecorder.isTypeSupported(t));
+  const mr=new MediaRecorder(stream,type?{mimeType:type}:undefined),chunks=[];
+  mr.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+  const ac=new(window.AudioContext||window.webkitAudioContext)(),an=ac.createAnalyser();an.fftSize=512;
+  ac.createMediaStreamSource(stream).connect(an);const buf=new Uint8Array(512);
+  const began=Date.now();let spoke=0,loud=0,raf=0,cancelled=false;
+  const end=()=>{cancelAnimationFrame(raf);if(mr.state!=="inactive")mr.stop()};
+  const me={cancel(){cancelled=true;end()},finish(){if(!spoke)spoke=Date.now();end()}};macRec=me;
+  // Ends after a short pause once he has spoken, or if he says nothing, or at 12 s.
+  const tick=()=>{
+    an.getByteTimeDomainData(buf);let sum=0;for(const v of buf)sum+=((v-128)/128)**2;
+    const lv=Math.min(1,Math.sqrt(sum/buf.length)*6),now=Date.now();
+    if(lv>.12){loud=now;if(!spoke)spoke=now}
+    if((spoke&&now-loud>1200)||(!spoke&&now-began>7000)||now-began>12000)return end();
+    raf=requestAnimationFrame(tick);
+  };
+  mr.onstop=async()=>{
+    stream.getTracks().forEach(t=>t.stop());ac.close();if(macRec===me)macRec=null;
+    if(cancelled)return;
+    if(!spoke||!chunks.length)return retry(c,"Didn’t hear anything.");
+    openSheet(`<div class="grab"></div><div class="mic">${ICON.mic}</div><p class="big sm">Checking…</p><p class="line" lang="es">${esc(c.es)}</p>`);
+    const f=new FormData();f.set("audio",new Blob(chunks,{type:mr.mimeType||"audio/webm"}));f.set("lang","es");f.set("hint",c.es);
+    try{
+      const r=await fetch(base+"/transcribe",{method:"POST",body:f,signal:AbortSignal.timeout(30000)});
+      const j=r.ok?await r.json():{};
+      if(!ctx||ctx.c!==c)return;
+      j.text?showScore(c,[j.text]):retry(c,"Didn’t catch that.");
+    }catch(e){selfRate(c,"Your Mac didn’t answer. Rate yourself this time.")}
+  };
+  mr.start();tick();
+}
 function scoreWords(c,t){
   const tg=c.es.split(" ");
   const h=t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[¿?¡!,.;:]/g,"").split(/\s+/);
@@ -427,14 +478,15 @@ function scoreWords(c,t){
 function sayIt(c){
   stopSpeech();ctx={c};
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR)return selfRate(c,"This browser has no speech recognition. Try Chrome or Safari.");
+  if(!SR)return sayItMac(c);
   openSheet(`<div class="grab"></div><div class="mic pulse">${ICON.mic}</div><p class="big sm">Say it</p><p class="line" lang="es">${esc(c.es)}</p><p class="mut">Listening…</p><div class="row"><button class="btn" data-sh="close">Cancel</button></div>`);
   stopListen();rec=new SR();rec.lang="es-MX";rec.interimResults=false;rec.maxAlternatives=3;
   let done=false;
   rec.onresult=e=>{done=true;const alts=[...e.results[0]].map(a=>a.transcript);showScore(c,alts)};
   rec.onerror=e=>{
     if(done)return;done=true;
-    if(e.error==="not-allowed"||e.error==="service-not-allowed")selfRate(c,"Mic access is blocked here. Allow it in your browser, or rate yourself.");
+    if(e.error==="service-not-allowed"&&window.MediaRecorder)sayItMac(c);
+    else if(e.error==="not-allowed"||e.error==="service-not-allowed")selfRate(c,"Mic access is blocked here. Allow it in your browser, or rate yourself.");
     else if(e.error==="no-speech")retry(c,"Didn’t hear anything.");
     else if(e.error!=="aborted")selfRate(c,"Speech recognition isn’t working here.");
   };
