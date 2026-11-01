@@ -124,6 +124,9 @@ button:focus-visible,.w:focus-visible{outline:3px solid var(--sun);outline-offse
 .page{padding:22px 20px 28px}
 .page h1{font-family:var(--disp);font-weight:400;font-size:32px;margin:0 0 4px}
 .mut{color:var(--mut);font-size:15px;margin:0}
+.sheetpr{margin:8px 0 12px;font-size:16px;font-weight:800;letter-spacing:.03em;line-height:1.35;color:var(--mut)}
+.sheetpr .ok{color:#0E8F72}
+.sheetpr .miss{color:#E6335F}
 .wrow{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
 .wrow .t{flex:1;min-width:0}
 .wrow .k{font-family:var(--disp);font-size:24px;line-height:1.1}
@@ -859,7 +862,7 @@ async function bridge(){
   const i=ok.indexOf(true);return i<0?null:(bridgeAt=BRIDGES[i]);
 }
 async function sayItMac(c){
-  openSheet(`<div class="grab"></div><div class="mic pulse">${ICON.mic}</div><p class="big sm">Say it</p><p class="line" lang="es">${esc(c.es)}</p><p class="mut">Listening…</p><div class="row"><button class="btn solid" data-sh="done">Done</button><button class="btn" data-sh="close">Cancel</button></div>`);
+  openSheet(`<div class="grab"></div><div class="mic pulse">${ICON.mic}</div><p class="big sm">Say it</p><p class="line" lang="es">${esc(c.es)}</p><p class="sheetpr">${pronLine(c)}</p><p class="mut">Listening…</p><div class="row"><button class="btn solid" data-sh="done">Done</button><button class="btn" data-sh="close">Cancel</button></div>`);
   const base=await bridge();
   if(!ctx||ctx.c!==c)return;
   if(!base)return selfRate(c,"Couldn’t reach your Mac to listen. Turn on Tailscale and keep the Mac awake, or rate yourself.");
@@ -886,7 +889,7 @@ async function sayItMac(c){
     stream.getTracks().forEach(t=>t.stop());ac.close();if(macRec===me)macRec=null;
     if(cancelled)return;
     if(!spoke||!chunks.length)return retry(c,"Didn’t hear anything.");
-    openSheet(`<div class="grab"></div><div class="mic">${ICON.mic}</div><p class="big sm">Checking…</p><p class="line" lang="es">${esc(c.es)}</p>`);
+    openSheet(`<div class="grab"></div><div class="mic">${ICON.mic}</div><p class="big sm">Checking…</p><p class="line" lang="es">${esc(c.es)}</p><p class="sheetpr">${pronLine(c)}</p>`);
     const f=new FormData();f.set("audio",new Blob(chunks,{type:mr.mimeType||"audio/webm"}));f.set("lang","es");f.set("hint",c.es);
     try{
       const r=await fetch(base+"/transcribe",{method:"POST",body:f,signal:AbortSignal.timeout(30000)});
@@ -897,6 +900,7 @@ async function sayItMac(c){
   };
   mr.start();tick();
 }
+const pronLine=c=>c.es.split(" ").map(t=>PRON[norm(t)]||"").filter(Boolean).join(" ");
 function scoreWords(c,t){
   const tg=c.es.split(" ");
   const h=t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[¿?¡!,.;:]/g,"").split(/\s+/);
@@ -906,7 +910,7 @@ function sayIt(c){
   stopSpeech();ctx={c};
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR)return sayItMac(c);
-  openSheet(`<div class="grab"></div><div class="mic pulse">${ICON.mic}</div><p class="big sm">Say it</p><p class="line" lang="es">${esc(c.es)}</p><p class="mut">Listening…</p><div class="row"><button class="btn" data-sh="close">Cancel</button></div>`);
+  openSheet(`<div class="grab"></div><div class="mic pulse">${ICON.mic}</div><p class="big sm">Say it</p><p class="line" lang="es">${esc(c.es)}</p><p class="sheetpr">${pronLine(c)}</p><p class="mut">Listening…</p><div class="row"><button class="btn" data-sh="close">Cancel</button></div>`);
   stopListen();rec=new SR();rec.lang="es-MX";rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=3;
   let done=false,finals=[],interim="",lastAt=Date.now();const began=Date.now();
   const heard=()=>[...finals,interim].filter(Boolean).join(" ").trim();
@@ -925,15 +929,16 @@ function sayIt(c){
   clearInterval(recPoll);recPoll=setInterval(()=>{const now=Date.now(),t=heard();if((t&&now-lastAt>3000)||(!t&&now-began>12000)||now-began>25000)finish()},250);
   try{rec.start()}catch(err){selfRate(c,"Couldn’t start the mic.")}
 }
-function retry(c,msg){openSheet(`<div class="grab"></div><p class="big sm">${esc(msg)}</p><p class="line" lang="es">${esc(c.es)}</p><div class="row"><button class="btn solid" data-sh="retry">Try again</button><button class="btn" data-sh="hear">${ICON.spk}Hear it</button></div>`)}
-function selfRate(c,msg){openSheet(`<div class="grab"></div><p class="mut">${esc(msg)}</p><p class="line" lang="es">${esc(c.es)}</p><p class="mut">Say it out loud, then compare with the audio.</p><div class="row"><button class="btn solid" data-sh="hear">${ICON.spk}Hear it</button><button class="btn" data-sh="close">Done</button></div>`)}
+function retry(c,msg){openSheet(`<div class="grab"></div><p class="big sm">${esc(msg)}</p><p class="line" lang="es">${esc(c.es)}</p><p class="sheetpr">${pronLine(c)}</p><div class="row"><button class="btn solid" data-sh="retry">Try again</button><button class="btn" data-sh="hear">${ICON.spk}Hear it</button></div>`)}
+function selfRate(c,msg){openSheet(`<div class="grab"></div><p class="mut">${esc(msg)}</p><p class="line" lang="es">${esc(c.es)}</p><p class="sheetpr">${pronLine(c)}</p><p class="mut">Say it out loud, then compare with the audio.</p><div class="row"><button class="btn solid" data-sh="hear">${ICON.spk}Hear it</button><button class="btn" data-sh="close">Done</button></div>`)}
 function showScore(c,alts){
   let best=null;alts.forEach(t=>{const r=scoreWords(c,t);const n=r.filter(Boolean).length;if(!best||n>best.n)best={r,n,t}});
   const tot=c.es.split(" ").length,pct=best.n/tot;
   S.scores=S.scores||{};const prev=S.scores[c.id]||{best:0,tries:0};S.scores[c.id]={best:Math.max(prev.best,best.n),of:tot,tries:prev.tries+1};persist();
   const head=pct===1?"Nailed it":pct>=.6?"Almost there":"Keep going";
   const html=c.es.split(" ").map((w,i)=>`<span class="${best.r[i]?"ok":"miss"}">${esc(w)}</span>`).join(" ");
-  openSheet(`<div class="grab"></div><p class="big sm">${head}</p><p class="scoreline" lang="es">${html}</p><p class="mut">${best.n} of ${tot} words. Best: ${S.scores[c.id].best} of ${tot}. You said: “${esc(best.t)}”</p><div class="row"><button class="btn solid" data-sh="retry">Try again</button><button class="btn" data-sh="hear">${ICON.spk}Hear it</button><button class="btn" data-sh="close">Done</button></div>`);
+  const prHtml=c.es.split(" ").map((t,i)=>`<span class="${best.r[i]?"ok":"miss"}">${esc(PRON[norm(t)]||"")}</span>`).join(" ");
+  openSheet(`<div class="grab"></div><p class="big sm">${head}</p><p class="scoreline" lang="es">${html}</p><p class="sheetpr">${prHtml}</p><p class="mut">${best.n} of ${tot} words. Best: ${S.scores[c.id].best} of ${tot}. You said: “${esc(best.t)}”</p><div class="row"><button class="btn solid" data-sh="retry">Try again</button><button class="btn" data-sh="hear">${ICON.spk}Hear it</button><button class="btn" data-sh="close">Done</button></div>`);
 }
 
 /* ---------- words tab ---------- */
