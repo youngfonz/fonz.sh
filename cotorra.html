@@ -692,6 +692,8 @@ $("#sheetBd").addEventListener("click",()=>{if($("#sheetWrap").dataset.lock!=="1
 /* Recorded once with ElevenLabs (scripts/cotorra-audio.py): every clip at normal and slow
    speed with word timings, and every word on its own. The browser's voice is only a fallback. */
 const AUD="cotorra-audio/";let MAN=null,el=null;
+// One audio element for every clip: once a tap has unlocked it, iPhone lets it keep playing on scroll without another tap.
+const SHARED=new Audio();
 fetch(AUD+"manifest.json").then(r=>r.ok?r.json():null).then(m=>{MAN=m}).catch(()=>{});
 function recorded(text,sec){
   if(!MAN)return null;
@@ -704,7 +706,7 @@ function speak(text,sec){
   const r=recorded(text,sec);
   if(!r)return speakSynth(text,sec);
   stopSpeech();
-  const a=new Audio(AUD+r.src);a.playbackRate=r.rate;a.preservesPitch=true;el=a;
+  const a=SHARED;a.onplaying=a.onended=a.onerror=null;a.src=AUD+r.src;a.defaultPlaybackRate=r.rate;a.playbackRate=r.rate;a.preservesPitch=true;el=a;
   const words=sec?[...sec.querySelectorAll(".es .w")]:[];
   const me={sec,timer:null,t0:null,got:true};cur=me;
   const hi=i=>words.forEach((w,j)=>w.classList.toggle("on",j===i));
