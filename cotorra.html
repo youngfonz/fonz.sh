@@ -60,28 +60,27 @@ button:focus-visible,.w:focus-visible{outline:3px solid var(--sun);outline-offse
 .prop svg{height:100%;max-height:300px;width:auto;max-width:100%;overflow:visible}
 .a{fill:var(--ac)} .f{fill:var(--fg)} .d{fill:var(--dk)}
 .s{fill:none;stroke:var(--fg);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
-.sub{padding:0 18px 14px}
-.es{margin:0;font-family:var(--disp);font-size:clamp(25px,6.8vw,33px);line-height:1.22;font-weight:400}
-.w{display:inline-block;padding:0 .08em;margin:0 .02em;border-radius:9px;border-bottom:3px dotted color-mix(in srgb,var(--fg) 55%,transparent);transition:background .12s,color .12s;cursor:pointer;font-family:inherit;color:inherit;font-size:inherit;line-height:inherit;text-align:left}
-.w.saved{border-bottom:3px solid var(--ac)}
-.w.on{background:var(--fg);color:var(--bg);border-bottom-color:transparent}
-.en{margin:10px 0 0;font-size:16px;line-height:1.35;font-weight:600;opacity:.9;display:none}
-#feed.showEn .en{display:block}
-.w{border-bottom:3px solid transparent}
+.sub{padding:0 22px 18px}
+.es{margin:0;font-family:var(--disp);font-size:clamp(26px,7vw,34px);line-height:1.2;font-weight:400}
+.w{display:inline-block;padding:0 .06em;margin:0 .01em;border-radius:10px;border-bottom:3px solid transparent;transition:background .12s,color .12s;cursor:pointer;font-family:inherit;color:inherit;font-size:inherit;line-height:inherit;text-align:left}
 .w.saved{border-bottom-color:var(--ac)}
-.pr{display:none;margin:12px 0 0;font-family:var(--body);font-size:16px;font-weight:800;letter-spacing:.03em;line-height:1.35;opacity:.88}
-#feed.showPr .pr{display:block}
-.seg{display:inline-flex;margin:16px 0 0;padding:3px;border-radius:999px;background:color-mix(in srgb,var(--fg) 16%,transparent)}
-.seg button{border:0;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s}
-.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
-.hint{margin:10px 0 0;font-size:14px;font-weight:600;opacity:.85}
-.acts{display:flex;gap:10px;padding:0 18px 16px;align-items:stretch}
+.w.on{background:var(--fg);color:var(--bg);border-bottom-color:transparent}
+.pr{margin:16px 0 0;font-family:var(--body);font-size:15px;font-weight:600;letter-spacing:.02em;line-height:1.5;color:color-mix(in srgb,var(--fg) 72%,transparent)}
+.en{margin:8px 0 0;font-family:var(--body);font-size:18px;line-height:1.35;font-weight:700}
+.hint{margin:14px 0 0;font-size:13px;font-weight:600;opacity:.65}
+.acts{display:grid;grid-template-columns:1fr auto auto;gap:10px;padding:0 22px 20px}
 .btn{border:2px solid currentColor;border-radius:999px;padding:11px 18px;font-weight:800;font-size:16px;display:inline-flex;align-items:center;gap:8px;line-height:1}
 .btn svg{width:18px;height:18px;fill:currentColor}
-.clip .btn{color:var(--fg)}
-.btn.main{background:var(--fg);color:var(--bg);flex:1;justify-content:center}
-.clip .btn.main{color:var(--bg)}
-.btn[aria-pressed="true"]{background:color-mix(in srgb,var(--fg) 22%,transparent)}
+.clip .btn{height:54px;padding:0 22px;border:0;justify-content:center;color:var(--fg);background:color-mix(in srgb,var(--fg) 14%,transparent);transition:background .15s,color .15s,transform .15s}
+.clip .btn:active{transform:scale(.97)}
+.clip .btn.main{background:var(--fg);color:var(--bg);padding:0 26px}
+.clip .btn[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
+.prop svg{transform-origin:50% 92%}
+.clip.is-active .prop svg{animation:idle 5s ease-in-out infinite}
+.clip.speaking .prop svg{animation:talk .55s ease-in-out infinite alternate}
+@keyframes idle{0%,100%{transform:translateY(0) rotate(-1deg)}50%{transform:translateY(-9px) rotate(1.4deg)}}
+@keyframes talk{from{transform:scale(1) rotate(-2deg)}to{transform:scale(1.07) rotate(2.4deg)}}
+@media (prefers-reduced-motion:reduce){.clip .prop svg{animation:none!important}}
 .i-stop{display:none}
 .speaking .i-play{display:none}
 .speaking .i-stop{display:inline}
@@ -759,15 +758,13 @@ function buildFeed(){
   const ratio=c=>newCount(c)/c.es.split(" ").length;
   const list=CLIPS.filter(c=>c.lvl<=lv).sort((a,b)=>b.lvl-a.lvl||ratio(a)-ratio(b));
   const feed=$("#feed");
-  feed.classList.toggle("showEn",S.en);
-  feed.classList.toggle("showPr",S.pr!==false);
   feed.innerHTML=list.map((c,i)=>{
     const toks=c.es.split(" ").map(t=>{const k=norm(t);return `<button class="w${S.dict[k]?" saved":""}" data-k="${esc(k)}">${esc(t)}</button>`}).join(" ");
     const n=newCount(c);
     return `<section class="clip" data-id="${c.id}" style="--bg:${c.bg};--fg:${c.fg};--ac:${c.ac}">
       <div class="meta"><span class="who"><span class="av">${esc(c.who[0])}</span>${esc(c.who)}, ${esc(c.city)}</span><span class="newc">${n} new word${n===1?"":"s"}</span></div>
       <div class="prop"><svg viewBox="0 0 240 220" aria-hidden="true">${SCENES[c.scene]()}</svg></div>
-      <div class="sub"><p class="es" lang="es">${toks}</p><p class="pr" aria-label="How to say it">${c.es.split(" ").map(t=>PRON[norm(t)]||"").filter(Boolean).join(" ")}</p><p class="en">${esc(c.en)}</p><div class="seg" role="group" aria-label="Show"><button data-act="pr" aria-pressed="${S.pr!==false}">Sounds</button><button data-act="en" aria-pressed="${S.en}">English</button></div>${i===0&&!S.seen?`<p class="hint">Tap any word to see what it means.</p>`:""}</div>
+      <div class="sub"><p class="es" lang="es">${toks}</p><p class="pr" aria-label="How to say it">${pronLine(c).replace(/-/g,"\u2011")}</p><p class="en">${esc(c.en)}</p>${i===0&&!S.seen?`<p class="hint">Tap any word to see what it means.</p>`:""}</div>
       <div class="acts">
         <button class="btn main" data-act="play" aria-label="Play or stop audio">${ICON.play}${ICON.stop}<span>Play</span><i class="bars"><b></b><b></b><b></b><b></b></i></button>
         <button class="btn" data-act="slow" aria-pressed="${S.slow}">Slow</button>
@@ -782,7 +779,7 @@ function observe(){
   window._io=new IntersectionObserver(es=>{
     es.forEach(en=>{
       if(en.isIntersecting&&en.intersectionRatio>.65){
-        const sec=en.target;if(active===sec)return;active=sec;stopSpeech();
+        const sec=en.target;if(active===sec)return;active=sec;document.querySelectorAll(".clip.is-active").forEach(x=>x.classList.remove("is-active"));sec.classList.add("is-active");stopSpeech();
         const dark=sec.classList.contains("endcard");
         const fg=dark?"#FFFFFF":sec.style.getPropertyValue("--fg");const bg=dark?"#17133A":sec.style.getPropertyValue("--bg");
         const app=$("#app");app.style.setProperty("--hfg",fg);app.style.setProperty("--hbg",bg);
@@ -805,7 +802,6 @@ $("#feed").addEventListener("click",e=>{
   if(act==="play")play(sec);
   else if(act==="slow"){S.slow=!S.slow;persist();document.querySelectorAll('[data-act="slow"]').forEach(x=>x.setAttribute("aria-pressed",S.slow));toast(S.slow?"Slow speech on":"Slow speech off")}
   else if(act==="say")sayIt(clipOf(+sec.dataset.id));
-  else if(act==="en"||act==="pr"){if(act==="en")S.en=!S.en;else S.pr=S.pr===false;persist();const f=$("#feed");f.classList.toggle("showEn",S.en);f.classList.toggle("showPr",S.pr!==false);document.querySelectorAll('[data-act="en"]').forEach(x=>x.setAttribute("aria-pressed",S.en));document.querySelectorAll('[data-act="pr"]').forEach(x=>x.setAttribute("aria-pressed",S.pr!==false))}
   else if(act==="up"){S.lvl=Math.min(3,Math.max(S.lvl,1)+1);persist();buildFeed();$("#feed").scrollTo({top:0});toast(LV[S.lvl]+": "+CLIPS.filter(c=>c.lvl===S.lvl).length+" clips")}
   else if(act==="top")$("#feed").scrollTo({top:0,behavior:"smooth"});
 });
