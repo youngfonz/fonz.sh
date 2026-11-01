@@ -67,17 +67,13 @@ button:focus-visible,.w:focus-visible{outline:3px solid var(--sun);outline-offse
 .w.on{background:var(--fg);color:var(--bg);border-bottom-color:transparent}
 .en{margin:10px 0 0;font-size:16px;line-height:1.35;font-weight:600;opacity:.9;display:none}
 #feed.showEn .en{display:block}
-.tools{display:flex;gap:8px;margin:12px 0 0}
-.tbtn{padding:7px 15px;border-radius:999px;border:2px solid color-mix(in srgb,var(--fg) 60%,transparent);background:transparent;color:var(--fg);font:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s,color .15s}
-.tbtn[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
-.w{text-align:center;vertical-align:top}
-.w{border-bottom:0}
-.w .t{display:block;border-bottom:3px dotted color-mix(in srgb,var(--fg) 55%,transparent)}
-.w.saved .t{border-bottom:3px solid var(--ac)}
-.w.on .t{border-bottom-color:transparent}
-.pr{display:none;font-style:normal;font-family:var(--body);font-size:12px;font-weight:700;letter-spacing:.05em;line-height:1.15;margin-top:3px;opacity:.9;white-space:nowrap}
+.w{border-bottom:3px solid transparent}
+.w.saved{border-bottom-color:var(--ac)}
+.pr{display:none;margin:12px 0 0;font-family:var(--body);font-size:16px;font-weight:800;letter-spacing:.03em;line-height:1.35;opacity:.88}
 #feed.showPr .pr{display:block}
-#feed.showPr .es{line-height:1.45}
+.seg{display:inline-flex;margin:16px 0 0;padding:3px;border-radius:999px;background:color-mix(in srgb,var(--fg) 16%,transparent)}
+.seg button{border:0;background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:700;padding:6px 14px;border-radius:999px;cursor:pointer;transition:background .15s,color .15s}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--bg)}
 .hint{margin:10px 0 0;font-size:14px;font-weight:600;opacity:.85}
 .acts{display:flex;gap:10px;padding:0 18px 16px;align-items:stretch}
 .btn{border:2px solid currentColor;border-radius:999px;padding:11px 18px;font-weight:800;font-size:16px;display:inline-flex;align-items:center;gap:8px;line-height:1}
@@ -763,12 +759,12 @@ function buildFeed(){
   feed.classList.toggle("showEn",S.en);
   feed.classList.toggle("showPr",S.pr!==false);
   feed.innerHTML=list.map((c,i)=>{
-    const toks=c.es.split(" ").map(t=>{const k=norm(t);return `<button class="w${S.dict[k]?" saved":""}" data-k="${esc(k)}"><span class="t">${esc(t)}</span><i class="pr" aria-hidden="true">${esc(PRON[k]||"")}</i></button>`}).join(" ");
+    const toks=c.es.split(" ").map(t=>{const k=norm(t);return `<button class="w${S.dict[k]?" saved":""}" data-k="${esc(k)}">${esc(t)}</button>`}).join(" ");
     const n=newCount(c);
     return `<section class="clip" data-id="${c.id}" style="--bg:${c.bg};--fg:${c.fg};--ac:${c.ac}">
       <div class="meta"><span class="who"><span class="av">${esc(c.who[0])}</span>${esc(c.who)}, ${esc(c.city)}</span><span class="newc">${n} new word${n===1?"":"s"}</span></div>
       <div class="prop"><svg viewBox="0 0 240 220" aria-hidden="true">${SCENES[c.scene]()}</svg></div>
-      <div class="sub"><p class="es" lang="es">${toks}</p><div class="tools"><button class="tbtn" data-act="pr" aria-pressed="${S.pr!==false}">Sounds</button><button class="tbtn" data-act="en" aria-pressed="${S.en}">English</button></div><p class="en">${esc(c.en)}</p>${i===0&&!S.seen?`<p class="hint">Press play, then tap any word to see what it means.</p>`:""}</div>
+      <div class="sub"><p class="es" lang="es">${toks}</p><p class="pr" aria-label="How to say it">${c.es.split(" ").map(t=>PRON[norm(t)]||"").filter(Boolean).join(" ")}</p><p class="en">${esc(c.en)}</p><div class="seg" role="group" aria-label="Show"><button data-act="pr" aria-pressed="${S.pr!==false}">Sounds</button><button data-act="en" aria-pressed="${S.en}">English</button></div>${i===0&&!S.seen?`<p class="hint">Tap any word to see what it means.</p>`:""}</div>
       <div class="acts">
         <button class="btn main" data-act="play" aria-label="Play or stop audio">${ICON.play}${ICON.stop}<span>Play</span><i class="bars"><b></b><b></b><b></b><b></b></i></button>
         <button class="btn" data-act="slow" aria-pressed="${S.slow}">Slow</button>
