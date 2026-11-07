@@ -38,6 +38,10 @@
   ],
   "rewrites": [
     {
+      "source": "/fde",
+      "destination": "/fde.html"
+    },
+    {
       "source": "/forward-deployed-engineer",
       "destination": "/forward-deployed-engineer.html"
     },

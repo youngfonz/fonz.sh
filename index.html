@@ -1,432 +1,712 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Forward Deployed Engineer — Fonz Morris</title>
-  <meta name="description" content="Fonz Morris is a Forward Deployed Engineer. He embeds with your team, deploys AI inside the workflow where the money leaks, and proves it moved revenue, risk, or cost.">
-  <meta name="author" content="Fonz Morris">
-  <meta name="theme-color" content="#2A52FF">
-  <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://www.fonz.sh/">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fonz Morris · Work</title>
+<meta name="description" content="Fonz Morris designs and ships products: BCC Academy (500+ students), GFX1000, Netflix paid sharing, PulsePro, Supernova on YouTube Playables, Aero, Show Up and Cadence.">
+<meta name="author" content="Fonz Morris">
+<meta name="theme-color" content="#6B3BFF">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.fonz.sh/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Fonz.sh">
+<meta property="og:title" content="Fonz Morris · I design it. Then I ship it.">
+<meta property="og:description" content="Product design and AI builds: BCC Academy, GFX1000, Netflix, PulsePro, Supernova, Aero, Show Up, Cadence.">
+<meta property="og:url" content="https://www.fonz.sh/">
+<meta property="og:image" content="https://www.fonz.sh/img/bcc-academy-home.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@youngfonz">
+<meta name="twitter:title" content="Fonz Morris · I design it. Then I ship it.">
+<meta name="twitter:image" content="https://www.fonz.sh/img/bcc-academy-home.jpg">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230E0E10'/><path d='M18 14h28v9H28v7h15v9H28v11H18z' fill='%236B3BFF'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Funnel+Display:wght@500..800&family=Funnel+Sans:ital,wght@0,400..600;1,400&family=Martian+Mono:wdth,wght@75..100,400..600&display=swap">
+<style>
+/* Layout: a contact sheet. Each project is a "reel": copy on one side, a large live screen on the other.
+   Screens are animated illustrations now and become real screen recordings later. */
+:root{
+  --paper:#FAF8F5;      /* bone white */
+  --paper-2:#F0EDE8;
+  --ink:#0E0E10;
+  --ink-2:#56545C;
+  --rule:#E2DED8;
+  --accent:#6B3BFF;     /* violet */
+  --accent-ink:#FFFFFF;
+  --screen:#111113;     /* device glass */
+  --screen-2:#1F1E24;
+  --screen-fg:#EEECF3;
+  --screen-dim:#8E8B98;
+  --ok:#3FB37F;
+  --display:"Funnel Display", "Helvetica Neue", Arial, sans-serif;
+  --body:"Funnel Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono:"Martian Mono", ui-monospace, Menlo, Consolas, monospace;
+  /* type roles: display / title / body / small / label (mono = data, code, dates, captions only) */
+  --fs-body:17px; --fs-small:15px; --fs-label:12px; --fs-micro:11px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0E0E10; --paper-2:#18171C; --ink:#F4F2EE; --ink-2:#A9A6B0; --rule:#2A2930;
+  --accent:#8C68FF; --accent-ink:#FFFFFF; --screen:#060608; --screen-2:#1C1B21; --screen-fg:#EEECF3; --screen-dim:#8A8794; --ok:#4CC58D;
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0E0E10; --paper-2:#18171C; --ink:#F4F2EE; --ink-2:#A9A6B0; --rule:#2A2930;
+  --accent:#8C68FF; --accent-ink:#FFFFFF; --screen:#060608; --screen-2:#1C1B21; --screen-fg:#EEECF3; --screen-dim:#8A8794; --ok:#4CC58D;
+  color-scheme:dark}
 
-  <!-- Open Graph -->
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="Fonz.sh">
-  <meta property="og:title" content="Forward Deployed Engineer — Fonz Morris">
-  <meta property="og:description" content="AI deployed inside your business, on your systems, with a number to prove it. Consulting engagements and the Forward Deploy channel.">
-  <meta property="og:url" content="https://www.fonz.sh/">
-  <meta property="og:image" content="https://www.fonz.sh/api/og">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height" content="630">
-  <meta property="og:image:alt" content="Fonz Morris — Forward Deployed Engineer">
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:var(--fs-body);line-height:1.6;font-feature-settings:"ss01";-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+a{color:inherit;text-underline-offset:.2em;text-decoration-thickness:1px}
+::selection{background:var(--accent);color:var(--accent-ink)}
+html{scrollbar-color:var(--ink-2) var(--paper);caret-color:var(--accent)}
+p{text-wrap:pretty}
+.stat strong,.done,.email{font-variant-numeric:tabular-nums}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.mono{font-family:var(--mono);font-size:var(--fs-label);font-stretch:87.5%;letter-spacing:.04em;text-transform:uppercase}
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:site" content="@youngfonz">
-  <meta name="twitter:title" content="Forward Deployed Engineer — Fonz Morris">
-  <meta name="twitter:description" content="AI deployed inside your business, on your systems, with a number to prove it.">
-  <meta name="twitter:image" content="https://www.fonz.sh/api/og">
+/* top bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--rule)}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.bar nav{display:flex;gap:18px;flex-wrap:wrap}
+.bar nav a{text-decoration:none;color:var(--ink-2)}
+.bar nav a:hover{color:var(--accent)}
+.brand{font-family:var(--display);font-weight:800;font-size:19px;letter-spacing:-.02em;text-decoration:none}
+.bar nav{font-family:var(--body);font-size:var(--fs-small);font-stretch:normal;text-transform:none;letter-spacing:0;font-weight:500}
+.hero .meta,.links{font-family:var(--body);font-size:var(--fs-small);font-stretch:normal;text-transform:none;letter-spacing:0}
+@media (max-width:720px){.bar nav{display:none}}
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%232A52FF'/><path d='M14 16h30v9H25v7h16v9H25v11H14z' fill='%23FFFFFF'/></svg>">
+/* hero */
+.hero{padding-block:56px 40px}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(52px,9.5vw,96px);line-height:.94;letter-spacing:-.035em;margin:0;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero-row{display:grid;grid-template-columns:1.1fr 1fr;gap:32px;margin-top:32px;align-items:end}
+.hero p.lede{font-size:clamp(19px,1.9vw,22px);line-height:1.5;max-width:38ch;margin:0}
+.hero .meta{display:flex;flex-wrap:wrap;gap:8px 20px;color:var(--ink-2)}
+@media (max-width:820px){.hero-row{grid-template-columns:1fr}}
 
-  <link rel="preload" href="fonts/new-york-xl-bold.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="fonts/sf-pro-text-regular.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="css/style.css">
+/* contact sheet */
+.sheet{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:40px}
+.frame{display:block;text-decoration:none;background:var(--screen);color:var(--screen-fg);border-radius:6px;aspect-ratio:4/5;position:relative;overflow:hidden;max-width:100%}
+.frame .tc{position:absolute;left:10px;bottom:8px;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.08em;color:var(--screen-dim)}
+.frame .nm{position:absolute;left:10px;top:9px;font-family:var(--display);font-weight:700;font-size:15px}
+.frame:hover{outline:2px solid var(--accent)}
+.frame:nth-child(1){animation:rise .7s .05s both}.frame:nth-child(2){animation:rise .7s .15s both}.frame:nth-child(3){animation:rise .7s .25s both}.frame:nth-child(4){animation:rise .7s .35s both}.frame:nth-child(5){animation:rise .7s .45s both}
+@keyframes rise{from{transform:translateY(14px)}to{transform:none}}
+@media (max-width:820px){.sheet{grid-template-columns:repeat(2,minmax(0,1fr))}.frame:nth-child(5){grid-column:span 2;aspect-ratio:8/5}}
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    "@id": "https://www.fonz.sh/#person",
-    "name": "Fonz Morris",
-    "alternateName": "Fonz.sh",
-    "url": "https://www.fonz.sh/",
-    "email": "mailto:hello@fonzmorris.com",
-    "jobTitle": "Forward Deployed Engineer",
-    "description": "Forward Deployed Engineer and consultant. Deploys AI inside real businesses and proves it moved revenue, risk, or cost. Former Lead Product Designer, Global Conversion at Netflix.",
-    "knowsAbout": ["Forward Deployed Engineering", "Forward Deployed Engineer", "AI deployment", "Agent evaluation", "Conversion architecture", "Revenue growth"],
-    "brand": { "@type": "Brand", "name": "Forward Deploy", "url": "https://www.youtube.com/@ForwardDeploy" },
-    "alumniOf": [
-      { "@type": "CollegeOrUniversity", "name": "Quantic School of Business and Technology" },
-      { "@type": "CollegeOrUniversity", "name": "Stanford University" },
-      { "@type": "CollegeOrUniversity", "name": "Morehouse College" }
-    ],
-    "sameAs": [
-      "https://fonzmorris.com",
-      "https://www.youtube.com/@ForwardDeploy",
-      "https://github.com/youngfonz",
-      "https://www.linkedin.com/in/fonzmorris",
-      "https://x.com/youngfonz"
-    ]
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Fonz Morris — Forward Deployed Engineering",
-    "url": "https://www.fonz.sh/",
-    "email": "hello@fonzmorris.com",
-    "founder": { "@type": "Person", "name": "Fonz Morris" },
-    "areaServed": "Worldwide",
-    "serviceType": "AI deployment consulting",
-    "description": "Forward Deployed Engineering engagements: discovery sprints, AI deployments on existing systems, and ongoing ownership with evals and measured business impact."
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    "name": "Fonz.sh",
-    "url": "https://www.fonz.sh/",
-    "description": "Fonz Morris, Forward Deployed Engineer. Consulting and the Forward Deploy channel."
-  }
-  </script>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": "Forward Deploy: videos on Forward Deployed Engineering",
-    "itemListElement": [
-      { "@type": "VideoObject", "position": 0, "name": "What a Forward Deployed Engineer Does for Your Business (2 min)", "description": "You bought the AI demo and it went nowhere. What a Forward Deployed Engineer does about that: discovery on the floor, software-model-human triage, building on your existing systems, proving the result in revenue, risk, or cost.", "thumbnailUrl": "https://i.ytimg.com/vi/MsInogHuFGk/maxresdefault.jpg", "uploadDate": "2026-09-16", "duration": "PT2M17S", "embedUrl": "https://www.youtube-nocookie.com/embed/MsInogHuFGk", "contentUrl": "https://www.youtube.com/watch?v=MsInogHuFGk", "author": { "@id": "https://www.fonz.sh/#person" } },
-      { "@type": "VideoObject", "position": 1, "name": "The $10M Autopsy: Why 95% of AI Pilots Fail", "description": "The three deaths every failed AI project dies, and the Forward Deployed Engineer role that exists to prevent them.", "thumbnailUrl": "https://i.ytimg.com/vi/5x0isKiD914/maxresdefault.jpg", "uploadDate": "2026-09-05", "duration": "PT8M11S", "embedUrl": "https://www.youtube-nocookie.com/embed/5x0isKiD914", "contentUrl": "https://www.youtube.com/watch?v=5x0isKiD914", "author": { "@id": "https://www.fonz.sh/#person" } },
-      { "@type": "VideoObject", "position": 2, "name": "The Sommelier's Job: What a Forward Deployed Engineer Actually Is", "description": "Where the role came from, what the job is, when it makes sense, and what it is not.", "thumbnailUrl": "https://i.ytimg.com/vi/7EoQ6i5gv4I/maxresdefault.jpg", "uploadDate": "2026-09-11", "duration": "PT4M57S", "embedUrl": "https://www.youtube-nocookie.com/embed/7EoQ6i5gv4I", "contentUrl": "https://www.youtube.com/watch?v=7EoQ6i5gv4I", "author": { "@id": "https://www.fonz.sh/#person" } },
-      { "@type": "VideoObject", "position": 3, "name": "5 Steps to Become a Forward Deployed Engineer", "description": "A one-minute explainer of the Forward Deployed Engineer path.", "thumbnailUrl": "https://i.ytimg.com/vi/4pz2_TnQocI/hqdefault.jpg", "uploadDate": "2026-08-20", "duration": "PT58S", "embedUrl": "https://www.youtube-nocookie.com/embed/4pz2_TnQocI", "contentUrl": "https://www.youtube.com/watch?v=4pz2_TnQocI", "author": { "@id": "https://www.fonz.sh/#person" } }
-    ]
-  }
-  </script>
+/* mini art inside frames */
+.mini{position:absolute;inset:34px 10px 26px}
+.mini-bars{display:flex;align-items:end;gap:5px}
+.mini-bars i{flex:1;background:var(--accent);border-radius:2px;animation:bar 2.4s ease-in-out infinite alternate}
+.mini-bars i:nth-child(2n){background:var(--screen-fg);animation-delay:.3s}
+.mini-bars i:nth-child(3n){animation-delay:.6s}
+@keyframes bar{from{height:30%}to{height:100%}}
+.mini-pipe{display:flex;flex-direction:column;justify-content:space-between}
+.mini-pipe span{height:10px;border-radius:5px;background:var(--screen-2);position:relative;overflow:hidden}
+.mini-pipe span::after{content:"";position:absolute;inset:0;width:30%;background:var(--accent);border-radius:5px;animation:slide 1.8s linear infinite}
+.mini-pipe span:nth-child(2)::after{animation-delay:.3s}.mini-pipe span:nth-child(3)::after{animation-delay:.6s}.mini-pipe span:nth-child(4)::after{animation-delay:.9s}.mini-pipe span:nth-child(5)::after{animation-delay:1.2s}
+@keyframes slide{from{transform:translateX(-100%)}to{transform:translateX(340%)}}
+.mini-steps{display:grid;gap:8px;align-content:center}
+.mini-steps b{display:block;height:26px;border:1.5px solid var(--screen-dim);border-radius:4px;animation:pick 3s steps(1) infinite}
+.mini-steps b:nth-child(2){animation-delay:1s}.mini-steps b:nth-child(3){animation-delay:2s}
+@keyframes pick{0%{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 22%,transparent)}33%,100%{border-color:var(--screen-dim);background:transparent}}
+.mini-wave{display:flex;align-items:center;gap:3px}
+.mini-wave i{flex:1;background:var(--screen-fg);border-radius:2px;animation:wave 1.1s ease-in-out infinite}
+.mini-wave i:nth-child(odd){animation-delay:.2s}.mini-wave i:nth-child(3n){animation-delay:.45s;background:var(--accent)}
+@keyframes wave{0%,100%{height:12%}50%{height:80%}}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.mini-grid i{background:var(--screen-2);border-radius:3px}
+.mini-grid i:nth-child(4){background:var(--accent)}
+
+/* reels */
+.reel{border-top:1px solid var(--rule);padding-block:72px}
+.reel-head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:8px 24px;margin-bottom:28px}
+.reel-head h2{font-family:var(--display);font-weight:800;font-size:clamp(40px,6.5vw,84px);line-height:.95;letter-spacing:-.03em;margin:0;text-wrap:balance}
+.reel-head .mono{color:var(--ink-2)}
+.reel-body{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;align-items:start}
+.reel.flip .reel-body{grid-template-columns:minmax(0,7fr) minmax(0,5fr)}
+.reel.flip .copy{order:2}
+@media (max-width:900px){.reel-body,.reel.flip .reel-body{grid-template-columns:1fr}.reel.flip .copy{order:0}}
+.copy{display:grid;gap:22px;min-width:0}
+.copy h3{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:-.005em;color:var(--accent);margin:0 0 6px}
+.copy p{margin:0;max-width:68ch}
+.stat{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding-top:16px;border-top:1px solid var(--rule)}
+.stat strong{font-family:var(--display);font-weight:700;font-size:clamp(44px,5vw,68px);line-height:.95;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stat span{color:var(--ink-2);max-width:32ch}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tags span{font-family:var(--mono);font-size:11px;letter-spacing:.06em;padding:4px 8px;border:1px solid var(--rule);border-radius:999px;color:var(--ink-2)}
+.ext{font-family:var(--mono);font-size:13.5px;text-decoration:none;border-bottom:1.5px solid var(--accent);width:max-content}
+
+/* screens */
+.screen{background:var(--screen);color:var(--screen-fg);border-radius:14px;padding:12px;box-shadow:0 30px 60px -30px rgba(0,0,0,.45);min-width:0}
+.chrome{display:flex;align-items:center;gap:6px;padding:2px 4px 10px}
+.chrome i{width:9px;height:9px;border-radius:50%;background:var(--screen-2)}
+.chrome .url{margin-left:8px;font-family:var(--mono);font-size:11px;color:var(--screen-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.glass{background:var(--screen-2);border-radius:8px;padding:16px;min-height:340px;position:relative;overflow:hidden}
+.cap{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-2)}
+.cap b{color:var(--accent);font-weight:600}
+.rec{display:inline-flex;align-items:center;gap:6px}
+.rec::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--accent);animation:blink 1.4s infinite}
+@keyframes blink{50%{opacity:.25}}
+.slot{margin-top:12px;border:1.5px dashed var(--rule);border-radius:10px;padding:12px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.04em;color:var(--ink-2);display:flex;gap:10px;align-items:center}
+.slot svg{flex:none}
+
+/* LXP vignette */
+.lxp{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:12px;min-height:340px}
+.panel{background:var(--screen);border-radius:6px;padding:12px;min-width:0}
+.panel .lbl{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.08em;color:var(--screen-dim);text-transform:uppercase;margin-bottom:10px}
+.cohort{display:grid;gap:9px}
+.cohort .row{display:grid;grid-template-columns:minmax(0,1fr) 54px;gap:8px;align-items:center;font-size:13.5px;font-family:var(--display)}
+.track{height:6px;background:var(--screen-2);border-radius:3px;overflow:hidden;grid-column:1/-1}
+.track i{display:block;height:100%;background:var(--ok);width:100%;transform-origin:left;animation:fill 2.2s cubic-bezier(.2,.7,.2,1) both}
+.cohort .row:nth-child(2) .track i{animation-delay:.25s}.cohort .row:nth-child(3) .track i{animation-delay:.5s}.cohort .row:nth-child(4) .track i{animation-delay:.75s}.cohort .row:nth-child(5) .track i{animation-delay:1s}
+@keyframes fill{from{transform:scaleX(.08)}to{transform:scaleX(1)}}
+.done{font-family:var(--mono);font-size:var(--fs-micro);color:var(--ok);text-align:right}
+.chat{display:flex;flex-direction:column;gap:8px;font-size:13.5px;line-height:1.4;font-family:var(--display)}
+.msg{padding:8px 10px;border-radius:8px;max-width:92%}
+.msg.me{align-self:flex-end;background:var(--accent);color:var(--accent-ink)}
+.msg.ai{background:var(--screen-2)}
+.tool{align-self:flex-start;font-family:var(--mono);font-size:var(--fs-micro);color:var(--screen-dim);border:1px solid var(--screen-2);border-radius:999px;padding:3px 8px}
+.tool b{color:var(--ok);font-weight:600}
+.chat > *{opacity:1;transition:opacity .4s}
+.chat.cycle > *{opacity:0}
+.chat.cycle > .on{opacity:1}
+.evals{grid-column:1/-1;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.evals .lbl{margin:0 8px 0 0}
+.evals i{width:14px;height:14px;border-radius:3px;background:var(--ok);opacity:.9}
+.evals i.f{background:var(--accent)}
+@media (max-width:560px){.lxp{grid-template-columns:1fr}}
+
+/* GFX pipeline */
+.pipe{display:grid;gap:10px}
+.node{display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:10px;align-items:center;background:var(--screen);border-radius:6px;padding:10px 12px;position:relative}
+.node .ic{width:30px;height:30px;border-radius:6px;background:var(--screen-2);display:grid;place-items:center;font-family:var(--mono);font-size:11px;color:var(--screen-dim)}
+.node .t{font-family:var(--display);font-size:13.5px;min-width:0}
+.node .t small{display:block;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.04em;color:var(--screen-dim)}
+.node .st{font-family:var(--mono);font-size:var(--fs-micro);color:var(--screen-dim)}
+.node.active{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.node.active .ic{background:var(--accent);color:var(--accent-ink)}
+.node.active .st{color:var(--accent)}
+.node.human .ic{background:var(--screen-fg);color:var(--screen)}
+.out{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.out div{aspect-ratio:4/5;background:linear-gradient(160deg,var(--screen) 0%,var(--screen) 55%,color-mix(in srgb,var(--accent) 55%,var(--screen)) 100%);border-radius:5px;position:relative;overflow:hidden;max-width:100%}
+.out div::after{content:"";position:absolute;left:10%;right:10%;bottom:12%;height:3px;background:var(--screen-fg);opacity:.6;border-radius:2px;box-shadow:0 -8px 0 var(--screen-fg)}
+
+/* Netflix-era flow (generic wireframe, no brand marks) */
+.flow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-content:start}
+.step{background:var(--screen);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:8px;min-width:0;min-height:270px;transition:box-shadow .3s}
+.step .lbl{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--screen-dim)}
+.step .h{font-family:var(--display);font-weight:700;font-size:15px;line-height:1.15}
+.plan{border:1.5px solid var(--screen-2);border-radius:6px;padding:8px;font-family:var(--display);font-size:var(--fs-label);display:flex;justify-content:space-between;gap:6px}
+.plan.sel{border-color:var(--accent)}
+.field{height:26px;border-radius:4px;background:var(--screen-2)}
+.field.short{width:60%}
+.btn{margin-top:auto;height:30px;border-radius:5px;background:var(--accent);color:var(--accent-ink);font-family:var(--display);font-weight:700;font-size:13.5px;display:grid;place-items:center}
+.check{width:44px;height:44px;border-radius:50%;border:2px solid var(--ok);display:grid;place-items:center;color:var(--ok);font-size:22px;margin-block:10px}
+.step.live{box-shadow:inset 0 0 0 1.5px var(--accent)}
+.flowcap{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+.flowcap span{font-family:var(--mono);font-size:var(--fs-micro);color:var(--screen-dim);border:1px solid var(--screen);border-radius:999px;padding:3px 9px}
+@media (max-width:560px){.flow{grid-template-columns:1fr}}
+
+/* PulsePro */
+.pp{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:12px;min-height:340px}
+.phone{background:var(--screen);border-radius:18px;padding:14px 10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.phone .lbl{font-family:var(--mono);font-size:var(--fs-micro);color:var(--screen-dim);text-align:center}
+.bub{background:var(--screen-2);border-radius:10px;padding:8px 10px;font-family:var(--display);font-size:var(--fs-label);line-height:1.35}
+.bub.me{background:var(--accent);color:var(--accent-ink);align-self:flex-end}
+.wave{display:flex;gap:2px;align-items:center;height:22px}
+.wave i{flex:1;background:var(--accent-ink);border-radius:1px;animation:wave 1s ease-in-out infinite}
+.wave i:nth-child(odd){animation-delay:.25s}.wave i:nth-child(3n){animation-delay:.5s}
+.task{display:grid;grid-template-columns:14px minmax(0,1fr);gap:8px;align-items:center;font-family:var(--display);font-size:var(--fs-label)}
+.task i{width:14px;height:14px;border:1.5px solid var(--screen-dim);border-radius:3px}
+.task.new{animation:pop .5s 1.2s both}
+@keyframes pop{from{transform:translateY(6px)}to{transform:none}}
+.ads{background:var(--screen);border-radius:8px;padding:12px;display:grid;gap:10px;min-width:0}
+.ads .lbl{font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.08em;text-transform:uppercase;color:var(--screen-dim)}
+.lane{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px}
+.lane div{border-radius:4px;background:var(--screen-2);font-family:var(--mono);font-size:var(--fs-micro);color:var(--screen-dim);padding:6px 5px;min-height:46px}
+.lane.render div{aspect-ratio:9/16;min-height:0;background:linear-gradient(180deg,var(--screen-2),color-mix(in srgb,var(--accent) 45%,var(--screen-2)));animation:show .6s both}
+.lane.render div:nth-child(2){animation-delay:.2s}.lane.render div:nth-child(3){animation-delay:.4s}.lane.render div:nth-child(4){animation-delay:.6s}.lane.render div:nth-child(5){animation-delay:.8s}
+@keyframes show{from{filter:grayscale(1) brightness(.6)}to{filter:none}}
+.arrow{font-family:var(--mono);font-size:var(--fs-micro);color:var(--screen-dim)}
+@media (max-width:560px){.pp{grid-template-columns:1fr}}
+
+/* More work */
+.more{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.card{background:var(--paper-2);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.card .vis{aspect-ratio:16/10;border-radius:6px;background:var(--screen);position:relative;overflow:hidden;max-width:100%}
+.card h4{font-family:var(--display);font-weight:700;font-size:22px;line-height:1.1;margin:0;letter-spacing:-.015em}
+.card p{margin:0;font-size:var(--fs-small);line-height:1.55;color:var(--ink-2)}
+.card .mono{color:var(--ink-2);font-size:11px}
+.card.wide{grid-column:span 2}
+@media (max-width:900px){.more{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.more{grid-template-columns:1fr}.card.wide{grid-column:auto}}
+.notes{position:absolute;inset:0;display:flex;align-items:end;gap:6%;padding:10% 8%}
+.notes i{flex:1;background:var(--accent);border-radius:3px 3px 0 0;animation:bar 1.6s ease-in-out infinite alternate}
+.notes i:nth-child(2){animation-delay:.2s;background:var(--screen-fg)}.notes i:nth-child(3){animation-delay:.4s}.notes i:nth-child(4){animation-delay:.6s;background:var(--screen-fg)}.notes i:nth-child(5){animation-delay:.8s}.notes i:nth-child(6){animation-delay:1s;background:var(--screen-fg)}
+.shorts{position:absolute;inset:12% 8%;display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.shorts i{background:var(--screen-2);border-radius:4px}
+.shorts i:last-child{background:var(--accent);animation:blink 1.6s infinite}
+.funnel{position:absolute;inset:14% 12%;display:grid;gap:6px;align-content:center;justify-items:center}
+.funnel i{height:14px;background:var(--screen-fg);border-radius:3px;opacity:.85}
+.funnel i:nth-child(1){width:100%}.funnel i:nth-child(2){width:78%}.funnel i:nth-child(3){width:58%;background:var(--accent)}
+.face{position:absolute;inset:0;display:grid;place-items:center}
+.face svg{width:46%;height:auto}
+.typed{position:absolute;inset:14% 10%;font-family:var(--display);color:var(--screen-fg);font-size:15px;display:grid;gap:6px;align-content:center}
+.typed span{background:var(--screen-2);border-radius:8px;padding:6px 9px;width:max-content;max-width:100%}
+.typed span.me{justify-self:end;background:var(--accent);color:var(--accent-ink)}
+.lines{position:absolute;inset:16% 10%;display:grid;gap:7px;align-content:center}
+.lines i{height:8px;background:var(--screen-2);border-radius:4px}
+.lines i:nth-child(2){width:80%}.lines i:nth-child(3){width:90%;background:var(--accent)}.lines i:nth-child(4){width:60%}
+
+/* talks + ships */
+.list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:40px;margin-top:8px}
+.list h3{font-family:var(--display);font-size:16px;font-weight:700;color:var(--accent);margin:0 0 12px}
+.list ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+.list li{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--rule);font-size:var(--fs-small)}
+.list li span:last-child{font-family:var(--mono);font-size:11px;color:var(--ink-2);text-align:right}
+@media (max-width:760px){.list{grid-template-columns:1fr}}
+
+/* footer */
+.foot{border-top:1px solid var(--rule);padding-block:72px 56px}
+.foot h2{font-family:var(--display);font-weight:800;font-size:clamp(44px,7.5vw,96px);line-height:.95;letter-spacing:-.03em;margin:0 0 24px}
+.contact{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.email{font-family:var(--mono);font-size:16px;padding:10px 14px;border:1.5px solid var(--ink);border-radius:8px;user-select:all}
+.copybtn{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding:12px 14px;border:0;border-radius:8px;background:var(--accent);color:var(--accent-ink);cursor:pointer}
+.links{display:flex;gap:18px;flex-wrap:wrap;margin-top:22px}
+
+
+/* real screenshots + diagrams */
+.shot{margin:0;min-width:0}
+.shot .frm{background:var(--screen);border-radius:14px;padding:10px;box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}
+.shot img{display:block;width:100%;height:auto;border-radius:7px;max-width:100%}
+.shot figcaption{margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-2);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.shots{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;margin-top:40px}
+.shots .wide{grid-column:1/-1}
+@media (max-width:820px){.shots{grid-template-columns:1fr}}
+.stack .reel-body{grid-template-columns:1fr}
+.stack .copy{grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.stack .copy > .full{grid-column:1/-1}
+@media (max-width:900px){.stack .copy{grid-template-columns:1fr}}
+.diagram{margin-top:36px;background:var(--paper-2);border-radius:14px;padding:20px;overflow-x:auto}
+.diagram svg{display:block;width:100%;min-width:860px;height:auto}
+.diagram .dhead{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2);margin-bottom:12px;min-width:0}
+.dn{fill:var(--paper);stroke:var(--rule);stroke-width:1.5}
+.dn.k{fill:var(--accent);stroke:var(--accent)}
+.dn.h{fill:var(--paper);stroke:var(--accent);stroke-width:2.5}
+.dn.dash{fill:none;stroke:var(--ink-2);stroke-dasharray:5 5}
+.dt{fill:var(--ink);font-family:var(--display);font-weight:700;font-size:19px}
+.ds{fill:var(--ink-2);font-family:var(--mono);font-size:var(--fs-label);letter-spacing:.02em}
+.dn.k + .dt,.dt.on{fill:var(--accent-ink)}
+.ds.on{fill:var(--accent-ink);opacity:.85}
+.chip{fill:var(--paper-2);stroke:var(--rule)}
+.chipt{fill:var(--ink);font-family:var(--mono);font-size:12px}
+.da{fill:none;stroke:var(--ink-2);stroke-width:2;stroke-dasharray:7 6;animation:flow 1.2s linear infinite}
+.da.acc{stroke:var(--accent)}
+.dl{fill:var(--ink-2);font-family:var(--mono);font-size:var(--fs-label)}
+.ah{fill:var(--ink-2)}
+.ah.acc{fill:var(--accent)}
+@keyframes flow{to{stroke-dashoffset:-26}}
+.frame.photo{background-size:cover;background-position:top left}
+.frame.photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,0) 35%,rgba(0,0,0,0) 70%,rgba(0,0,0,.6))}
+.frame.photo .nm,.frame.photo .tc{z-index:1;color:#fff}
+
+a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72em;margin-left:.3em;vertical-align:-.02em;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 12 12%27%3E%3Cpath d=%27M3 9L9 3M4.5 3H9v4.5%27 fill=%27none%27 stroke=%27black%27 stroke-width=%271.6%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 12 12%27%3E%3Cpath d=%27M3 9L9 3M4.5 3H9v4.5%27 fill=%27none%27 stroke=%27black%27 stroke-width=%271.6%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E") center/contain no-repeat}
+.ext{font-family:var(--body);font-size:var(--fs-small);font-weight:600}
+.ic svg,.check svg,.plan svg{display:block}
+.shots.nf{grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);align-items:start}
+@media (max-width:820px){.shots.nf{grid-template-columns:1fr}}
+.shot figcaption a{color:var(--accent);text-decoration:none}
+.partner{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:20px;margin-top:40px;align-items:start}
+@media (max-width:820px){.partner{grid-template-columns:1fr}}
+.shots.phones{grid-template-columns:repeat(3,minmax(0,1fr));max-width:980px}
+@media (max-width:820px){.shots.phones{grid-template-columns:repeat(2,minmax(0,1fr))}.shots.phones .shot:last-child{grid-column:1/-1;max-width:50%;justify-self:center}}
+.greet{background:var(--screen);border-radius:14px;padding:clamp(28px,5vw,56px);display:grid;gap:18px;box-shadow:0 30px 60px -30px rgba(0,0,0,.45)}
+.greet .g{font-family:var(--display);font-weight:800;font-size:clamp(34px,5vw,64px);line-height:1.05;letter-spacing:-.02em;color:var(--screen-fg);margin:0}
+.greet .g span{color:#9C80FF}
+.greet .w{font-family:var(--display);font-weight:700;font-size:22px;color:var(--screen-fg);margin:0}
+.langs{list-style:none;margin:0;padding:0;display:grid;border-top:1px solid #2a2930}
+.langs li{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:16px;padding:18px 0;border-bottom:1px solid #2a2930;align-items:baseline}
+.langs .ln{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9C80FF}
+.langs .hi{grid-row:span 2;font-family:var(--display);font-weight:800;font-size:clamp(34px,4.6vw,58px);line-height:1;color:var(--screen-fg)}
+.langs .rm{font-family:var(--mono);font-size:12px;color:#A9A6B2}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style>
 </head>
 <body>
-
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <!-- Masthead: a ruled strip of metadata, not a floating bar -->
-  <header class="masthead">
-    <div class="masthead__cell masthead__cell--name">Fonz Morris</div>
-    <div class="masthead__cell masthead__cell--role">Forward Deployed Engineer</div>
-    <nav class="masthead__cell masthead__cell--index" aria-label="Sections">
-      <a href="#method">Method</a>
-      <a href="#engagements">Engagements</a>
-      <a href="#cases">Deployments</a>
-      <a href="#videos">Videos</a>
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="/forward-deployed-engineer">Guide</a>
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="#top">Fonz Morris</a>
+    <nav class="mono" aria-label="Projects">
+      <a href="#lxp">BCC Academy</a><a href="#gfx">GFX1000</a><a href="#netflix">Netflix</a><a href="#pulse">PulsePro</a><a href="#supernova">Supernova</a><a href="#aero">Aero</a><a href="#showup">Show Up</a><a href="#cadence">Cadence</a><a href="#contact">Contact</a>
     </nav>
-    <a class="masthead__cell masthead__cell--mail" href="mailto:hello@fonzmorris.com">hello@fonzmorris.com</a>
-  </header>
+  </div>
+</header>
 
-  <main id="main">
+<main id="top">
+  <section class="hero wrap" aria-labelledby="h">
+    <h1 id="h">I design it.<br>Then I <em>ship</em> it.</h1>
+    <div class="hero-row">
+      <p class="lede">Five years designing how hundreds of millions of people sign up and pay at Netflix. Now I build the AI products myself: learning platforms, agent pipelines, and tools that run while nobody is watching.</p>
+      <div class="meta mono"><span>Head of Product, Black Girls Code</span><span>San Jose, CA</span><span>Open to roles</span></div>
+    </div>
 
-    <!-- Cover -->
-    <section class="cover" aria-labelledby="cover-title">
-      <h1 class="cover__title" id="cover-title">
-        <span class="cover__word">Forward</span>
-        <span class="cover__word cover__word--shift">Deployed</span>
-        <span class="cover__word cover__word--blue">Engineer<span class="cover__stop">.</span></span>
-      </h1>
-      <div class="cover__foot">
-        <p class="cover__meta">Consulting<br>AI deployed on the systems you already run<br>Owned until the metric moves</p>
-        <p class="cover__lede">Every company can buy the same models now. The edge moved to where, how, and why they get deployed. I embed with your team, find the workflow where the money actually leaks, build on top of what you already have, and stay until a number you care about changes.</p>
-        <a class="cover__cta" href="mailto:hello@fonzmorris.com?subject=Forward%20deployment%20for%20our%20team">Start a conversation<span aria-hidden="true"> ↗</span></a>
+    <div class="sheet" aria-label="Project reels">
+      <a class="frame photo" href="#lxp" style="background-image:url(img/bcc-academy-home.jpg)"><span class="nm">BCC Academy</span><span class="tc">REEL A · LXP</span></a>
+      <a class="frame" href="#gfx"><span class="nm">GFX1000</span><div class="mini mini-pipe"><span></span><span></span><span></span><span></span><span></span></div><span class="tc">REEL B · PIPELINE</span></a>
+      <a class="frame photo" href="#netflix" style="background-image:url(img/netflix-sharing-announcement.jpg);background-position:center"><span class="nm">Netflix</span><span class="tc">REEL C · CONVERSION</span></a>
+      <a class="frame photo" href="#pulse" style="background-image:url(img/pulsepro-dashboard.jpg)"><span class="nm">PulsePro</span><span class="tc">REEL D · SOLO OPS</span></a>
+      <a class="frame photo" href="#supernova" style="background-image:url(img/supernova-title.jpg);background-position:center"><span class="nm">Supernova</span><span class="tc">REEL E · YOUTUBE PLAYABLE</span></a>
+    </div>
+  </section>
+
+  <!-- LXP -->
+  <section class="reel" id="lxp" aria-labelledby="lxp-h">
+    <div class="wrap">
+      <div class="reel-head">
+        <h2 id="lxp-h">BCC Academy</h2>
+        <span class="mono">Learning platform (LXP) · Beyond Code Collective · 2025 to now</span>
       </div>
-    </section>
+      <div class="reel-body">
+        <div class="copy">
+          <div><h3>The problem</h3><p>Training programs for Black Girls Code, Upskill Bahamas, Catalyst and After The Game ran on a spreadsheet, a Google Form, a Zoom account and a part-time coordinator. Funders asked for outcome data nobody could produce.</p></div>
+          <div><h3>What I built</h3><p>One multi-tenant platform for enrollment, live sessions, attendance, certificates and reporting. An opt-in AI tutor and an instructor agent sit on top, and a golden-set eval suite with LLM judges decides whether a release is good enough to ship.</p></div>
+          <div class="stat"><strong>500+</strong><span>Students served across five organizations on one codebase, built in about nine weeks.</span></div>
+          <div class="stat"><strong>66/66</strong><span>Every finished cohort so far completed at 100 percent.</span></div>
+          <div class="tags"><span>Next.js</span><span>Supabase</span><span>Vercel AI SDK</span><span>Tool-use agent</span><span>LLM-judge evals</span><span>Vitest</span></div>
+          <a class="ext" href="https://bccacademy.io" target="_blank" rel="noopener">bccacademy.io</a>
+        </div>
+        <figure class="shot">
+          <div class="frm"><img src="img/bcc-academy-home.jpg" alt="BCC Academy home page: 'Human in the lead' headline with a magic-link sign-in panel" width="2644" height="1554"></div>
+          <figcaption><span>bccacademy.io · live home + magic-link sign-in</span><span>Screenshot, Nov 2026</span></figcaption>
+        </figure>
+      </div>
+      <div class="diagram">
+        <div class="dhead"><span>How it fits together</span><span>Architecture</span></div>
+        <svg viewBox="0 0 1240 430" role="img" aria-label="BCC Academy architecture: signups, Zoom and organizations feed one Next.js platform on Supabase, with an AI tutor and instructor agent gated by evals"><defs><marker id="lm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah"/></marker><marker id="lma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah acc"/></marker></defs><rect x="20" y="40" width="250" height="84" rx="10" class="dn"/><text x="36" y="70" class="dt">Eventbrite ticket</text><text x="36" y="92" class="ds">becomes an account</text><text x="36" y="109" class="ds">+ a magic-link sign-in</text><rect x="20" y="170" width="250" height="84" rx="10" class="dn"/><text x="36" y="200" class="dt">Zoom sessions</text><text x="36" y="222" class="ds">recordings import</text><text x="36" y="239" class="ds">themselves</text><rect x="20" y="300" width="250" height="84" rx="10" class="dn"/><text x="36" y="330" class="dt">5 organizations</text><text x="36" y="352" class="ds">BGC, Upskill Bahamas,</text><text x="36" y="369" class="ds">Catalyst and more</text><rect x="380" y="30" width="330" height="370" rx="14" class="dn h"/><text x="400" y="68" class="dt" style="font-size:24px">BCC Academy</text><text x="400" y="92" class="ds">Next.js on Vercel · multi-tenant</text><rect x="400" y="118" width="290" height="40" rx="8" class="chip"/><text x="416" y="144" class="chipt">Enrollment</text><rect x="400" y="170" width="290" height="40" rx="8" class="chip"/><text x="416" y="196" class="chipt">Live sessions</text><rect x="400" y="222" width="290" height="40" rx="8" class="chip"/><text x="416" y="248" class="chipt">Attendance</text><rect x="400" y="274" width="290" height="40" rx="8" class="chip"/><text x="416" y="300" class="chipt">Certificates</text><rect x="400" y="326" width="290" height="40" rx="8" class="chip"/><text x="416" y="352" class="chipt">Funder reporting</text><rect x="820" y="30" width="400" height="96" rx="10" class="dn"/><text x="836" y="60" class="dt">Supabase</text><text x="836" y="82" class="ds">Postgres + row-level security</text><text x="836" y="99" class="ds">PII audit log · weekly security check to Slack</text><rect x="820" y="166" width="400" height="96" rx="10" class="dn k"/><text x="836" y="196" class="dt on">AI tutor + instructor agent</text><text x="836" y="218" class="ds on">Vercel AI SDK · tool use</text><text x="836" y="235" class="ds on">opt-in per program · generates course material</text><rect x="820" y="302" width="400" height="96" rx="10" class="dn"/><text x="836" y="332" class="dt">Golden-set evals</text><text x="836" y="354" class="ds">Vitest + LLM judges</text><text x="836" y="371" class="ds">a release ships only if it passes</text><path d="M270 82 C320 82 330 140 376 140" class="da" marker-end="url(#lm)"/><path d="M270 212 L376 212" class="da" marker-end="url(#lm)"/><path d="M270 342 C320 342 330 300 376 300" class="da" marker-end="url(#lm)"/><text x="325" y="70" class="dl" text-anchor="middle">account + link</text><text x="323" y="203" class="dl" text-anchor="middle">auto-import</text><text x="145" y="414" class="dl" text-anchor="middle">new org = a database row</text><path d="M710 90 L816 80" class="da" marker-end="url(#lm)"/><path d="M710 214 L816 214" class="da acc" marker-end="url(#lma)"/><path d="M1020 262 L1020 298" class="da acc" marker-end="url(#lma)"/><text x="763" y="74" class="dl" text-anchor="middle">data</text><text x="763" y="205" class="dl" text-anchor="middle">learners ask</text><text x="1080" y="284" class="dl" text-anchor="start">every release</text></svg>
+      </div>
+    </div>
+  </section>
 
-    <!-- Definition -->
-    <section class="define" id="define" aria-labelledby="define-title">
-      <div class="define__inner">
-        <h2 class="define__title" id="define-title">What is a Forward Deployed Engineer?</h2>
-        <div class="define__body">
-          <p>A Forward Deployed Engineer is a customer-facing software engineer who works inside your business rather than at a vendor's office. The role is consultant, product manager, and engineer in one person: discover the real bottleneck, decide where AI belongs in the workflow and where it does not, build on the systems you already run, and own the result until a revenue, risk, or cost number moves.</p>
-          <p>Palantir invented the role. Anthropic, OpenAI, Databricks, Cursor, and Sierra hire for it now. I do it as an independent, and I explain it in public on the Forward Deploy channel.</p>
-          <p><a class="text-link" href="/forward-deployed-engineer">Read the full guide: what a Forward Deployed Engineer is and how the method works ↗</a></p>
-          <p><a class="text-link" href="/hire-a-forward-deployed-engineer">Buyer's guide: how to hire a Forward Deployed Engineer, with scope, cost, and timeline ↗</a></p>
+  <!-- GFX1000 -->
+  <section class="reel stack" id="gfx" aria-labelledby="gfx-h">
+    <div class="wrap">
+      <div class="reel-head">
+        <h2 id="gfx-h">GFX1000</h2>
+        <span class="mono">Design + video production pipeline · BGC and BCC marketing</span>
+      </div>
+      <div class="reel-body">
+        <div class="copy">
+          <div><h3>The problem</h3><p>Every design and video request was built by hand, and every review round meant three Slack messages per job. Reviewers were drowning, and requesters had no idea where anything stood.</p></div>
+          <div><h3>What I built</h3><p>A request row in Notion comes out the other end as finished, delivered assets, with one human approval in the middle. Nobody opens a terminal. The same system publishes a short every morning.</p></div>
+          <div class="stat" style="border-top:0;padding-top:0"><strong>136</strong><span>Rendered videos across 35 projects, plus every still that came with them. Output doubled, and work we would have paid outside designers and editors for now runs in-house.</span></div>
+          <div class="tags full"><span>Claude</span><span>Python</span><span>Flask</span><span>Vercel</span><span>Cloud Run</span><span>Notion · Slack · Canva · Drive</span></div>
         </div>
       </div>
-    </section>
+      <div class="diagram">
+        <div class="dhead"><span>Request to delivery</span><span>1 human step</span></div>
+        <svg viewBox="0 0 1240 520" role="img" aria-label="GFX1000 pipeline: a Notion request goes through a Vercel webhook, Slack, a Claude planning routine, one human approval and a Cloud Run render studio, then lands in Drive, Notion, Canva and Slack"><defs><marker id="gm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah"/></marker><marker id="gma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah acc"/></marker></defs><rect x="20" y="60" width="220" height="96" rx="10" class="dn"/><text x="36" y="90" class="dt">Notion request</text><text x="36" y="112" class="ds">one row per job</text><text x="36" y="129" class="ds">title, brief, format</text><rect x="320" y="60" width="240" height="96" rx="10" class="dn"/><text x="336" y="90" class="dt">Webhook crawler</text><text x="336" y="112" class="ds">Vercel</text><text x="336" y="129" class="ds">catches the row</text><rect x="320" y="250" width="240" height="96" rx="10" class="dn"/><text x="336" y="280" class="dt">Slack</text><text x="336" y="302" class="ds">asks the requester</text><text x="336" y="319" class="ds">for missing fields</text><rect x="640" y="60" width="240" height="96" rx="10" class="dn k"/><text x="656" y="90" class="dt on">Claude routine</text><text x="656" y="112" class="ds on">plans the job</text><text x="656" y="129" class="ds on">scenes, copy, specs</text><rect x="960" y="60" width="260" height="96" rx="10" class="dn h"/><text x="976" y="90" class="dt">Human approval</text><text x="976" y="112" class="ds">the only manual step</text><text x="976" y="129" class="ds">one review in Slack</text><rect x="960" y="250" width="260" height="96" rx="10" class="dn k"/><text x="976" y="280" class="dt on">Cloud Run studio</text><text x="976" y="302" class="ds on">renders video + stills</text><text x="976" y="319" class="ds on">no terminal, no laptop</text><rect x="470" y="420" width="170" height="80" rx="10" class="dn"/><text x="486" y="450" class="dt">Drive</text><text x="486" y="472" class="ds">files</text><rect x="660" y="420" width="170" height="80" rx="10" class="dn"/><text x="676" y="450" class="dt">Notion</text><text x="676" y="472" class="ds">status + links</text><rect x="850" y="420" width="170" height="80" rx="10" class="dn"/><text x="866" y="450" class="dt">Canva</text><text x="866" y="472" class="ds">editable</text><rect x="1040" y="420" width="170" height="80" rx="10" class="dn"/><text x="1056" y="450" class="dt">Slack</text><text x="1056" y="472" class="ds">delivered</text><rect x="20" y="420" width="400" height="80" rx="10" class="dn dash"/><text x="36" y="450" class="dt">Also runs unattended</text><text x="36" y="472" class="ds">a daily short + a weekly analytics digest</text><path d="M240 108 L316 108" class="da" marker-end="url(#gm)"/><path d="M420 156 L420 246" class="da" marker-end="url(#gm)"/><path d="M460 250 L460 160" class="da" marker-end="url(#gm)"/><text x="410" y="205" class="dl" text-anchor="end">missing?</text><text x="470" y="205" class="dl" text-anchor="start">filled</text><path d="M560 108 L636 108" class="da acc" marker-end="url(#gma)"/><path d="M880 108 L956 108" class="da acc" marker-end="url(#gma)"/><path d="M1090 156 L1090 246" class="da acc" marker-end="url(#gma)"/><text x="1100" y="205" class="dl" text-anchor="start">approved</text><path d="M1090 346 C1090 390 555 380 555 416" class="da" marker-end="url(#gm)"/><path d="M1090 346 C1090 390 745 380 745 416" class="da" marker-end="url(#gm)"/><path d="M1090 346 C1090 390 935 380 935 416" class="da" marker-end="url(#gm)"/><path d="M1090 346 C1090 390 1125 380 1125 416" class="da" marker-end="url(#gm)"/></svg>
+      </div>
+    </div>
+  </section>
 
-    <!-- Claim: one solid blue block -->
-    <section class="claim" aria-labelledby="claim-title">
-      <div class="claim__inner">
-        <p class="claim__kicker">Why the role exists</p>
-        <h2 class="claim__title" id="claim-title">Most AI pilots die the same way. It is almost never the model.</h2>
-        <div class="claim__body">
-          <p>MIT put the failure rate of enterprise AI pilots near 95 percent. The teams I meet have already tried a chatbot, a copilot, or a vendor demo that looked great in the sales call and went nowhere in the building. The gap is not intelligence. It is deployment.</p>
-          <ol class="claim__list" aria-label="Five ways AI pilots fail">
-            <li>Built for the demo, not the mess</li>
-            <li>Forced a migration nobody asked for</li>
-            <li>Tuned for the happy path only</li>
-            <li>Handed off to nobody after launch</li>
-            <li>Never tied to a number</li>
-          </ol>
+  <!-- Netflix -->
+  <section class="reel stack" id="netflix" aria-labelledby="nf-h">
+    <div class="wrap">
+      <div class="reel-head">
+        <h2 id="nf-h">Netflix</h2>
+        <span class="mono">Lead Product Designer, Global Conversion · May 2020 to Feb 2025</span>
+      </div>
+      <div class="reel-body">
+        <div class="copy">
+          <div><h3>The job</h3><p>For almost five years I designed how people sign up, pick a plan and pay, across web, mobile and TV, in 190 countries, for a member base of more than 300 million.</p></div>
+          <div><h3>Paid sharing</h3><p>I designed the conversion systems behind Netflix's paid-sharing change: the flows that turned people using someone else's password into paying members, through Extra Member and Transfer Profile.</p></div>
+          <div class="stat" style="border-top:0;padding-top:0"><strong>$3B+</strong><span>Revenue tied to the monetization, acquisition and retention flows I designed.</span></div>
         </div>
       </div>
-    </section>
-
-    <!-- Method: a ledger, not cards -->
-    <section class="method" id="method" aria-labelledby="method-title">
-      <header class="ledger__head">
-        <h2 class="section-word" id="method-title">Method</h2>
-        <p class="ledger__note">One loop, run in order. Each stage gates the next. This is the part of the job that is judgment, not code.</p>
-      </header>
-      <ol class="ledger">
-        <li class="ledger__row">
-          <span class="ledger__num">1</span>
-          <h3 class="ledger__name">Discover</h3>
-          <p class="ledger__text">The documented process is fiction. I sit next to the person doing the work, pull ten to twenty real completed cases, and walk the request back until I hit the actual bottleneck.</p>
-        </li>
-        <li class="ledger__row">
-          <span class="ledger__num">2</span>
-          <h3 class="ledger__name">Triage</h3>
-          <p class="ledger__text">Every step gets one of three answers. A fixed rule becomes deterministic software. A messy judgment call goes to the model. Anything expensive to get wrong stays with a human.</p>
-        </li>
-        <li class="ledger__row">
-          <span class="ledger__num">3</span>
-          <h3 class="ledger__name">Build</h3>
-          <p class="ledger__text">The smallest scope that proves value, on top of the ERP, CRM, or spreadsheet you already run. No migration. Your team's steps stay visible so trust survives.</p>
-        </li>
-        <li class="ledger__row">
-          <span class="ledger__num">4</span>
-          <h3 class="ledger__name">Evaluate</h3>
-          <p class="ledger__text">An eval suite built from your own history. The pass rate is not the deliverable. The failure analysis is. Each failure becomes a fix, a guardrail, or a routing rule to a person.</p>
-        </li>
-        <li class="ledger__row">
-          <span class="ledger__num">5</span>
-          <h3 class="ledger__name">Deploy</h3>
-          <p class="ledger__text">Shadow mode, then suggestions, then gated actions, then autonomy. Private inference, access control, and audit logs are in the build, not bolted on later.</p>
-        </li>
-        <li class="ledger__row">
-          <span class="ledger__num">6</span>
-          <h3 class="ledger__name">Prove</h3>
-          <p class="ledger__text">Businesses measure three things: revenue, risk, cost. We define the number at scoping time and report the before and after in that language and no other.</p>
-        </li>
-        <li class="ledger__row">
-          <span class="ledger__num">7</span>
-          <h3 class="ledger__name">Scale</h3>
-          <p class="ledger__text">One proven workflow exposes the next bottleneck up or down the line. The loop runs again. That is how a single deployment compounds across a business.</p>
-        </li>
-      </ol>
-    </section>
-
-    <!-- Engagements -->
-    <section class="engagements" id="engagements" aria-labelledby="eng-title">
-      <header class="ledger__head ledger__head--dark">
-        <h2 class="section-word" id="eng-title">Engagements</h2>
-        <p class="ledger__note">Three shapes. Scope is directional and the success number is agreed before anything is built.</p>
-      </header>
-      <div class="offers">
-        <article class="offer">
-          <p class="offer__length">Two weeks</p>
-          <h3 class="offer__name">Discovery Sprint</h3>
-          <div class="offer__body">
-            <p>I shadow the work, map the real process, classify your actual cases, and hand back a triage table with the rough math that says what a deployment is worth. You leave with a funded decision, not a deck.</p>
-            <ul>
-              <li>Workflow map from the floor, not the wiki</li>
-              <li>Per-step call: software, model, or human</li>
-              <li>Baseline number and projected impact</li>
-            </ul>
-          </div>
-        </article>
-        <article class="offer offer--lead">
-          <p class="offer__length">Six to ten weeks</p>
-          <h3 class="offer__name">Deployment</h3>
-          <div class="offer__body">
-            <p>The smallest build that moves the most work. Shipped inside your systems, with an eval suite built from your history and a rollout that earns trust one autonomy step at a time.</p>
-            <ul>
-              <li>Working software in your environment</li>
-              <li>Eval report with failure analysis</li>
-              <li>Before and after in revenue, risk, or cost</li>
-            </ul>
-          </div>
-        </article>
-        <article class="offer">
-          <p class="offer__length">Ongoing</p>
-          <h3 class="offer__name">Ownership</h3>
-          <div class="offer__body">
-            <p>Production is cultural, not just technical. I stay on: monitoring, cost tracking, model changes, and the next workflow the first one exposed. There is no handoff to nobody.</p>
-            <ul>
-              <li>Monitoring, evals, and model updates</li>
-              <li>Token spend and reliability tracking</li>
-              <li>Next bottleneck scoped and run</li>
-            </ul>
-          </div>
-        </article>
+      <div class="shots nf">
+        <figure class="shot">
+          <div class="frm"><img src="img/netflix-sharing-announcement.jpg" alt="Netflix newsroom article titled Update on Sharing, May 2023" width="2612" height="1554"></div>
+          <figcaption><span>Netflix newsroom · "Update on Sharing," May 23, 2023</span><a href="https://about.netflix.com/news/update-on-sharing-may-us" target="_blank" rel="noopener">Source</a></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="frm"><img src="img/netflix-sharing-email.jpg" alt="Netflix email to members: An update on sharing between households, offering Transfer a profile and Buy an extra member" width="862" height="1872"></div>
+          <figcaption><span>The member email from the rollout</span><span>Public, via Netflix newsroom</span></figcaption>
+        </figure>
       </div>
-      <p class="engagements__fit">Best fit: a technical product meeting a non-technical team, real volume in the workflow, and an executive who owns the number. If the ask is “we're understaffed,” I will say so on the first call.</p>
-    </section>
+    </div>
+  </section>
 
-    <!-- Cases -->
-    <section class="cases" id="cases" aria-labelledby="cases-title">
-      <header class="ledger__head">
-        <h2 class="section-word" id="cases-title">Deployments</h2>
-        <p class="ledger__note">Three systems I built and run. Each one replaced a process that lived in spreadsheets, inboxes, and one person's head. Two of them run inside organizations I am part of, so the numbers are mine to stand behind.</p>
-      </header>
-
-      <article class="case">
-        <div class="case__head">
-          <h3 class="case__title">BCC Academy</h3>
-          <p class="case__meta">Cohort program platform · Beyond Code Collective · <a href="https://bccacademy.io" target="_blank" rel="noopener">bccacademy.io ↗</a></p>
-        </div>
-        <div class="case__cols">
-          <div>
-            <p class="case__label">The problem</p>
-            <p>High-touch training programs for Black Girls Code, Upskill Bahamas, Catalyst, and After The Game were running on a spreadsheet, a Google Form, a Zoom account, and a part-time coordinator. Funders asked for outcome data nobody could produce.</p>
-          </div>
-          <div>
-            <p class="case__label">What I built</p>
-            <p>One multi-tenant platform for enrollment, live sessions, attendance, certificates, and reporting. Zoom recordings import themselves. An Eventbrite ticket becomes an account and a magic link. New organizations are database rows, not deploys. An opt-in AI tutor runs per program, with row-level security, a PII audit log, and a weekly automated security check posted to Slack.</p>
-          </div>
-          <div>
-            <p class="case__label">What moved</p>
-            <p class="case__figure">66<span>/66</span></p>
-            <p>Every finished cohort to date completed at 100 percent. Five organizations live on one codebase, built in about nine weeks. It now also hosts the Forward Deploy training program for staff.</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="case">
-        <div class="case__head">
-          <h3 class="case__title">GFX1000</h3>
-          <p class="case__meta">Design and video production pipeline · BGC and BCC marketing</p>
-        </div>
-        <div class="case__cols">
-          <div>
-            <p class="case__label">The problem</p>
-            <p>Every design and video request was hand-built, and every review round meant three Slack messages per job. Reviewers were drowning and requesters had no idea where anything stood.</p>
-          </div>
-          <div>
-            <p class="case__label">What I built</p>
-            <p>A request row in Notion comes out the other end as finished, delivered assets, with one human approval in the middle. A webhook crawler on Vercel catches the row and asks for missing fields in Slack, a Claude routine plans the work, a Cloud Run studio renders it, and delivery lands in Drive, Notion, Canva, and Slack. Nobody opens a terminal. The Forward Deploy channel publishes from the same system every morning.</p>
-          </div>
-          <div>
-            <p class="case__label">What moved</p>
-            <p class="case__figure">136</p>
-            <p>Rendered videos across 35 registered projects, plus every still that came with them. One short published daily and a weekly analytics digest, unattended.</p>
-          </div>
-        </div>
-      </article>
-
-      <article class="case">
-        <div class="case__head">
-          <h3 class="case__title">PulsePro</h3>
-          <p class="case__meta">Project management for solo operators, plus an ad engine · <a href="https://pulsepro.work" target="_blank" rel="noopener">pulsepro.work ↗</a></p>
-        </div>
-        <div class="case__cols">
-          <div>
-            <p class="case__label">The problem</p>
-            <p>Freelancers and consultants with five clients were paying for tools designed for five hundred employees, and spending more time maintaining the tracker than doing client work. Their Shopify stores also needed fresh ad creative every week with nobody to make it.</p>
-          </div>
-          <div>
-            <p class="case__label">What I built</p>
-            <p>PulsePro.work: projects, tasks, clients, billing through Polar, daily reminders over Telegram, and Claude-generated insights on the dashboard. Beside it, the Ad Engine: it reads a store's Shopify and Meta Ads data, has Claude write five Instagram video ad scripts a week, renders them with HeyGen, and hands back a performance report.</p>
-          </div>
-          <div>
-            <p class="case__label">What moved</p>
-            <p class="case__figure">5<span> ads / week</span></p>
-            <p>End to end in under thirty minutes of machine time, at fifty to one hundred fifty dollars a month in marginal cost per client. The creative problem disappears from the owner's week.</p>
-          </div>
-        </div>
-      </article>
-    </section>
-
-    <!-- Videos -->
-    <section class="videos" id="videos" aria-labelledby="videos-title">
-      <header class="videos__head">
-        <h2 class="section-word section-word--split" id="videos-title"><span>Forward</span> <span>Deploy</span></h2>
-        <div class="videos__about">
-          <p>The method, explained in public. A YouTube channel on how Forward Deployed Engineering actually works: discovery mistakes, the triage judgment, evals, the trust curve after launch. Long-form breakdowns plus a 40-second short every day.</p>
-          <p class="videos__links">
-            <a href="https://www.youtube.com/@ForwardDeploy?sub_confirmation=1" target="_blank" rel="noopener me">Subscribe on YouTube ↗</a>
-            <a href="https://www.youtube.com/playlist?list=PLQedN6LjbrkI" target="_blank" rel="noopener">The FDE Roadmap playlist ↗</a>
-            <a href="https://forwarddeploy.fonz.sh" target="_blank" rel="noopener">Free 30-day roadmap ↗</a>
-          </p>
-        </div>
-      </header>
-
-      <a class="feature" href="https://www.youtube.com/watch?v=MsInogHuFGk" data-video="MsInogHuFGk" target="_blank" rel="noopener">
-        <span class="feature__frame">
-          <img src="https://i.ytimg.com/vi/MsInogHuFGk/maxresdefault.jpg" onerror="this.onerror=null;this.src='https://i.ytimg.com/vi/MsInogHuFGk/hqdefault.jpg'" alt="Poster frame: 95 percent of AI pilots fail, from the video What a Forward Deployed Engineer Does for Your Business" loading="lazy" width="1280" height="720">
-        </span>
-        <span class="feature__caption">
-          <span class="feature__label">Start here · 2 min</span>
-          <span class="feature__title">What a Forward Deployed Engineer does for your business</span>
-          <span class="feature__play">Play ↗</span>
-        </span>
-      </a>
-
-      <table class="index">
-        <thead>
-          <tr><th scope="col">No.</th><th scope="col">Title</th><th scope="col">Format</th><th scope="col">Length</th><th scope="col"><span class="visually-hidden">Open</span></th></tr>
-        </thead>
-        <tbody>
-          <tr><td>02</td><td><a href="https://www.youtube.com/watch?v=7EoQ6i5gv4I" target="_blank" rel="noopener">The Sommelier's Job: What a Forward Deployed Engineer Actually Is</a></td><td>Long-form</td><td>4:57</td><td>↗</td></tr>
-          <tr><td>03</td><td><a href="https://www.youtube.com/watch?v=5x0isKiD914" target="_blank" rel="noopener">The $10M Autopsy: Why 95% of AI Pilots Fail</a></td><td>Long-form</td><td>8:11</td><td>↗</td></tr>
-          <tr><td>04</td><td><a href="https://www.youtube.com/watch?v=4pz2_TnQocI" target="_blank" rel="noopener">5 Steps to Become a Forward Deployed Engineer</a></td><td>Explainer</td><td>0:58</td><td>↗</td></tr>
-          <tr><td>05</td><td><a href="https://www.youtube.com/shorts/Cph_EkN45UE" target="_blank" rel="noopener">Why 95% of AI Rollouts Flop: The Sommelier Rule</a></td><td>Short</td><td>0:40</td><td>↗</td></tr>
-          <tr><td>06</td><td><a href="https://www.youtube.com/shorts/iIcmeVuUTv8" target="_blank" rel="noopener">Anthropic Promised Thousands of AI Engineers. Only 86 Exist.</a></td><td>Short</td><td>0:40</td><td>↗</td></tr>
-          <tr><td>07</td><td><a href="https://www.youtube.com/shorts/wrALMU-bxT4" target="_blank" rel="noopener">Your AI Agent Is Worthless. Here's the 1,000 Ways It Breaks.</a></td><td>Short</td><td>0:40</td><td>↗</td></tr>
-          <tr><td>08</td><td><a href="https://www.youtube.com/shorts/VCWGaKF3tUs" target="_blank" rel="noopener">5 Job Titles That Are Secretly the Same $280K AI Job</a></td><td>Short</td><td>0:40</td><td>↗</td></tr>
-          <tr><td>09</td><td><a href="https://www.youtube.com/shorts/TnQBhVXVYQc" target="_blank" rel="noopener">Stop Being “Model Agnostic”</a></td><td>Short</td><td>0:40</td><td>↗</td></tr>
-          <tr><td>10</td><td><a href="https://www.youtube.com/shorts/jqSyCAEnQ6A" target="_blank" rel="noopener">Every AI Demo Works. 95% of Deployments Fail.</a></td><td>Short</td><td>0:40</td><td>↗</td></tr>
-        </tbody>
-      </table>
-      <p class="videos__also">Also on <a href="https://www.tiktok.com/@forwarddeploy" target="_blank" rel="noopener">TikTok</a> and <a href="https://www.instagram.com/fwddeploy" target="_blank" rel="noopener">Instagram</a>.</p>
-    </section>
-
-    <!-- Work -->
-    <section class="work" id="work" aria-labelledby="work-title">
-      <header class="ledger__head">
-        <h2 class="section-word" id="work-title">Shipped</h2>
-        <p class="ledger__note">A Forward Deployed Engineer has to ship. This list is pulled live from GitHub: AI tools, ad-ops automation, marketplaces, learning platforms, and voice agents taken from idea to production.</p>
-      </header>
-      <div class="repos" id="projects-grid" data-gh-user="youngfonz">
-        <p class="repos__status" id="projects-status">Loading from GitHub…</p>
+  <!-- PulsePro -->
+  <section class="reel stack" id="pulse" aria-labelledby="pp-h">
+    <div class="wrap">
+      <div class="reel-head">
+        <h2 id="pp-h">PulsePro</h2>
+        <span class="mono">Project management for solo operators + Ad Engine · FNZMS</span>
       </div>
-    </section>
-
-    <!-- About -->
-    <section class="about" id="about" aria-labelledby="about-title">
-      <h2 class="about__name" id="about-title"><span>Fonz</span><span>Morris</span></h2>
-      <div class="about__body">
-        <p>For nearly five years I was Lead Product Designer for Global Conversion at Netflix: the team responsible for how hundreds of millions of people sign up, pick a plan, and pay across 190 countries. I architected the conversion systems behind the password-sharing crackdown, which turned tens of millions of sharers into paying subscribers and drove billions in new revenue.</p>
-        <p>Before Netflix I led Growth Design at Coursera. I have founded three companies, invest as an LP, hold an MBA from Quantic, and studied at Stanford and Morehouse. Today I do the job the market is finally naming: embed with a business, decide where intelligence belongs in its workflows, build it, own the result.</p>
-        <dl class="about__facts">
-          <div><dt>Netflix</dt><dd>Lead Product Designer, Global Conversion</dd></div>
-          <div><dt>Coursera</dt><dd>Growth Design Lead</dd></div>
-          <div><dt>Education</dt><dd>MBA, Quantic. Stanford. Morehouse.</dd></div>
-          <div><dt>Based</dt><dd>United States. Remote and on-site.</dd></div>
-          <div><dt>Stack</dt><dd>Claude, Python, TypeScript, Vercel, AWS, and whatever you already run.</dd></div>
-          <div><dt>Strategy work</dt><dd><a href="https://fonzmorris.com" rel="me">fonzmorris.com</a></dd></div>
-          <div><dt>Code</dt><dd><a href="https://github.com/youngfonz" target="_blank" rel="noopener me">github.com/youngfonz</a></dd></div>
-        </dl>
+      <div class="reel-body">
+        <div class="copy">
+          <div><h3>The problem</h3><p>Freelancers and consultants with five clients were paying for tools built for five hundred employees, and spent more time maintaining the tracker than doing client work. Their stores also needed fresh ad creative every week.</p></div>
+          <div><h3>What I built</h3><p>Projects, tasks, clients and invoicing, billing through Polar, daily reminders over Telegram, voice capture and Claude-written insights on the dashboard. Beside it, an Ad Engine that makes a store's weekly ads.</p></div>
+          <div class="stat" style="border-top:0;padding-top:0"><strong>5 ads / wk</strong><span>Per store, end to end in under thirty minutes of machine time.</span></div>
+          <div class="tags full"><span>Claude</span><span>Vercel AI SDK</span><span>TypeScript</span><span>Polar</span><span>Telegram</span><span>Shopify · Meta Ads</span><span>HeyGen</span></div>
+        </div>
       </div>
-    </section>
+      <div class="shots">
+        <figure class="shot wide">
+          <div class="frm"><img src="img/pulsepro-dashboard.jpg" alt="PulsePro dashboard on desktop and phone: activity rings, tasks due today, project health" width="2220" height="1024"></div>
+          <figcaption><span>Dashboard · desktop + mobile</span><span>pulsepro.work, sample data</span></figcaption>
+        </figure>
+        <figure class="shot wide">
+          <div class="frm"><img src="img/pulsepro-projects-invoices.jpg" alt="PulsePro projects board with health status and a phone showing invoices" width="2220" height="900"></div>
+          <figcaption><span>Projects + invoices</span><span>sample data</span></figcaption>
+        </figure>
+      </div>
+      <div class="diagram">
+        <div class="dhead"><span>Ad Engine · weekly</span><span>Automated</span></div>
+        <svg viewBox="0 0 1240 190" role="img" aria-label="PulsePro Ad Engine: Shopify and Meta Ads data go to Claude, which writes five scripts, HeyGen renders them, and a performance report comes back"><defs><marker id="pm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah"/></marker><marker id="pma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah acc"/></marker></defs><rect x="20" y="40" width="260" height="100" rx="10" class="dn"/><text x="36" y="70" class="dt">Store data</text><text x="36" y="92" class="ds">Shopify + Meta Ads</text><rect x="340" y="40" width="260" height="100" rx="10" class="dn k"/><text x="356" y="70" class="dt on">Claude</text><text x="356" y="92" class="ds on">writes 5 Instagram</text><text x="356" y="109" class="ds on">video ad scripts</text><rect x="660" y="40" width="260" height="100" rx="10" class="dn"/><text x="676" y="70" class="dt">HeyGen</text><text x="676" y="92" class="ds">renders the videos</text><rect x="980" y="40" width="240" height="100" rx="10" class="dn h"/><text x="996" y="70" class="dt">Report</text><text x="996" y="92" class="ds">performance back</text><text x="996" y="109" class="ds">to the owner</text><path d="M280 90 L336 90" class="da" marker-end="url(#pm)"/><path d="M600 90 L656 90" class="da acc" marker-end="url(#pma)"/><path d="M920 90 L976 90" class="da" marker-end="url(#pm)"/><text x="620" y="175" class="dl" text-anchor="middle">every week · under 30 min of machine time · $50 to $150 a month per client</text></svg>
+      </div>
+      <p style="margin-top:20px"><a class="ext" href="https://pulsepro.work" target="_blank" rel="noopener">pulsepro.work</a></p>
+    </div>
+  </section>
 
-    <!-- Contact -->
-    <section class="contact" id="contact" aria-labelledby="contact-title">
-      <p class="contact__lead">Have a workflow that leaks money? Describe the process, who does it, and roughly how often. I will tell you within a day whether a forward deployment fits and what the first two weeks would look like.</p>
-      <h2 class="contact__title" id="contact-title">Send me<br>an email</h2>
-      <a class="contact__mail" href="mailto:hello@fonz.sh?subject=Forward%20deployment%20for%20our%20team">hello@fonz.sh</a>
-    </section>
+  <!-- Supernova -->
+  <section class="reel stack" id="supernova" aria-labelledby="sn-h">
+    <div class="wrap">
+      <div class="reel-head">
+        <h2 id="sn-h">Supernova</h2>
+        <span class="mono">Black Girls Code × YouTube Playables · Oct 2026</span>
+      </div>
+      <div class="reel-body">
+        <div class="copy">
+          <div><h3>The game</h3><p>Nova's band canceled, and the Black Girls Code Block Party is tonight. Players audition musicians on keys, guitar and 808, build her a new band, and unlock the full chorus before showtime.</p></div>
+          <div><h3>What I did</h3><p>Led the product from concept to launch inside YouTube. An AI sidekick, Echo, guides players through how a song comes together. It's free to play in the YouTube app and on the web, with no download.</p></div>
+          <div class="stat" style="border-top:0;padding-top:0"><strong>8K+</strong><span>Plays since launch. Built in partnership with YouTube for its learning Playables lineup, alongside Khan Academy, TED-Ed and Veritasium.</span></div>
+        </div>
+      </div>
+      <div class="partner">
+        <figure class="shot">
+          <div class="frm"><img src="img/youtube-blog-playables.jpg" alt="YouTube Official Blog post: Puzzles, Beats, and Trivia: Dive into new Playables on YouTube, Oct 28, 2026, with the Playables logo" width="2612" height="1554"></div>
+          <figcaption><span>YouTube Official Blog · Oct 28, 2026</span><a href="https://blog.youtube/news-and-events/puzzles-beats-trivia-new-youtube-playables/" target="_blank" rel="noopener">Source</a></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="frm"><img src="img/youtube-blog-partners.jpg" alt="Blog excerpt: YouTube teamed up with Black Girls Code, The Jed Foundation, Khan Academy, Math with Mr. J, TED-Ed and Veritasium; SuperNova by Black Girls Code" width="1510" height="540"></div>
+          <figcaption><span>The partner lineup, from the same post</span></figcaption>
+          <div class="frm" style="margin-top:16px"><img src="img/supernova-on-youtube.jpg" alt="Supernova live on YouTube Playables, published by Black Girls Code" width="885" height="760"></div>
+          <figcaption><span>Live on YouTube</span><span>Screenshot, Nov 2026</span></figcaption>
+        </figure>
+      </div>
+      <div class="shots">
+        <figure class="shot wide">
+          <div class="frm"><img src="img/supernova-art.jpg" alt="Supernova launch art: Her band canceled. The block party is tonight. Two illustrated musicians with a bass and a keytar" width="2612" height="1554"></div>
+          <figcaption><span>Launch page on wearebgc.org</span><span>Screenshot, Nov 2026</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="frm"><img src="img/supernova-title.jpg" alt="Supernova title screen on YouTube Playables with band silhouettes and a Play button" width="816" height="757"></div>
+          <figcaption><span>Title screen</span><span>YouTube Playables</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="frm"><img src="img/supernova-auditions.jpg" alt="Supernova auditions: two musicians on stage, Echo says add two more artists to unlock a full chorus" width="842" height="729"></div>
+          <figcaption><span>Auditions · building the band</span><span>Gameplay</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="frm"><img src="img/supernova-intro.jpg" alt="Supernova story intro: Echo the robot says the Black Girls Code Block Party is tonight" width="842" height="729"></div>
+          <figcaption><span>Story intro with Echo</span><span>Gameplay</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="frm"><img src="img/supernova-tutorial.jpg" alt="Supernova drag-and-drop tutorial card: it's audition time, try out the musicians and build your band" width="842" height="729"></div>
+          <figcaption><span>Onboarding · drag and drop</span><span>Gameplay</span></figcaption>
+        </figure>
+      </div>
+      <p style="margin-top:20px"><a class="ext" href="https://www.youtube.com/playables/UgkxshdYxwEgrbzYxFbYOMIa9uzU3qpzcBKm" target="_blank" rel="noopener">Play Supernova on YouTube</a></p>
+    </div>
+  </section>
 
-  </main>
+  <!-- Aero -->
+  <section class="reel stack" id="aero" aria-labelledby="aero-h">
+    <div class="wrap">
+      <div class="reel-head">
+        <h2 id="aero-h">Aero</h2>
+        <span class="mono">Live flight tracker + browser flight sim · personal build</span>
+      </div>
+      <div class="reel-body">
+        <div class="copy">
+          <div><h3>The tracker</h3><p>A live arrivals board for San José, Van Nuys and Teterboro. Every plane in the air on one map, a landing log with flight, origin, airline, aircraft and tail number, and any tail number looked up on demand.</p></div>
+          <div><h3>The flight sim</h3><p>A flight school that runs in the browser, set at SJC. Pick a Cessna 172, an Embraer 175 or a Gulfstream G550, then take a 19-step guided lesson, practice landings or fly free. An instructor and the tower talk you through it out loud.</p></div>
+          <div class="stat" style="border-top:0;padding-top:0"><strong>266</strong><span>Landings logged at SJC on Monday, Nov 2. The log has run every day since Sep 28.</span></div>
+          <div class="tags full"><span>Next.js</span><span>TypeScript</span><span>Leaflet</span><span>ADS-B · adsb.lol + adsbdb</span><span>3D in the browser</span><span>Spoken ATC</span></div>
+        </div>
+      </div>
+      <div class="shots">
+        <figure class="shot wide">
+          <div class="frm"><img src="img/aero-tracker.jpg" alt="SJC Arrivals: dark map of the Bay Area with live aircraft, 266 landed on Monday November 2, and a landing log of flights from Chicago, Portland and Dallas" width="2644" height="1554"></div>
+          <figcaption><span>SJC arrivals · live map + landing log</span><span>aero.fonz.sh, Nov 2026</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="frm"><img src="img/aero-sim-flight.jpg" alt="Flight sim chase view: a Cessna over a gridded city, lesson step 14 of 19 Turn base, instructor caption and a full instrument panel" width="1420" height="840"></div>
+          <figcaption><span>Landing practice · lesson step 14 of 19</span><span>aero.fonz.sh/sim</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="frm"><img src="img/aero-sim-school.jpg" alt="Flight school menu: pick a Cessna 172, Embraer 175 or Gulfstream G550, then a guided lesson, landing practice, controls tour or free flight" width="2644" height="1554"></div>
+          <figcaption><span>Flight school · pick a plane, pick a mode</span><span>aero.fonz.sh/sim</span></figcaption>
+        </figure>
+      </div>
+      <p style="margin-top:20px"><a class="ext" href="https://aero.fonz.sh" target="_blank" rel="noopener">aero.fonz.sh</a></p>
+    </div>
+  </section>
 
-  <footer class="colophon">
-    <span>© 2026 Fonz Morris</span>
-    <span class="colophon__links">
-      <a href="/forward-deployed-engineer">What is a Forward Deployed Engineer?</a>
-      <a href="/hire-a-forward-deployed-engineer">How to hire one</a>
-      <a href="https://www.youtube.com/@ForwardDeploy" target="_blank" rel="noopener me">YouTube</a>
-      <a href="https://www.linkedin.com/in/fonzmorris" target="_blank" rel="noopener me">LinkedIn</a>
-      <a href="https://github.com/youngfonz" target="_blank" rel="noopener me">GitHub</a>
-      <a href="https://x.com/youngfonz" target="_blank" rel="noopener me">X</a>
-    </span>
-    <span>fonz.sh</span>
+  <!-- Show Up -->
+  <section class="reel stack" id="showup" aria-labelledby="su-h">
+    <div class="wrap">
+      <div class="reel-head">
+        <h2 id="su-h">Show Up</h2>
+        <span class="mono">Workout habit app · personal build</span>
+      </div>
+      <div class="reel-body">
+        <div class="copy">
+          <div><h3>The idea</h3><p>One rule: show up today. Show Up hands you the plan for the week you're in, keeps the streak, runs a 28-day challenge, times your daily holds and plays a guided stretch with video for every move.</p></div>
+          <div><h3>How it works</h3><p>No account needed. Your data lives on the device, with export and import. Sign in with an emailed code to back it up and pick it up on any device.</p></div>
+          <div class="tags full"><span>Next.js</span><span>TypeScript</span><span>Supabase</span><span>Email-code sign-in</span><span>Offline first</span></div>
+        </div>
+      </div>
+      <div class="shots phones">
+        <figure class="shot">
+          <div class="frm"><img src="img/showup-today.jpg" alt="Show Up Today screen: day streak, week strip, and a Walk day card for week 3 with a Start stretch button" width="840" height="1451"></div>
+          <figcaption><span>Today</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="frm"><img src="img/showup-stretch.jpg" alt="Show Up guided stretch: World's Greatest Stretch, 5 reps per side, three cues and a Done button" width="840" height="1451"></div>
+          <figcaption><span>Guided stretch</span></figcaption>
+        </figure>
+        <figure class="shot">
+          <div class="frm"><img src="img/showup-progress.jpg" alt="Show Up Progress screen: days trained, minutes, best streak, and a 28-day challenge grid" width="840" height="1451"></div>
+          <figcaption><span>Progress · 28-day challenge</span></figcaption>
+        </figure>
+      </div>
+      <p style="margin-top:20px"><a class="ext" href="https://showup.fonz.sh/classic" target="_blank" rel="noopener">showup.fonz.sh</a></p>
+    </div>
+  </section>
+
+  <!-- Cadence -->
+  <section class="reel" id="cadence" aria-labelledby="cd-h">
+    <div class="wrap">
+      <div class="reel-head">
+        <h2 id="cd-h">Cadence</h2>
+        <span class="mono">Speaking tutor · Spanish · Mandarin · Arabic</span>
+      </div>
+      <div class="reel-body">
+        <div class="copy">
+          <div><h3>What it is</h3><p>A private speaking tutor for three languages: Spanish, Mandarin and Arabic. You talk, and a live avatar face with a real voice talks back.</p></div>
+          <div class="stat" style="border-top:0;padding-top:0"><strong>3</strong><span>Languages, three scripts: Latin, Chinese characters and Arabic, written right to left.</span></div>
+          <div class="tags"><span>Next.js</span><span>Vercel AI SDK</span><span>Simli avatars</span><span>pinyin-pro</span><span>libSQL</span><span>Vercel Blob</span></div>
+        </div>
+        <div class="greet" aria-label="Cadence teaches Spanish, Mandarin and Arabic">
+          <p class="w">cadence</p>
+          <ul class="langs">
+            <li><span class="ln">Spanish</span><span class="hi" lang="es">¡Hola!</span><span class="rm">hello</span></li>
+            <li><span class="ln">Mandarin</span><span class="hi" lang="zh">你好</span><span class="rm">nǐ hǎo · hello</span></li>
+            <li><span class="ln">Arabic</span><span class="hi" lang="ar" dir="rtl">أهلاً</span><span class="rm">ahlan · welcome</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- More -->
+  <section class="reel" id="more" aria-labelledby="more-h">
+    <div class="wrap">
+      <div class="reel-head">
+        <h2 id="more-h">Before this</h2>
+      </div>
+      <div class="list">
+        <div>
+          <h3>Earlier work</h3>
+          <ul>
+            <li><span>Coursera · Growth Design Lead</span><span>2018 to 2020 · scaled to 20M+ learners</span></li>
+            <li><span>Mychannel · Co-founder, Head of Design</span><span>2016 to 2018 · AI video sentiment</span></li>
+            <li><span>FNZMS · Founder</span><span>2019 to now · AI product consulting</span></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Talks</h3>
+          <ul>
+            <li><span>LEAP2025, Riyadh</span><span>Keynote</span></li>
+            <li><span>NUS AIDF</span><span>Talk</span></li>
+            <li><span>Afrotech</span><span>Talk</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot" id="contact">
+    <div class="wrap">
+      <h2>Let's build the next one.</h2>
+      <div class="contact">
+        <span class="email" id="email">hello@fonzmorris.com</span>
+        <button class="copybtn" id="copy" type="button">Copy email</button>
+      </div>
+      <div class="links mono">
+        <a href="https://www.linkedin.com/in/fonzmorris" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/youngfonz" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://bccacademy.io" target="_blank" rel="noopener">BCC Academy</a>
+        <a href="https://pulsepro.work" target="_blank" rel="noopener">PulsePro</a>
+      </div>
+    </div>
   </footer>
+</main>
 
-  <script src="js/main.js" defer></script>
+<script>
+(function(){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Copy email
+  var btn=document.getElementById('copy'), em=document.getElementById('email');
+  btn.addEventListener('click',function(){
+    var done=function(){btn.textContent='Copied';setTimeout(function(){btn.textContent='Copy email'},1600)};
+    try{navigator.clipboard.writeText(em.textContent).then(done,function(){selectEmail()})}catch(e){selectEmail()}
+    function selectEmail(){var r=document.createRange();r.selectNodeContents(em);var s=getSelection();s.removeAllRanges();s.addRange(r);btn.textContent='Selected, press copy'}
+  });
+
+  if(reduce) return;
+
+  // AI tutor chat: reveal lines one by one, then loop
+  var chat=document.getElementById('chat');
+  if(chat){
+    var items=[].slice.call(chat.children), i=0;
+    chat.classList.add('cycle');
+    function tick(){
+      if(i<items.length){items[i].classList.add('on');i++;setTimeout(tick,i===items.length?3200:900)}
+      else{items.forEach(function(n){n.classList.remove('on')});i=0;setTimeout(tick,500)}
+    }
+    tick();
+  }
+
+  // GFX pipeline: walk the active node down the list
+  var pipe=document.getElementById('pipe');
+  if(pipe){
+    var nodes=[].slice.call(pipe.children), k=0;
+    var labels=['received','asked','planned','approved','rendered','delivered'];
+    setInterval(function(){
+      nodes.forEach(function(n,j){
+        n.classList.toggle('active',j===k);
+        var st=n.querySelector('.st');
+        st.textContent = j<k ? labels[j] : (j===k ? 'running' : 'waiting');
+      });
+      k=(k+1)%(nodes.length+1);
+    },1100);
+  }
+
+  // Conversion flow: highlight steps in order
+  var flow=document.getElementById('flow');
+  if(flow){
+    var steps=[].slice.call(flow.querySelectorAll('.step')), s=0;
+    setInterval(function(){steps.forEach(function(n,j){n.classList.toggle('live',j===s)});s=(s+1)%steps.length},1400);
+  }
+})();
+</script>
+
 </body>
 </html>
