@@ -89,13 +89,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-off
 /* contact sheet */
 .sheet{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:10px;margin-top:40px}
 @media (max-width:1100px){.sheet{grid-template-columns:repeat(5,minmax(0,1fr))}}
+@media (min-width:1101px) and (max-width:1400px){.tcd{display:none}}
 .frame{display:block;text-decoration:none;background:var(--screen);color:var(--screen-fg);border-radius:6px;aspect-ratio:4/5;position:relative;overflow:hidden;max-width:100%}
 .frame .tc{position:absolute;left:10px;right:8px;bottom:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:var(--mono);font-size:var(--fs-micro);letter-spacing:.08em;color:var(--screen-dim)}
 .frame .nm{position:absolute;left:10px;right:8px;top:9px;font-family:var(--display);font-weight:700;font-size:15px;line-height:1.1}
 .frame:hover{outline:2px solid var(--accent)}
 .frame:nth-child(1){animation:rise .7s .05s both}.frame:nth-child(2){animation:rise .7s .15s both}.frame:nth-child(3){animation:rise .7s .25s both}.frame:nth-child(4){animation:rise .7s .35s both}.frame:nth-child(5){animation:rise .7s .45s both}.frame:nth-child(6){animation:rise .7s .55s both}.frame:nth-child(7){animation:rise .7s .65s both}.frame:nth-child(8){animation:rise .7s .75s both}.frame:nth-child(9){animation:rise .7s .85s both}
 @keyframes rise{from{transform:translateY(14px)}to{transform:none}}
-@media (max-width:820px){.sheet{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:820px){.sheet{grid-template-columns:repeat(3,minmax(0,1fr))}.tcd{display:none}}
 
 /* mini art inside frames */
 .mini{position:absolute;inset:34px 10px 26px}
@@ -383,15 +384,15 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
     </div>
 
     <div class="sheet" aria-label="Projects">
-      <a class="frame photo" href="#lxp" style="background-image:url(img/bcc-academy-home.jpg)"><span class="nm">BCC Academy</span><span class="tc">01 · LXP</span></a>
-      <a class="frame photo" href="#netflix" style="background-image:url(img/netflix-sharing-announcement.jpg);background-position:center"><span class="nm">Netflix</span><span class="tc">02 · CONVERSION</span></a>
-      <a class="frame" href="#gfx"><span class="nm">GFX1000</span><div class="mini mini-pipe"><span></span><span></span><span></span><span></span><span></span></div><span class="tc">03 · PIPELINE</span></a>
-      <a class="frame photo" href="#pulse" style="background-image:url(img/pulsepro-dashboard.jpg)"><span class="nm">PulsePro</span><span class="tc">04 · SOLO OPS</span></a>
-      <a class="frame photo" href="#fde" style="background-image:url(img/gfx-banner.jpg);background-position:center"><span class="nm">Forward Deploy</span><span class="tc">05 · CHANNEL</span></a>
-      <a class="frame photo" href="#supernova" style="background-image:url(img/supernova-title.jpg);background-position:center"><span class="nm">Supernova</span><span class="tc">06 · PLAYABLE</span></a>
-      <a class="frame photo" href="#aero" style="background-image:url(img/aero-live.jpg);background-position:center"><span class="nm">Aero</span><span class="tc">07 · FLIGHT</span></a>
-      <a class="frame photo" href="#showup" style="background-image:url(img/showup-hero.jpg);background-position:center"><span class="nm">Show Up</span><span class="tc">08 · FITNESS</span></a>
-      <a class="frame" href="#cadence"><span class="nm">Cadence</span><div class="mini mini-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="tc">09 · LANGUAGE</span></a>
+      <a class="frame photo" href="#lxp" style="background-image:url(img/bcc-academy-home.jpg)"><span class="nm">BCC Academy</span><span class="tc">01<span class="tcd"> · LXP</span></span></a>
+      <a class="frame photo" href="#netflix" style="background-image:url(img/netflix-sharing-announcement.jpg);background-position:center"><span class="nm">Netflix</span><span class="tc">02<span class="tcd"> · CONVERSION</span></span></a>
+      <a class="frame" href="#gfx"><span class="nm">GFX1000</span><div class="mini mini-pipe"><span></span><span></span><span></span><span></span><span></span></div><span class="tc">03<span class="tcd"> · PIPELINE</span></span></a>
+      <a class="frame photo" href="#pulse" style="background-image:url(img/pulsepro-dashboard.jpg)"><span class="nm">PulsePro</span><span class="tc">04<span class="tcd"> · SOLO OPS</span></span></a>
+      <a class="frame photo" href="#fde" style="background-image:url(img/gfx-banner.jpg);background-position:center"><span class="nm">Forward Deploy</span><span class="tc">05<span class="tcd"> · CHANNEL</span></span></a>
+      <a class="frame photo" href="#supernova" style="background-image:url(img/supernova-title.jpg);background-position:center"><span class="nm">Supernova</span><span class="tc">06<span class="tcd"> · PLAYABLE</span></span></a>
+      <a class="frame photo" href="#aero" style="background-image:url(img/aero-live.jpg);background-position:center"><span class="nm">Aero</span><span class="tc">07<span class="tcd"> · FLIGHT</span></span></a>
+      <a class="frame photo" href="#showup" style="background-image:url(img/showup-hero.jpg);background-position:center"><span class="nm">Show Up</span><span class="tc">08<span class="tcd"> · FITNESS</span></span></a>
+      <a class="frame" href="#cadence"><span class="nm">Cadence</span><div class="mini mini-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="tc">09<span class="tcd"> · LANGUAGE</span></span></a>
     </div><span class="tc">REEL C · PIPELINE</span></a>
       <a class="frame photo" href="#pulse" style="background-image:url(img/pulsepro-dashboard.jpg)"><span class="nm">PulsePro</span><span class="tc">REEL D · SOLO OPS</span></a>
       <a class="frame photo" href="#supernova" style="background-image:url(img/supernova-title.jpg);background-position:center"><span class="nm">Supernova</span><span class="tc">REEL E · YOUTUBE PLAYABLE</span></a>
