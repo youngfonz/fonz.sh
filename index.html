@@ -14,11 +14,11 @@
 <meta property="og:title" content="Fonz Morris · I design it. Then I ship it.">
 <meta property="og:description" content="Product design and AI builds: BCC Academy, GFX1000, Netflix, PulsePro, Supernova, Aero, Show Up, Cadence.">
 <meta property="og:url" content="https://www.fonz.sh/">
-<meta property="og:image" content="https://www.fonz.sh/img/bcc-academy-home.jpg">
+<meta property="og:image" content="https://www.fonz.sh/img/showup-hero.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@youngfonz">
 <meta name="twitter:title" content="Fonz Morris · I design it. Then I ship it.">
-<meta name="twitter:image" content="https://www.fonz.sh/img/bcc-academy-home.jpg">
+<meta name="twitter:image" content="https://www.fonz.sh/img/showup-hero.jpg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230E0E10'/><path d='M18 14h28v9H28v7h15v9H28v11H18z' fill='%236B3BFF'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -332,6 +332,34 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
 .langs .ln{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:#9C80FF}
 .langs .hi{grid-row:span 2;font-family:var(--display);font-weight:800;font-size:clamp(34px,4.6vw,58px);line-height:1;color:var(--screen-fg)}
 .langs .rm{font-family:var(--mono);font-size:12px;color:#A9A6B2}
+.strip-wrap{margin-top:40px;--sh:clamp(240px,40vw,500px)}
+.strip-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.strip-head .mono{color:var(--ink-2);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.strip-ctl{display:flex;gap:8px}
+.sbtn{width:42px;height:42px;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--ink);display:grid;place-items:center;cursor:pointer;transition:background .2s,border-color .2s,opacity .2s}
+.sbtn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.sbtn:hover{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.sbtn:disabled{opacity:.3;cursor:default;background:transparent;border-color:var(--rule);color:var(--ink)}
+.sbtn:focus-visible,.sf .frm:focus-visible,.strip:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.strip{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:0;padding-bottom:14px;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;cursor:grab}
+.strip.dragging{cursor:grabbing;scroll-snap-type:none}
+.strip::-webkit-scrollbar{height:6px}.strip::-webkit-scrollbar-thumb{background:var(--accent);border-radius:9px}
+.sf{flex:0 0 auto;margin:0;scroll-snap-align:start;max-width:min(92vw,1100px)}
+.sf .frm{display:block;height:var(--sh);padding:8px;border:0;background:var(--screen);border-radius:14px;cursor:zoom-in;box-shadow:0 24px 50px -30px rgba(0,0,0,.5);transition:transform .35s cubic-bezier(.16,1,.3,1)}
+.sf .frm:hover{transform:translateY(-4px)}
+.sf img{display:block;height:100%;width:auto;max-width:100%;object-fit:contain;border-radius:7px;user-select:none;-webkit-user-drag:none}
+.sf figcaption{width:0;min-width:100%;flex-wrap:wrap;margin-top:10px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-2);display:flex;justify-content:space-between;gap:12px;max-width:100%}
+.sf figcaption a{color:var(--accent);text-decoration:none}
+.shot.showcase{margin-top:40px}.shot.showcase .frm{padding:0;background:none;box-shadow:0 40px 80px -40px rgba(20,40,160,.6);border-radius:16px;overflow:hidden}.shot.showcase img{border-radius:16px}
+.lb{border:0;padding:0;background:transparent;max-width:none;max-height:none;width:100vw;height:100dvh;color:#F4F1EC}
+.lb::backdrop{background:rgba(8,8,10,.92);backdrop-filter:blur(6px)}
+.lb[open]{display:grid;grid-template-rows:1fr auto;place-items:center}
+.lb img{max-width:min(94vw,1800px);max-height:calc(100dvh - 120px);width:auto;height:auto;border-radius:8px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.lb-bar{display:flex;align-items:center;gap:14px;padding:14px 16px 22px;font-family:var(--mono);font-size:12px;letter-spacing:.05em}
+.lb-bar .sbtn{color:#F4F1EC;border-color:rgba(255,255,255,.25)}
+.lb-cap{min-width:0;max-width:60vw;text-align:center;opacity:.85}
+.lb-x{position:fixed;top:16px;right:16px}
+@media (max-width:640px){.strip-wrap{--sh:clamp(220px,70vw,360px)}.sf.tall .frm{height:calc(var(--sh)*1.25)}.lb-cap{max-width:50vw}}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -383,6 +411,49 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
           <figcaption><span>bccacademy.io · live home + magic-link sign-in</span><span>Screenshot, Nov 2026</span></figcaption>
         </figure>
       </div>
+      <div class="strip-wrap" data-strip>
+        <div class="strip-head">
+          <span class="mono">BCC Academy screens · <span data-pos>1</span> / 8</span>
+          <div class="strip-ctl">
+            <button type="button" class="sbtn" data-prev aria-label="Previous screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button type="button" class="sbtn" data-next aria-label="Next screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="strip" tabindex="0" role="region" aria-label="BCC Academy screens">
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: New course from a link, about 30 seconds"><img src="img/lxp-reel.jpg" alt="New course from a link: paste a URL and the course is built" width="1600" height="900" decoding="async"></button>
+            <figcaption><span>New course from a link, about 30 seconds</span><span>LXP admin</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: AI drafts the program from a description"><img src="img/bcc-new-course.jpg" alt="New Course screen: describe the program and AI drafts the full course" width="1200" height="587" decoding="async"></button>
+            <figcaption><span>AI drafts the program from a description</span><span>LXP admin</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Every course, every program, one admin"><img src="img/bcc-courses.jpg" alt="Courses list across Catalyst, Beyond the Game and more programs" width="1200" height="750" loading="lazy" decoding="async"></button>
+            <figcaption><span>Every course, every program, one admin</span><span>LXP admin</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Attendance analytics · names blurred"><img src="img/bcc-attendance.jpg" alt="Attendance analytics: 54% average turnout across 3 running courses, per-session check-ins" width="1200" height="750" loading="lazy" decoding="async"></button>
+            <figcaption><span>Attendance analytics · names blurred</span><span>LXP admin</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Signups by course · 211 for one course"><img src="img/bcc-signups.jpg" alt="Signups table for Foundations of AI and Digital Skills: 211 signed up, 59 enrolled" width="1200" height="750" loading="lazy" decoding="async"></button>
+            <figcaption><span>Signups by course · 211 for one course</span><span>LXP admin</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Landing page builder"><img src="img/bcc-landing-builder.jpg" alt="Landing page builder with program, slug, hero and publish controls" width="1200" height="750" loading="lazy" decoding="async"></button>
+            <figcaption><span>Landing page builder</span><span>LXP admin</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Applications that allowlist accepted applicants"><img src="img/bcc-applications.jpg" alt="Applications list: application forms that allowlist accepted applicants" width="1200" height="406" loading="lazy" decoding="async"></button>
+            <figcaption><span>Applications that allowlist accepted applicants</span><span>LXP admin</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Resources per program"><img src="img/bcc-resources.jpg" alt="Resources editor per program and course" width="1200" height="685" loading="lazy" decoding="async"></button>
+            <figcaption><span>Resources per program</span><span>LXP admin</span></figcaption>
+          </figure>
+        </div>
+      </div>
       <div class="diagram">
         <div class="dhead"><span>How it fits together</span><span>Architecture</span></div>
         <svg viewBox="0 0 1240 430" role="img" aria-label="BCC Academy architecture: signups, Zoom and organizations feed one Next.js platform on Supabase, with an AI tutor and instructor agent gated by evals"><defs><marker id="lm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah"/></marker><marker id="lma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah acc"/></marker></defs><rect x="20" y="40" width="250" height="84" rx="10" class="dn"/><text x="36" y="70" class="dt">Eventbrite ticket</text><text x="36" y="92" class="ds">becomes an account</text><text x="36" y="109" class="ds">+ a magic-link sign-in</text><rect x="20" y="170" width="250" height="84" rx="10" class="dn"/><text x="36" y="200" class="dt">Zoom sessions</text><text x="36" y="222" class="ds">recordings import</text><text x="36" y="239" class="ds">themselves</text><rect x="20" y="300" width="250" height="84" rx="10" class="dn"/><text x="36" y="330" class="dt">5 organizations</text><text x="36" y="352" class="ds">BGC, Upskill Bahamas,</text><text x="36" y="369" class="ds">Catalyst and more</text><rect x="380" y="30" width="330" height="370" rx="14" class="dn h"/><text x="400" y="68" class="dt" style="font-size:24px">BCC Academy</text><text x="400" y="92" class="ds">Next.js on Vercel · multi-tenant</text><rect x="400" y="118" width="290" height="40" rx="8" class="chip"/><text x="416" y="144" class="chipt">Enrollment</text><rect x="400" y="170" width="290" height="40" rx="8" class="chip"/><text x="416" y="196" class="chipt">Live sessions</text><rect x="400" y="222" width="290" height="40" rx="8" class="chip"/><text x="416" y="248" class="chipt">Attendance</text><rect x="400" y="274" width="290" height="40" rx="8" class="chip"/><text x="416" y="300" class="chipt">Certificates</text><rect x="400" y="326" width="290" height="40" rx="8" class="chip"/><text x="416" y="352" class="chipt">Funder reporting</text><rect x="820" y="30" width="400" height="96" rx="10" class="dn"/><text x="836" y="60" class="dt">Supabase</text><text x="836" y="82" class="ds">Postgres + row-level security</text><text x="836" y="99" class="ds">PII audit log · weekly security check to Slack</text><rect x="820" y="166" width="400" height="96" rx="10" class="dn k"/><text x="836" y="196" class="dt on">AI tutor + instructor agent</text><text x="836" y="218" class="ds on">Vercel AI SDK · tool use</text><text x="836" y="235" class="ds on">opt-in per program · generates course material</text><rect x="820" y="302" width="400" height="96" rx="10" class="dn"/><text x="836" y="332" class="dt">Golden-set evals</text><text x="836" y="354" class="ds">Vitest + LLM judges</text><text x="836" y="371" class="ds">a release ships only if it passes</text><path d="M270 82 C320 82 330 140 376 140" class="da" marker-end="url(#lm)"/><path d="M270 212 L376 212" class="da" marker-end="url(#lm)"/><path d="M270 342 C320 342 330 300 376 300" class="da" marker-end="url(#lm)"/><text x="325" y="70" class="dl" text-anchor="middle">account + link</text><text x="323" y="203" class="dl" text-anchor="middle">auto-import</text><text x="145" y="414" class="dl" text-anchor="middle">new org = a database row</text><path d="M710 90 L816 80" class="da" marker-end="url(#lm)"/><path d="M710 214 L816 214" class="da acc" marker-end="url(#lma)"/><path d="M1020 262 L1020 298" class="da acc" marker-end="url(#lma)"/><text x="763" y="74" class="dl" text-anchor="middle">data</text><text x="763" y="205" class="dl" text-anchor="middle">learners ask</text><text x="1080" y="284" class="dl" text-anchor="start">every release</text></svg>
@@ -403,6 +474,61 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
           <div><h3>What I built</h3><p>A request row in Notion comes out the other end as finished, delivered assets, with one human approval in the middle. Nobody opens a terminal. The same system publishes a short every morning.</p></div>
           <div class="stat" style="border-top:0;padding-top:0"><strong>136</strong><span>Rendered videos across 35 projects, plus every still that came with them. Output doubled, and work we would have paid outside designers and editors for now runs in-house.</span></div>
           <div class="tags full"><span>Claude</span><span>Python</span><span>Flask</span><span>Vercel</span><span>Cloud Run</span><span>Notion · Slack · Canva · Drive</span></div>
+        </div>
+      </div>
+      <div class="strip-wrap" data-strip>
+        <div class="strip-head">
+          <span class="mono">Made by the pipeline · <span data-pos>1</span> / 11</span>
+          <div class="strip-ctl">
+            <button type="button" class="sbtn" data-prev aria-label="Previous screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button type="button" class="sbtn" data-next aria-label="Next screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="strip" tabindex="0" role="region" aria-label="Made by the pipeline">
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Forward Deploy channel art"><img src="img/gfx-banner.jpg" alt="Forward Deploy channel banner" width="2400" height="1350" decoding="async"></button>
+            <figcaption><span>Forward Deploy channel art</span><span>GFX1000 render</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Long-form thumbnail · FDE Roadmap"><img src="img/gfx-longform-02.jpg" alt="YouTube thumbnail: 95% of AI pilots fail to reach production" width="1920" height="1080" decoding="async"></button>
+            <figcaption><span>Long-form thumbnail · FDE Roadmap</span><span>GFX1000 render</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Long-form thumbnail · FDE Roadmap"><img src="img/gfx-longform-05.jpg" alt="YouTube thumbnail: 1 to 1,000: one happy path, a thousand unhappy ones" width="1920" height="1080" loading="lazy" decoding="async"></button>
+            <figcaption><span>Long-form thumbnail · FDE Roadmap</span><span>GFX1000 render</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Long-form thumbnail · FDE Roadmap"><img src="img/gfx-longform-07.jpg" alt="YouTube thumbnail: 6 weeks to 4 months: build time vs trust time" width="1920" height="1080" loading="lazy" decoding="async"></button>
+            <figcaption><span>Long-form thumbnail · FDE Roadmap</span><span>GFX1000 render</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Long-form thumbnail · FDE Roadmap"><img src="img/gfx-longform-10.jpg" alt="YouTube thumbnail: ~40% pass rate on the ambiguous case study" width="1920" height="1080" loading="lazy" decoding="async"></button>
+            <figcaption><span>Long-form thumbnail · FDE Roadmap</span><span>GFX1000 render</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Long-form thumbnail · FDE Roadmap"><img src="img/gfx-longform-03.jpg" alt="YouTube thumbnail: Everyone has the same model, so where is the edge?" width="1920" height="1080" loading="lazy" decoding="async"></button>
+            <figcaption><span>Long-form thumbnail · FDE Roadmap</span><span>GFX1000 render</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Long-form thumbnail · FDE Roadmap"><img src="img/gfx-longform-11.jpg" alt="YouTube thumbnail: One job, seven stages" width="1920" height="1080" loading="lazy" decoding="async"></button>
+            <figcaption><span>Long-form thumbnail · FDE Roadmap</span><span>GFX1000 render</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Long-form thumbnail · FDE Roadmap"><img src="img/gfx-longform-08.jpg" alt="YouTube thumbnail: Not should we use AI, but where does it belong" width="1920" height="1080" loading="lazy" decoding="async"></button>
+            <figcaption><span>Long-form thumbnail · FDE Roadmap</span><span>GFX1000 render</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Vertical short · 9:16"><img src="img/gfx-short-p01.jpg" alt="Vertical short frame from The Compass series" width="1080" height="1920" loading="lazy" decoding="async"></button>
+            <figcaption><span>Vertical short · 9:16</span><span>GFX1000 render</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Vertical short · 9:16"><img src="img/gfx-short-p02.jpg" alt="Vertical short frame from The Compass series" width="1080" height="1920" loading="lazy" decoding="async"></button>
+            <figcaption><span>Vertical short · 9:16</span><span>GFX1000 render</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Vertical short · 9:16"><img src="img/gfx-short-p03.jpg" alt="Vertical short frame from The Compass series" width="1080" height="1920" loading="lazy" decoding="async"></button>
+            <figcaption><span>Vertical short · 9:16</span><span>GFX1000 render</span></figcaption>
+          </figure>
         </div>
       </div>
       <div class="diagram">
@@ -426,15 +552,36 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
           <div class="stat" style="border-top:0;padding-top:0"><strong>$3B+</strong><span>Revenue tied to the monetization, acquisition and retention flows I designed.</span></div>
         </div>
       </div>
-      <div class="shots nf">
-        <figure class="shot">
-          <div class="frm"><img src="img/netflix-sharing-announcement.jpg" alt="Netflix newsroom article titled Update on Sharing, May 2023" width="2612" height="1554"></div>
-          <figcaption><span>Netflix newsroom · "Update on Sharing," May 23, 2023</span><a href="https://about.netflix.com/news/update-on-sharing-may-us" target="_blank" rel="noopener">Source</a></figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frm"><img src="img/netflix-sharing-email.jpg" alt="Netflix email to members: An update on sharing between households, offering Transfer a profile and Buy an extra member" width="862" height="1872"></div>
-          <figcaption><span>The member email from the rollout</span><span>Public, via Netflix newsroom</span></figcaption>
-        </figure>
+      <div class="strip-wrap" data-strip>
+        <div class="strip-head">
+          <span class="mono">Paid sharing, in public · <span data-pos>1</span> / 5</span>
+          <div class="strip-ctl">
+            <button type="button" class="sbtn" data-prev aria-label="Previous screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button type="button" class="sbtn" data-next aria-label="Next screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="strip" tabindex="0" role="region" aria-label="Paid sharing, in public">
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: &quot;Update on Sharing,&quot; May 2023"><img src="img/netflix-sharing-announcement.jpg" alt="Netflix newsroom article: Update on Sharing, May 2023" width="2612" height="1554" decoding="async"></button>
+            <figcaption><span>"Update on Sharing," May 2023</span><a href="https://about.netflix.com/news/update-on-sharing-may-us" target="_blank" rel="noopener">Source</a></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: The member email from the rollout"><img src="img/netflix-sharing-email.jpg" alt="Netflix member email: an update on sharing between households" width="862" height="1872" decoding="async"></button>
+            <figcaption><span>The member email from the rollout</span><span>Public</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: &quot;Paying to Share Netflix Outside Your Household&quot;"><img src="img/netflix-paying-to-share.jpg" alt="Netflix newsroom: Paying to Share Netflix Outside Your Household" width="2400" height="1640" loading="lazy" decoding="async"></button>
+            <figcaption><span>"Paying to Share Netflix Outside Your Household"</span><a href="https://about.netflix.com/en/news/paying-to-share-netflix-outside-your-household" target="_blank" rel="noopener">Source</a></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Extra Member · Help Center"><img src="img/netflix-extra-members.jpg" alt="Netflix Help Center: Extra Members" width="2400" height="1742" loading="lazy" decoding="async"></button>
+            <figcaption><span>Extra Member · Help Center</span><a href="https://help.netflix.com/en/node/123279" target="_blank" rel="noopener">Source</a></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Profile Transfer announcement"><img src="img/netflix-profile-transfer.jpg" alt="Netflix newsroom: With Profile Transfer, keep your Netflix experience" width="2400" height="1537" loading="lazy" decoding="async"></button>
+            <figcaption><span>Profile Transfer announcement</span><a href="https://about.netflix.com/en/news/profile-transfer-keeps-netflix-experience-constant" target="_blank" rel="noopener">Source</a></figcaption>
+          </figure>
+        </div>
       </div>
     </div>
   </section>
@@ -454,15 +601,40 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
           <div class="tags full"><span>Claude</span><span>Vercel AI SDK</span><span>TypeScript</span><span>Polar</span><span>Telegram</span><span>Shopify · Meta Ads</span><span>HeyGen</span></div>
         </div>
       </div>
-      <div class="shots">
-        <figure class="shot wide">
-          <div class="frm"><img src="img/pulsepro-dashboard.jpg" alt="PulsePro dashboard on desktop and phone: activity rings, tasks due today, project health" width="2220" height="1024"></div>
-          <figcaption><span>Dashboard · desktop + mobile</span><span>pulsepro.work, sample data</span></figcaption>
-        </figure>
-        <figure class="shot wide">
-          <div class="frm"><img src="img/pulsepro-projects-invoices.jpg" alt="PulsePro projects board with health status and a phone showing invoices" width="2220" height="900"></div>
-          <figcaption><span>Projects + invoices</span><span>sample data</span></figcaption>
-        </figure>
+      <div class="strip-wrap" data-strip>
+        <div class="strip-head">
+          <span class="mono">PulsePro screens · <span data-pos>1</span> / 6</span>
+          <div class="strip-ctl">
+            <button type="button" class="sbtn" data-prev aria-label="Previous screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button type="button" class="sbtn" data-next aria-label="Next screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="strip" tabindex="0" role="region" aria-label="PulsePro screens">
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Dashboard · desktop + mobile"><img src="img/pulsepro-dashboard.jpg" alt="PulsePro dashboard on desktop and phone" width="2220" height="1024" decoding="async"></button>
+            <figcaption><span>Dashboard · desktop + mobile</span><span>sample data</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Web dashboard"><img src="img/pulsepro-app-dashboard.jpg" alt="PulsePro web dashboard: upcoming tasks, project health, calendar" width="2400" height="1644" decoding="async"></button>
+            <figcaption><span>Web dashboard</span><span>pulsepro.work</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: All projects"><img src="img/pulsepro-app-projects.jpg" alt="PulsePro projects table with status, priority and due dates" width="2400" height="1644" loading="lazy" decoding="async"></button>
+            <figcaption><span>All projects</span><span>pulsepro.work</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Tasks"><img src="img/pulsepro-app-tasks.jpg" alt="PulsePro tasks list with priorities" width="2400" height="1644" loading="lazy" decoding="async"></button>
+            <figcaption><span>Tasks</span><span>pulsepro.work</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Projects + invoices"><img src="img/pulsepro-projects-invoices.jpg" alt="PulsePro projects board and phone invoices" width="2220" height="900" loading="lazy" decoding="async"></button>
+            <figcaption><span>Projects + invoices</span><span>sample data</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Bookmarks"><img src="img/pulsepro-app-bookmarks.jpg" alt="PulsePro bookmarks: saved links and videos per project" width="1920" height="1315" loading="lazy" decoding="async"></button>
+            <figcaption><span>Bookmarks</span><span>pulsepro.work</span></figcaption>
+          </figure>
+        </div>
       </div>
       <div class="diagram">
         <div class="dhead"><span>Ad Engine · weekly</span><span>Automated</span></div>
@@ -498,27 +670,64 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
           <figcaption><span>Live on YouTube</span><span>Screenshot, Nov 2026</span></figcaption>
         </figure>
       </div>
-      <div class="shots">
-        <figure class="shot wide">
-          <div class="frm"><img src="img/supernova-art.jpg" alt="Supernova launch art: Her band canceled. The block party is tonight. Two illustrated musicians with a bass and a keytar" width="2612" height="1554"></div>
-          <figcaption><span>Launch page on wearebgc.org</span><span>Screenshot, Nov 2026</span></figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frm"><img src="img/supernova-title.jpg" alt="Supernova title screen on YouTube Playables with band silhouettes and a Play button" width="816" height="757"></div>
-          <figcaption><span>Title screen</span><span>YouTube Playables</span></figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frm"><img src="img/supernova-auditions.jpg" alt="Supernova auditions: two musicians on stage, Echo says add two more artists to unlock a full chorus" width="842" height="729"></div>
-          <figcaption><span>Auditions · building the band</span><span>Gameplay</span></figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frm"><img src="img/supernova-intro.jpg" alt="Supernova story intro: Echo the robot says the Black Girls Code Block Party is tonight" width="842" height="729"></div>
-          <figcaption><span>Story intro with Echo</span><span>Gameplay</span></figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frm"><img src="img/supernova-tutorial.jpg" alt="Supernova drag-and-drop tutorial card: it's audition time, try out the musicians and build your band" width="842" height="729"></div>
-          <figcaption><span>Onboarding · drag and drop</span><span>Gameplay</span></figcaption>
-        </figure>
+      <div class="strip-wrap" data-strip>
+        <div class="strip-head">
+          <span class="mono">Supernova screens · <span data-pos>1</span> / 12</span>
+          <div class="strip-ctl">
+            <button type="button" class="sbtn" data-prev aria-label="Previous screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button type="button" class="sbtn" data-next aria-label="Next screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="strip" tabindex="0" role="region" aria-label="Supernova screens">
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Launch page on wearebgc.org"><img src="img/supernova-art.jpg" alt="Supernova launch art on wearebgc.org" width="2612" height="1554" decoding="async"></button>
+            <figcaption><span>Launch page on wearebgc.org</span><span>Nov 2026</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Title screen · mobile"><img src="img/sn-screen-title.jpg" alt="Supernova title screen, mobile" width="900" height="1600" decoding="async"></button>
+            <figcaption><span>Title screen · mobile</span><span>YouTube Playables</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Story intro with Echo · mobile"><img src="img/sn-screen-echo.jpg" alt="Supernova story intro with Echo the robot, mobile" width="900" height="1600" loading="lazy" decoding="async"></button>
+            <figcaption><span>Story intro with Echo · mobile</span><span>Gameplay</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Auditions · mobile"><img src="img/sn-screen-audition.jpg" alt="Supernova audition screen: drag musicians into the band, mobile" width="900" height="1600" loading="lazy" decoding="async"></button>
+            <figcaption><span>Auditions · mobile</span><span>Gameplay</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Title screen · desktop"><img src="img/supernova-title.jpg" alt="Supernova title screen with band silhouettes" width="816" height="757" loading="lazy" decoding="async"></button>
+            <figcaption><span>Title screen · desktop</span><span>YouTube Playables</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Building the band"><img src="img/supernova-auditions.jpg" alt="Supernova auditions: two musicians on stage" width="842" height="729" loading="lazy" decoding="async"></button>
+            <figcaption><span>Building the band</span><span>Gameplay</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Story intro"><img src="img/supernova-intro.jpg" alt="Echo says the Black Girls Code Block Party is tonight" width="842" height="729" loading="lazy" decoding="async"></button>
+            <figcaption><span>Story intro</span><span>Gameplay</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Onboarding · drag and drop"><img src="img/supernova-tutorial.jpg" alt="Drag-and-drop tutorial card" width="842" height="729" loading="lazy" decoding="async"></button>
+            <figcaption><span>Onboarding · drag and drop</span><span>Gameplay</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Nova"><img src="img/sn-supernova.jpg" alt="Nova character art with keytar" width="629" height="1000" loading="lazy" decoding="async"></button>
+            <figcaption><span>Nova</span><span>Character art</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Bass"><img src="img/sn-bass-locs.jpg" alt="Bass player character art" width="667" height="1000" loading="lazy" decoding="async"></button>
+            <figcaption><span>Bass</span><span>Character art</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Guitar"><img src="img/sn-guitar-puffs.jpg" alt="Guitarist character art" width="667" height="1000" loading="lazy" decoding="async"></button>
+            <figcaption><span>Guitar</span><span>Character art</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: 808 / DJ"><img src="img/sn-dj-pink-hoodie.jpg" alt="DJ character art" width="667" height="1000" loading="lazy" decoding="async"></button>
+            <figcaption><span>808 / DJ</span><span>Character art</span></figcaption>
+          </figure>
+        </div>
       </div>
       <p style="margin-top:20px"><a class="ext" href="https://www.youtube.com/playables/UgkxshdYxwEgrbzYxFbYOMIa9uzU3qpzcBKm" target="_blank" rel="noopener">Play Supernova on YouTube</a></p>
     </div>
@@ -539,19 +748,44 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
           <div class="tags full"><span>Next.js</span><span>TypeScript</span><span>Leaflet</span><span>ADS-B · adsb.lol + adsbdb</span><span>3D in the browser</span><span>Spoken ATC</span></div>
         </div>
       </div>
-      <div class="shots">
-        <figure class="shot wide">
-          <div class="frm"><img src="img/aero-tracker.jpg" alt="SJC Arrivals: dark map of the Bay Area with live aircraft, 266 landed on Monday November 2, and a landing log of flights from Chicago, Portland and Dallas" width="2644" height="1554"></div>
-          <figcaption><span>SJC arrivals · live map + landing log</span><span>aero.fonz.sh, Nov 2026</span></figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frm"><img src="img/aero-sim-flight.jpg" alt="Flight sim chase view: a Cessna over a gridded city, lesson step 14 of 19 Turn base, instructor caption and a full instrument panel" width="1420" height="840"></div>
-          <figcaption><span>Landing practice · lesson step 14 of 19</span><span>aero.fonz.sh/sim</span></figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frm"><img src="img/aero-sim-school.jpg" alt="Flight school menu: pick a Cessna 172, Embraer 175 or Gulfstream G550, then a guided lesson, landing practice, controls tour or free flight" width="2644" height="1554"></div>
-          <figcaption><span>Flight school · pick a plane, pick a mode</span><span>aero.fonz.sh/sim</span></figcaption>
-        </figure>
+      <div class="strip-wrap" data-strip>
+        <div class="strip-head">
+          <span class="mono">Aero screens · <span data-pos>1</span> / 7</span>
+          <div class="strip-ctl">
+            <button type="button" class="sbtn" data-prev aria-label="Previous screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button type="button" class="sbtn" data-next aria-label="Next screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="strip" tabindex="0" role="region" aria-label="Aero screens">
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: SJC arrivals · map + landing log"><img src="img/aero-tracker.jpg" alt="SJC arrivals: live map and landing log, 266 landed Nov 2" width="2644" height="1554" decoding="async"></button>
+            <figcaption><span>SJC arrivals · map + landing log</span><span>aero.fonz.sh</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Live · one on final, 96 tracked"><img src="img/aero-live.jpg" alt="Live map with WN1791 on final into SJC, 96 aircraft tracked" width="2400" height="1174" decoding="async"></button>
+            <figcaption><span>Live · one on final, 96 tracked</span><span>aero.fonz.sh</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Any tail number: live state, route, altitude"><img src="img/aero-aircraft.jpg" alt="Aircraft page for N8849Q: live altitude, speed, route map across the US and altitude chart" width="2400" height="1742" loading="lazy" decoding="async"></button>
+            <figcaption><span>Any tail number: live state, route, altitude</span><span>aero.fonz.sh/aircraft</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Owner, FAA record, recent flights"><img src="img/aero-aircraft-history.jpg" alt="Aircraft owner, FAA registration and recent flights table" width="2400" height="1602" loading="lazy" decoding="async"></button>
+            <figcaption><span>Owner, FAA record, recent flights</span><span>aero.fonz.sh/aircraft</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: G550 landing practice"><img src="img/aero-sim-g550.jpg" alt="Flight sim: Gulfstream G550 on final approach, instructor talking you down" width="1274" height="935" loading="lazy" decoding="async"></button>
+            <figcaption><span>G550 landing practice</span><span>aero.fonz.sh/sim</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Cessna 172 · lesson step 14 of 19"><img src="img/aero-sim-flight.jpg" alt="Flight sim: Cessna 172 turning base, lesson step 14 of 19" width="1420" height="840" loading="lazy" decoding="async"></button>
+            <figcaption><span>Cessna 172 · lesson step 14 of 19</span><span>aero.fonz.sh/sim</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Pick a plane, pick a mode"><img src="img/aero-sim-school.jpg" alt="Flight school menu: pick a plane and a mode" width="2644" height="1554" loading="lazy" decoding="async"></button>
+            <figcaption><span>Pick a plane, pick a mode</span><span>aero.fonz.sh/sim</span></figcaption>
+          </figure>
+        </div>
       </div>
       <p style="margin-top:20px"><a class="ext" href="https://aero.fonz.sh" target="_blank" rel="noopener">aero.fonz.sh</a></p>
     </div>
@@ -571,19 +805,55 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
           <div class="tags full"><span>Next.js</span><span>TypeScript</span><span>Supabase</span><span>Email-code sign-in</span><span>Offline first</span></div>
         </div>
       </div>
-      <div class="shots phones">
-        <figure class="shot">
-          <div class="frm"><img src="img/showup-today.jpg" alt="Show Up Today screen: day streak, week strip, and a Walk day card for week 3 with a Start stretch button" width="840" height="1451"></div>
-          <figcaption><span>Today</span></figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frm"><img src="img/showup-stretch.jpg" alt="Show Up guided stretch: World's Greatest Stretch, 5 reps per side, three cues and a Done button" width="840" height="1451"></div>
-          <figcaption><span>Guided stretch</span></figcaption>
-        </figure>
-        <figure class="shot">
-          <div class="frm"><img src="img/showup-progress.jpg" alt="Show Up Progress screen: days trained, minutes, best streak, and a 28-day challenge grid" width="840" height="1451"></div>
-          <figcaption><span>Progress · 28-day challenge</span></figcaption>
-        </figure>
+      <figure class="shot showcase">
+        <div class="frm"><img src="img/showup-hero.jpg" alt="Five Show Up screens: log a workout, stationary bike timer, today's pull day plan, rest countdown and a pull-up set" width="3000" height="1700"></div>
+      </figure>
+      <div class="strip-wrap" data-strip>
+        <div class="strip-head">
+          <span class="mono">Show Up screens · <span data-pos>1</span> / 9</span>
+          <div class="strip-ctl">
+            <button type="button" class="sbtn" data-prev aria-label="Previous screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button type="button" class="sbtn" data-next aria-label="Next screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="strip" tabindex="0" role="region" aria-label="Show Up screens">
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: A plan built from what you logged"><img src="img/showup-pullday.jpg" alt="Today&#x27;s plan: Pull day, 41 minutes, 3 rounds, built from what you logged" width="671" height="1568" decoding="async"></button>
+            <figcaption><span>A plan built from what you logged</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Timed sets with form cues"><img src="img/showup-bike.jpg" alt="Workout player: stationary bike countdown with form cues" width="685" height="1568" decoding="async"></button>
+            <figcaption><span>Timed sets with form cues</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Rest timer · what is up next"><img src="img/showup-rest.jpg" alt="Rest screen: 83 second countdown, up next pull-up" width="685" height="1568" loading="lazy" decoding="async"></button>
+            <figcaption><span>Rest timer · what is up next</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Rep sets · easier swap one tap away"><img src="img/showup-pullup.jpg" alt="Pull-up set: round 1 of 3, 5 reps, easier option offered" width="685" height="1568" loading="lazy" decoding="async"></button>
+            <figcaption><span>Rep sets · easier swap one tap away</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Guided warm-up"><img src="img/showup-stretch.jpg" alt="Guided stretch: World&#x27;s Greatest Stretch" width="840" height="1451" loading="lazy" decoding="async"></button>
+            <figcaption><span>Guided warm-up</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Log anything, it counts"><img src="img/showup-log.jpg" alt="Log a workout sheet: cardio or strength, minutes, distance" width="724" height="1568" loading="lazy" decoding="async"></button>
+            <figcaption><span>Log anything, it counts</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: 28-day challenge"><img src="img/showup-progress.jpg" alt="Progress: 28-day challenge grid and stats" width="840" height="1451" loading="lazy" decoding="async"></button>
+            <figcaption><span>28-day challenge</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Move library · video for every move"><img src="img/showup-moves.jpg" alt="Move library: every move with a video demo" width="1890" height="1870" loading="lazy" decoding="async"></button>
+            <figcaption><span>Move library · video for every move</span></figcaption>
+          </figure>
+          <figure class="sf tall">
+            <button class="frm" type="button" aria-label="Enlarge: Walk days count too"><img src="img/showup-today.jpg" alt="Today screen on a walk day" width="840" height="1451" loading="lazy" decoding="async"></button>
+            <figcaption><span>Walk days count too</span></figcaption>
+          </figure>
+        </div>
       </div>
       <p style="margin-top:20px"><a class="ext" href="https://showup.fonz.sh/classic" target="_blank" rel="noopener">showup.fonz.sh</a></p>
     </div>
@@ -598,9 +868,10 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
       </div>
       <div class="reel-body">
         <div class="copy">
-          <div><h3>What it is</h3><p>A private speaking tutor for three languages: Spanish, Mandarin and Arabic. You talk, and a live avatar face with a real voice talks back.</p></div>
-          <div class="stat" style="border-top:0;padding-top:0"><strong>3</strong><span>Languages, three scripts: Latin, Chinese characters and Arabic, written right to left.</span></div>
-          <div class="tags"><span>Next.js</span><span>Vercel AI SDK</span><span>Simli avatars</span><span>pinyin-pro</span><span>libSQL</span><span>Vercel Blob</span></div>
+          <div><h3>What it is</h3><p>A private speaking tutor for three languages: Spanish, Mandarin and Arabic, each with its own tutor. You speak out loud every day; the tutor corrects you against this week's grammar and vocabulary, and answers in a real voice.</p></div>
+          <div><h3>The plan</h3><p>Spanish runs on a 52-week curriculum from A1 to B2, in four phases. Each week has a grammar focus, a vocabulary domain, three scenes and a listening assignment. Your mic audio never leaves the device; only the transcript does.</p></div>
+          <div class="stat" style="border-top:0;padding-top:0"><strong>612 hrs</strong><span>What B2 costs an English speaker. 156 of them are speaking in the app.</span></div>
+          <div class="tags"><span>Next.js</span><span>Vercel AI SDK</span><span>ElevenLabs</span><span>Speech recognition</span><span>Simli avatars</span><span>pinyin-pro</span><span>libSQL</span><span>Vercel Blob</span></div>
         </div>
         <div class="greet" aria-label="Cadence teaches Spanish, Mandarin and Arabic">
           <p class="w">cadence</p>
@@ -609,6 +880,29 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
             <li><span class="ln">Mandarin</span><span class="hi" lang="zh">你好</span><span class="rm">nǐ hǎo · hello</span></li>
             <li><span class="ln">Arabic</span><span class="hi" lang="ar" dir="rtl">أهلاً</span><span class="rm">ahlan · welcome</span></li>
           </ul>
+        </div>
+      </div>
+      <div class="strip-wrap" data-strip>
+        <div class="strip-head">
+          <span class="mono">The tutors · <span data-pos>1</span> / 3</span>
+          <div class="strip-ctl">
+            <button type="button" class="sbtn" data-prev aria-label="Previous screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+            <button type="button" class="sbtn" data-next aria-label="Next screens"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+          </div>
+        </div>
+        <div class="strip" tabindex="0" role="region" aria-label="The tutors">
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Sofi · Spanish"><img src="img/cadence-sofi.jpg" alt="Sofi, the Spanish tutor" width="1000" height="768" decoding="async"></button>
+            <figcaption><span>Sofi · Spanish</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Mei · Mandarin"><img src="img/cadence-mei.jpg" alt="Mei, the Mandarin tutor" width="1000" height="768" decoding="async"></button>
+            <figcaption><span>Mei · Mandarin</span></figcaption>
+          </figure>
+          <figure class="sf">
+            <button class="frm" type="button" aria-label="Enlarge: Nour · Arabic"><img src="img/cadence-nour.jpg" alt="Nour, the Arabic tutor" width="1000" height="768" loading="lazy" decoding="async"></button>
+            <figcaption><span>Nour · Arabic</span></figcaption>
+          </figure>
         </div>
       </div>
     </div>
@@ -657,6 +951,15 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
     </div>
   </footer>
 </main>
+<dialog class="lb" id="lb" aria-label="Screenshot viewer">
+  <button type="button" class="sbtn lb-x" data-lb-close aria-label="Close viewer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <img id="lb-img" alt="">
+  <div class="lb-bar">
+    <button type="button" class="sbtn" data-lb-prev aria-label="Previous image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+    <span class="lb-cap" id="lb-cap"></span>
+    <button type="button" class="sbtn" data-lb-next aria-label="Next image"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+  </div>
+</dialog>
 
 <script>
 (function(){
@@ -705,6 +1008,32 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
     var steps=[].slice.call(flow.querySelectorAll('.step')), s=0;
     setInterval(function(){steps.forEach(function(n,j){n.classList.toggle('live',j===s)});s=(s+1)%steps.length},1400);
   }
+})();
+// Galleries: arrows, counter, drag-to-scroll, lightbox
+(function(){
+  var lb=document.getElementById('lb'), lbImg=document.getElementById('lb-img'), lbCap=document.getElementById('lb-cap'), set=[], idx=0;
+  function show(n){idx=(n+set.length)%set.length;var f=set[idx],im=f.querySelector('img');lbImg.src=im.currentSrc||im.src;lbImg.alt=im.alt;var c=f.querySelector('figcaption span');lbCap.textContent=(idx+1)+' / '+set.length+(c?'  ·  '+c.textContent:'')}
+  function open(figs,n){set=figs;show(n);if(lb.showModal)lb.showModal();else lb.setAttribute('open','')}
+  lb.querySelector('[data-lb-close]').onclick=function(){lb.close()};
+  lb.querySelector('[data-lb-prev]').onclick=function(){show(idx-1)};
+  lb.querySelector('[data-lb-next]').onclick=function(){show(idx+1)};
+  lb.addEventListener('click',function(e){if(e.target===lb)lb.close()});
+  document.addEventListener('keydown',function(e){if(!lb.open)return;if(e.key==='ArrowRight')show(idx+1);if(e.key==='ArrowLeft')show(idx-1)});
+  [].forEach.call(document.querySelectorAll('[data-strip]'),function(w){
+    var st=w.querySelector('.strip'), figs=[].slice.call(st.querySelectorAll('.sf')), pos=w.querySelector('[data-pos]'), pv=w.querySelector('[data-prev]'), nx=w.querySelector('[data-next]');
+    function cur(){var x=st.scrollLeft+8,k=0;figs.forEach(function(f,j){if(f.offsetLeft-st.offsetLeft<=x)k=j});return k}
+    function upd(){var k=cur();pos.textContent=k+1;pv.disabled=st.scrollLeft<4;nx.disabled=st.scrollLeft+st.clientWidth>=st.scrollWidth-4}
+    function go(d){var k=Math.max(0,Math.min(figs.length-1,cur()+d));st.scrollTo({left:figs[k].offsetLeft-st.offsetLeft,behavior:'smooth'})}
+    pv.onclick=function(){go(-1)};nx.onclick=function(){go(1)};
+    st.addEventListener('scroll',function(){window.requestAnimationFrame(upd)},{passive:true});
+    st.addEventListener('keydown',function(e){if(e.key==='ArrowRight'){e.preventDefault();go(1)}if(e.key==='ArrowLeft'){e.preventDefault();go(-1)}});
+    var down=false,sx=0,sl=0,moved=0;
+    st.addEventListener('pointerdown',function(e){if(e.pointerType!=='mouse')return;down=true;moved=0;sx=e.clientX;sl=st.scrollLeft});
+    window.addEventListener('pointermove',function(e){if(!down)return;var dx=e.clientX-sx;if(Math.abs(dx)>4){st.classList.add('dragging');moved=Math.abs(dx)}st.scrollLeft=sl-dx});
+    window.addEventListener('pointerup',function(){if(!down)return;down=false;if(st.classList.contains('dragging')){st.classList.remove('dragging');go(0)}});
+    figs.forEach(function(f,j){f.querySelector('.frm').addEventListener('click',function(e){if(moved>6){e.preventDefault();moved=0;return}open(figs,j)})});
+    upd();window.addEventListener('resize',upd);
+  });
 })();
 </script>
 
