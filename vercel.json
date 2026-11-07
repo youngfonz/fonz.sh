@@ -59,6 +59,10 @@
     },
     {
       "source": "/cotorra",
+      "destination": "/cotorra-home.html"
+    },
+    {
+      "source": "/cotorra/app",
       "destination": "/cotorra.html"
     },
     {
