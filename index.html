@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fonz Morris · Work</title>
+<title>Fonz Morris · Product Leader</title>
 <meta name="description" content="Fonz Morris designs and ships products: BCC Academy (500+ students), GFX1000, Netflix paid sharing, PulsePro, Supernova on YouTube Playables, Aero, Show Up and Cadence.">
 <meta name="author" content="Fonz Morris">
 <meta name="theme-color" content="#6B3BFF">
@@ -11,13 +11,13 @@
 <link rel="canonical" href="https://www.fonz.sh/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Fonz.sh">
-<meta property="og:title" content="Fonz Morris · I design it. Then I ship it.">
+<meta property="og:title" content="Fonz Morris · I lead product. And I still ship it.">
 <meta property="og:description" content="Product design and AI builds: BCC Academy, GFX1000, Netflix, PulsePro, Supernova, Aero, Show Up, Cadence.">
 <meta property="og:url" content="https://www.fonz.sh/">
 <meta property="og:image" content="https://www.fonz.sh/img/showup-hero.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:site" content="@youngfonz">
-<meta name="twitter:title" content="Fonz Morris · I design it. Then I ship it.">
+<meta name="twitter:title" content="Fonz Morris · I lead product. And I still ship it.">
 <meta name="twitter:image" content="https://www.fonz.sh/img/showup-hero.jpg">
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' fill='%230E0E10'/><path d='M18 14h28v9H28v7h15v9H28v11H18z' fill='%236B3BFF'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -414,6 +414,49 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
 .hl-show .hl-lead .gb img{max-height:none}
 @media (max-width:900px){.fmts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:640px){.hl-row{grid-template-columns:repeat(2,minmax(0,1fr))}.hl-row[data-wide]{grid-template-columns:1fr}.hl-row:not([data-wide]) > .gi:nth-child(3){display:none}}
+/* Leadership frame */
+.hero h1{font-size:clamp(44px,7.4vw,92px)}
+.impact{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0;margin:48px 0 0;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+.impact div{padding:18px 18px 20px 0;border-right:1px solid var(--rule);margin-right:18px}
+.impact div:last-child{border-right:0;margin-right:0}
+.impact dt{font-family:var(--display);font-weight:800;font-size:clamp(30px,3.4vw,48px);line-height:1;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.impact dd{margin:8px 0 0;font-size:13.5px;line-height:1.4;color:var(--ink-2);max-width:20ch}
+.toc{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:0;margin-top:28px}
+.toc a{display:flex;flex-direction:column;gap:3px;padding:14px 16px 14px 0;text-decoration:none;color:var(--ink);border-top:2px solid var(--rule);transition:border-color .25s}
+.toc a span{font-family:var(--display);font-weight:700;font-size:17px}
+.toc a em{font-style:normal;font-size:13px;color:var(--ink-2)}
+.toc a:hover{border-top-color:var(--accent)}.toc a:hover span{color:var(--accent)}
+.case{display:grid;grid-template-columns:minmax(0,2.2fr) minmax(0,1fr);gap:48px;align-items:start}
+.frame4{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:0}
+.frame4 dt{font-family:var(--display);font-size:15px;font-weight:700;color:var(--accent);margin-bottom:8px}
+.frame4 dd{margin:0;line-height:1.55}
+.result{border-left:2px solid var(--ink);padding-left:24px;display:grid;gap:18px}
+.result-h{margin:0;font-family:var(--display);font-size:15px;font-weight:700;color:var(--accent)}
+.result div{display:grid;gap:4px}
+.result strong{font-family:var(--display);font-weight:800;font-size:clamp(40px,4.4vw,60px);line-height:.95;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.result span{color:var(--ink-2);font-size:15px;line-height:1.4;max-width:28ch}
+.case-foot{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin-top:28px}
+.case-lead{margin-top:44px}
+.reel.case-sec .reel-body{display:none}
+.own-lede{margin:-8px 0 28px;color:var(--ink-2);max-width:60ch}
+.bos{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:20px}
+.bo .x{display:none}
+.bo-img{display:block;width:100%;aspect-ratio:4/3;padding:0;border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--paper-2);cursor:zoom-in;position:relative;transition:transform .45s cubic-bezier(.16,1,.3,1)}
+.bo-img:hover{transform:translateY(-3px)}
+.bo-img:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+.bo-img img{width:100%;height:100%;object-fit:cover;object-position:top}
+.bo-n{position:absolute;left:8px;bottom:8px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:#fff;background:rgba(14,14,16,.72);padding:4px 8px;border-radius:999px}
+.bo h3{font-family:var(--display);font-size:18px;font-weight:700;margin:14px 0 4px}
+.bo p{margin:0 0 8px;font-size:14.5px;line-height:1.45;color:var(--ink-2)}
+.bo-link{font-size:13.5px;font-weight:600;color:var(--ink);text-decoration:none;border-bottom:1.5px solid var(--accent)}
+span.bo-link{border-bottom-color:var(--rule);color:var(--ink-2)}
+.lead-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 48px;margin:0 0 56px}
+.lead-list div{border-top:1px solid var(--ink);padding-top:14px}
+.lead-list dt{font-family:var(--display);font-size:clamp(20px,2vw,26px);font-weight:700;letter-spacing:-.015em;line-height:1.15;margin-bottom:10px;text-wrap:balance}
+.lead-list dd{margin:0;line-height:1.55;color:var(--ink-2);max-width:60ch}
+@media (max-width:1100px){.impact{grid-template-columns:repeat(3,minmax(0,1fr))}.impact div:nth-child(3){border-right:0;margin-right:0}.impact div:nth-child(n+4){border-top:1px solid var(--rule)}.bos{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:900px){.case{grid-template-columns:1fr}.result{border-left:0;border-top:2px solid var(--ink);padding:18px 0 0;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}.frame4{grid-template-columns:1fr;gap:20px}.toc{grid-template-columns:repeat(2,minmax(0,1fr))}.lead-list{grid-template-columns:1fr}}
+@media (max-width:640px){.impact{grid-template-columns:repeat(2,minmax(0,1fr))}.impact div{border-right:0;margin-right:0;border-top:1px solid var(--rule)}.impact div:nth-child(-n+2){border-top:0}.bos{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (prefers-reduced-motion: reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -427,46 +470,57 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
 
 <main id="top">
   <section class="hero wrap" aria-labelledby="h">
-    <h1 id="h">I design it.<br>Then I <em>ship</em> it.</h1>
+    <h1 id="h">I lead product.<br><em>And I still ship it.</em></h1>
     <div class="hero-row">
-      <p class="lede">Five years designing how hundreds of millions of people sign up and pay at Netflix. Now I build the AI products myself: learning platforms, agent pipelines, and tools that run while nobody is watching.</p>
-      <div class="meta mono"><span>Head of Product, Black Girls Code</span><span>San Jose, CA</span><span>Open to roles</span></div>
+      <p class="lede">Head of Product at Black Girls Code and Beyond Code Collective, running product strategy, the learning platform, curriculum and marketing ops across both. Before that, five years leading conversion design at Netflix and growth design at Coursera.</p>
+      <div class="meta"><span>San Jose, CA</span><span>Open to Head, Director and VP roles</span></div>
     </div>
-
-    <div class="sheet" aria-label="Projects">
-      <a class="frame photo" href="#lxp" style="background-image:url(img/bcc-academy-home.jpg)"><span class="nm">BCC Academy</span><span class="tc">01<span class="tcd"> · LXP</span></span></a>
-      <a class="frame photo" href="#netflix" style="background-image:url(img/netflix-sharing-announcement.jpg);background-position:center"><span class="nm">Netflix</span><span class="tc">02<span class="tcd"> · CONVERSION</span></span></a>
-      <a class="frame" href="#gfx"><span class="nm">GFX1000</span><div class="mini mini-pipe"><span></span><span></span><span></span><span></span><span></span></div><span class="tc">03<span class="tcd"> · PIPELINE</span></span></a>
-      <a class="frame photo" href="#pulse" style="background-image:url(img/pulsepro-dashboard.jpg)"><span class="nm">PulsePro</span><span class="tc">04<span class="tcd"> · SOLO OPS</span></span></a>
-      <a class="frame photo" href="#supernova" style="background-image:url(img/supernova-title.jpg);background-position:center"><span class="nm">Supernova</span><span class="tc">05<span class="tcd"> · PLAYABLE</span></span></a>
-      <a class="frame photo" href="#fde" style="background-image:url(img/gfx-banner.jpg);background-position:center"><span class="nm">Forward Deploy</span><span class="tc">06<span class="tcd"> · CHANNEL</span></span></a>
-      <a class="frame photo" href="#aero" style="background-image:url(img/aero-live.jpg);background-position:center"><span class="nm">Aero</span><span class="tc">07<span class="tcd"> · FLIGHT</span></span></a>
-      <a class="frame photo" href="#showup" style="background-image:url(img/showup-hero.jpg);background-position:center"><span class="nm">Show Up</span><span class="tc">08<span class="tcd"> · FITNESS</span></span></a>
-      <a class="frame" href="#cadence"><span class="nm">Cadence</span><div class="mini mini-wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="tc">09<span class="tcd"> · LANGUAGE</span></span></a>
-    </div>
+    <dl class="impact" aria-label="Impact">
+      <div><dt>$3B+</dt><dd>revenue tied to Netflix conversion flows I designed</dd></div>
+      <div><dt>300M+</dt><dd>Netflix members across 190 countries</dd></div>
+      <div><dt>20M+</dt><dd>learners while I led growth design at Coursera</dd></div>
+      <div><dt>500+</dt><dd>students on the platform I built for BCC</dd></div>
+      <div><dt>66/66</dt><dd>finished cohorts completed at 100 percent</dd></div>
+      <div><dt>8K+</dt><dd>plays of Supernova on YouTube since launch</dd></div>
+    </dl>
+    <nav class="toc" aria-label="Case studies">
+      <a href="#lxp"><span>BCC Academy</span><em>Learning platform</em></a>
+      <a href="#netflix"><span>Netflix</span><em>Paid sharing</em></a>
+      <a href="#gfx"><span>GFX1000</span><em>Creative pipeline</em></a>
+      <a href="#supernova"><span>Supernova</span><em>YouTube Playable</em></a>
+      <a href="#lead"><span>How I lead</span><em>Scope + experience</em></a>
+    </nav>
   </section>
 
   <!-- LXP -->
-  <section class="reel" id="lxp" aria-labelledby="lxp-h">
+  <section class="reel case-sec" id="lxp" aria-labelledby="lxp-h">
     <div class="wrap">
       <div class="reel-head">
         <h2 id="lxp-h">BCC Academy</h2>
         <span class="mono">Learning platform (LXP) · Beyond Code Collective · 2025 to now</span>
       </div>
-      <div class="reel-body">
-        <div class="copy">
-          <div><h3>The problem</h3><p>Training programs for Black Girls Code, Upskill Bahamas, Catalyst and After The Game ran on a spreadsheet, a Google Form, a Zoom account and a part-time coordinator. Funders asked for outcome data nobody could produce.</p></div>
-          <div><h3>What I built</h3><p>One multi-tenant platform for enrollment, live sessions, attendance, certificates and reporting. Zoom runs inside it: learners join class without leaving the platform, attendance records itself, and recordings import to the right week every hour. Staff get live analytics on turnout, signups and who needs a check-in. An opt-in AI tutor and an instructor agent sit on top, and a golden-set eval suite with LLM judges decides whether a release is good enough to ship.</p></div>
-          <div class="stat"><strong>500+</strong><span>Students served across five organizations on one codebase, built in about nine weeks.</span></div>
-          <div class="stat"><strong>66/66</strong><span>Every finished cohort so far completed at 100 percent.</span></div>
-          <div class="tags"><span>Next.js</span><span>Supabase</span><span>Vercel AI SDK</span><span>Tool-use agent</span><span>LLM-judge evals</span><span>Vitest</span></div>
-          <a class="ext" href="https://bccacademy.io" target="_blank" rel="noopener">bccacademy.io</a>
+      <div class="case">
+        <dl class="frame4">
+          <div><dt>The problem</dt><dd>Training for Black Girls Code, Upskill Bahamas, Catalyst and After The Game ran on a spreadsheet, a Google Form, a Zoom account and a part-time coordinator. Funders asked for outcome data nobody could produce.</dd></div>
+          <div><dt>My role</dt><dd>Head of Product. I wrote the PRD and architecture, then built it with Claude, working with program leads, instructors and five partner organizations.</dd></div>
+          <div><dt>The call</dt><dd>Build our own platform instead of renewing a WordPress LMS, and make it multi-tenant from day one: a new partner is a database row, not a new deploy. Zoom, attendance and analytics live inside it, and an eval suite decides whether the AI tutor ships.</dd></div>
+        </dl>
+        <div class="result">
+          <p class="result-h">The result</p>
+          <div><strong>500+</strong><span>students across five organizations</span></div>
+          <div><strong>66/66</strong><span>finished cohorts completed at 100 percent</span></div>
+          <div><strong>9 weeks</strong><span>from PRD to five orgs live on one codebase</span></div>
         </div>
-        <figure class="shot">
-          <div class="frm"><img src="img/bcc-academy-home.jpg" alt="BCC Academy home page: 'Human in the lead' headline with a magic-link sign-in panel" width="2644" height="1554"></div>
-          <figcaption><span>bccacademy.io · live home + magic-link sign-in</span><span>Screenshot, Nov 2026</span></figcaption>
-        </figure>
       </div>
+      <div class="case-foot">
+        <div class="tags"><span>Next.js</span><span>Supabase</span><span>Zoom SDK</span><span>Vercel AI SDK</span><span>LLM-judge evals</span></div>
+        <a class="ext" href="https://bccacademy.io" target="_blank" rel="noopener">bccacademy.io</a>
+      </div>
+
+      <figure class="shot case-lead">
+        <div class="frm"><img src="img/bcc-academy-home.jpg" alt="BCC Academy home page: Human in the lead, with a magic-link sign-in panel" width="2644" height="1554"></div>
+        <figcaption><span>bccacademy.io · live home + magic-link sign-in</span><span>Nov 2026</span></figcaption>
+      </figure>
       <div class="hl" data-gal style="--ar:4/3;--cols:3">
         <p class="hl-label">For learners</p>
         <div class="hl-row">
@@ -535,19 +589,25 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
   </section>
 
   <!-- Netflix -->
-  <section class="reel stack" id="netflix" aria-labelledby="nf-h">
+  <section class="reel case-sec stack" id="netflix" aria-labelledby="nf-h">
     <div class="wrap">
       <div class="reel-head">
         <h2 id="nf-h">Netflix</h2>
         <span class="mono">Lead Product Designer, Global Conversion · May 2020 to Feb 2025</span>
       </div>
-      <div class="reel-body">
-        <div class="copy">
-          <div><h3>The job</h3><p>For almost five years I designed how people sign up, pick a plan and pay, across web, mobile and TV, in 190 countries, for a member base of more than 300 million.</p></div>
-          <div><h3>Paid sharing</h3><p>I designed the conversion systems behind Netflix's paid-sharing change: the flows that turned people using someone else's password into paying members, through Extra Member and Transfer Profile.</p></div>
-          <div class="stat" style="border-top:0;padding-top:0"><strong>$3B+</strong><span>Revenue tied to the monetization, acquisition and retention flows I designed.</span></div>
+      <div class="case">
+        <dl class="frame4">
+          <div><dt>The problem</dt><dd>Tens of millions of people watched Netflix on someone else's password. The business needed them to pay, without pushing members away.</dd></div>
+          <div><dt>My role</dt><dd>Lead Product Designer, Global Conversion, for almost five years: how people sign up, pick a plan and pay across web, mobile and TV in 190 countries.</dd></div>
+          <div><dt>The call</dt><dd>Design paid sharing as a path to pay, not a wall. Extra Member lets an owner pay for someone outside the home; Transfer Profile lets a sharer leave with their history and start their own plan.</dd></div>
+        </dl>
+        <div class="result">
+          <p class="result-h">The result</p>
+          <div><strong>$3B+</strong><span>revenue tied to the monetization, acquisition and retention flows I designed</span></div>
+          <div><strong>300M+</strong><span>members the flows serve, in 190 countries</span></div>
         </div>
       </div>
+
       <div class="hl" data-gal style="--ar:3/4;--cols:3">
         <figure class="gi hl-lead">
             <button class="gb" type="button" aria-label="Open: &quot;Update on Sharing,&quot; May 2023"><img src="img/netflix-sharing-announcement.jpg" alt="Netflix newsroom article: Update on Sharing, May 2023" width="2612" height="1554" decoding="async"></button>
@@ -601,20 +661,29 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
   </section>
 
   <!-- GFX1000 -->
-  <section class="reel stack" id="gfx" aria-labelledby="gfx-h">
+  <section class="reel case-sec stack" id="gfx" aria-labelledby="gfx-h">
     <div class="wrap">
       <div class="reel-head">
         <h2 id="gfx-h">GFX1000</h2>
         <span class="mono">Design + video production pipeline · BGC and BCC marketing</span>
       </div>
-      <div class="reel-body">
-        <div class="copy">
-          <div><h3>The problem</h3><p>Every design and video request was built by hand, and every review round meant three Slack messages per job. Reviewers were drowning, and requesters had no idea where anything stood.</p></div>
-          <div><h3>What I built</h3><p>A request row in Notion comes out the other end as finished, delivered assets, with one human approval in the middle. Nobody opens a terminal. The same system publishes a short every morning.</p></div>
-          <div class="stat" style="border-top:0;padding-top:0"><strong>136</strong><span>Rendered videos across 35 projects, plus every still that came with them. Output doubled, and work we would have paid outside designers and editors for now runs in-house.</span></div>
-          <div class="tags full"><span>Claude</span><span>Python</span><span>Flask</span><span>Vercel</span><span>Cloud Run</span><span>Notion · Slack · Canva · Drive</span></div>
+      <div class="case">
+        <dl class="frame4">
+          <div><dt>The problem</dt><dd>Every design and video request was made by hand, and every review round meant three Slack messages per job. Reviewers were drowning and requesters never knew where anything stood.</dd></div>
+          <div><dt>My role</dt><dd>After marketing leadership turned over, I restructured how assets get requested, reviewed and delivered, then designed and built the system that runs it for the BGC and BCC teams.</dd></div>
+          <div><dt>The call</dt><dd>Keep exactly one human step, an approval in Slack, and automate everything around it. Bring work in-house that we used to pay outside designers and editors for.</dd></div>
+        </dl>
+        <div class="result">
+          <p class="result-h">The result</p>
+          <div><strong>136</strong><span>videos rendered across 35 projects, plus every still</span></div>
+          <div><strong>2×</strong><span>creative output, with no added headcount</span></div>
+          <div><strong>1</strong><span>human step between request and delivery</span></div>
         </div>
       </div>
+      <div class="case-foot">
+        <div class="tags"><span>Claude</span><span>Python</span><span>Cloud Run</span><span>Notion · Slack · Canva · Drive</span></div>
+      </div>
+
       <div class="hl" style="--ar:4/3">
         <p class="hl-label">What the pipeline makes for Black Girls Code + Beyond Code Collective</p>
         <div class="fmts">
@@ -764,22 +833,31 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
         </div>
         </div>
       </div>
-      <div class="hl hl-video" data-gal style="--ar:9/16;--cols:3">
+      <div class="hl hl-video" data-gal style="--ar:4/5;--cols:3">
         <p class="hl-label">Video</p>
         <div class="hl-row">
-          <figure class="gi" data-video="img/v/gfx-video-jihan.mp4">
-            <button class="gb" type="button" aria-label="Open: Instructor spotlight · dynamic captions"><video class="vt" muted loop playsinline preload="none" poster="img/v/gfx-video-jihan.jpg" data-src="img/v/gfx-video-jihan.mp4" aria-hidden="true"></video><img class="vposter" src="img/v/gfx-video-jihan.jpg" alt="Catalyst Labs instructor video with dynamic captions" width="720" height="1280" loading="lazy" decoding="async"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></button>
-            <figcaption>Instructor spotlight · dynamic captions <span class="gs">Video, with sound</span></figcaption>
-          </figure>
           <figure class="gi" data-video="img/v/gfx-video-moments.mp4">
-            <button class="gb" type="button" aria-label="Open: Moments of Impact · reel"><video class="vt" muted loop playsinline preload="none" poster="img/v/gfx-video-moments.jpg" data-src="img/v/gfx-video-moments.mp4" aria-hidden="true"></video><img class="vposter" src="img/v/gfx-video-moments.jpg" alt="Moments of Impact reel" width="720" height="1280" loading="lazy" decoding="async"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></button>
+            <button class="gb" type="button" aria-label="Open: Moments of Impact · reel"><video class="vt" muted loop playsinline preload="none" poster="img/v/gfx-video-moments.jpg" data-src="img/v/gfx-video-moments.mp4" aria-hidden="true"></video><img class="vposter" src="img/v/gfx-video-moments.jpg" alt="Moments of Impact reel: aerial city footage with community stats" width="720" height="1280" loading="lazy" decoding="async"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></button>
             <figcaption>Moments of Impact · reel <span class="gs">Video</span></figcaption>
           </figure>
-          <figure class="gi" data-video="img/v/gfx-reel-cyber.mp4">
+          <figure class="gi" data-video="img/v/gfx-video-mission.mp4">
+            <button class="gb" type="button" aria-label="Open: Mission film · Tech is the tool"><video class="vt" muted loop playsinline preload="none" poster="img/v/gfx-video-mission.jpg" data-src="img/v/gfx-video-mission.mp4" aria-hidden="true"></video><img class="vposter" src="img/v/gfx-video-mission.jpg" alt="Beyond Code Collective mission film: Tech is the tool" width="864" height="1080" loading="lazy" decoding="async"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></button>
+            <figcaption>Mission film · Tech is the tool <span class="gs">Video, with sound</span></figcaption>
+          </figure>
+          <figure class="gi" data-video="img/v/gfx-video-laborday.mp4">
+            <button class="gb" type="button" aria-label="Open: Labor Day · chat motion piece"><video class="vt" muted loop playsinline preload="none" poster="img/v/gfx-video-laborday.jpg" data-src="img/v/gfx-video-laborday.mp4" aria-hidden="true"></video><img class="vposter" src="img/v/gfx-video-laborday.jpg" alt="Labor Day motion piece: a chat about AI and layoffs" width="864" height="1080" loading="lazy" decoding="async"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></button>
+            <figcaption>Labor Day · chat motion piece <span class="gs">Motion</span></figcaption>
+          </figure>
+        </div>
+          <figure class="gi x" data-video="img/v/gfx-video-jihan.mp4">
+            <button class="gb" type="button" aria-label="Open: Instructor spotlight · captions"><video class="vt" muted loop playsinline preload="none" poster="img/v/gfx-video-jihan.jpg" data-src="img/v/gfx-video-jihan.mp4" aria-hidden="true"></video><img class="vposter" src="img/v/gfx-video-jihan.jpg" alt="Catalyst Labs instructor video with dynamic captions" width="720" height="1280" loading="lazy" decoding="async"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></button>
+            <figcaption>Instructor spotlight · captions <span class="gs">Video, with sound</span></figcaption>
+          </figure>
+          <figure class="gi x" data-video="img/v/gfx-reel-cyber.mp4">
             <button class="gb" type="button" aria-label="Open: Family Guide · Instagram reel"><video class="vt" muted loop playsinline preload="none" poster="img/v/gfx-reel-cyber.jpg" data-src="img/v/gfx-reel-cyber.mp4" aria-hidden="true"></video><img class="vposter" src="img/v/gfx-reel-cyber.jpg" alt="Cybersecurity Awareness Month reel" width="720" height="1280" loading="lazy" decoding="async"><span class="play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z"/></svg></span></button>
             <figcaption>Family Guide · Instagram reel <span class="gs">Video</span></figcaption>
           </figure>
-        </div>
+        <button class="hl-all" type="button" data-all>View all 5 videos <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
       <div class="diagram">
         <div class="dhead"><span>Request to delivery</span><span>1 human step</span></div>
@@ -788,72 +866,32 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
     </div>
   </section>
 
-    <!-- PulsePro -->
-  <section class="reel stack" id="pulse" aria-labelledby="pp-h">
-    <div class="wrap">
-      <div class="reel-head">
-        <h2 id="pp-h">PulsePro</h2>
-        <span class="mono">Project management for solo operators + Ad Engine · FNZMS</span>
-      </div>
-      <div class="reel-body">
-        <div class="copy">
-          <div><h3>The problem</h3><p>Freelancers and consultants with five clients were paying for tools built for five hundred employees, and spent more time maintaining the tracker than doing client work. Their stores also needed fresh ad creative every week.</p></div>
-          <div><h3>What I built</h3><p>Projects, tasks, clients and invoicing, billing through Polar, daily reminders over Telegram, voice capture and Claude-written insights on the dashboard. Beside it, an Ad Engine that makes a store's weekly ads.</p></div>
-          <div class="stat" style="border-top:0;padding-top:0"><strong>5 ads / wk</strong><span>Per store, end to end in under thirty minutes of machine time.</span></div>
-          <div class="tags full"><span>Claude</span><span>Vercel AI SDK</span><span>TypeScript</span><span>Polar</span><span>Telegram</span><span>Shopify · Meta Ads</span><span>HeyGen</span></div>
-        </div>
-      </div>
-      <div class="hl" data-gal style="--ar:16/10;--cols:3">
-        <figure class="gi hl-lead">
-            <button class="gb" type="button" aria-label="Open: Dashboard · desktop + mobile"><img src="img/pulsepro-dashboard.jpg" alt="PulsePro dashboard on desktop and phone" width="2220" height="1024" decoding="async"></button>
-            <figcaption>Dashboard · desktop + mobile <span class="gs">sample data</span></figcaption>
-          </figure>
-        <div class="hl-row" data-wide>
-          <figure class="gi">
-            <button class="gb" type="button" aria-label="Open: All projects"><img src="img/pulsepro-app-projects.jpg" alt="PulsePro projects table with status, priority and due dates" width="2400" height="1644" loading="lazy" decoding="async"></button>
-            <figcaption>All projects <span class="gs">pulsepro.work</span></figcaption>
-          </figure>
-          <figure class="gi">
-            <button class="gb" type="button" aria-label="Open: Tasks"><img src="img/pulsepro-app-tasks.jpg" alt="PulsePro tasks list with priorities" width="2400" height="1644" loading="lazy" decoding="async"></button>
-            <figcaption>Tasks <span class="gs">pulsepro.work</span></figcaption>
-          </figure>
-          <figure class="gi">
-            <button class="gb" type="button" aria-label="Open: Bookmarks"><img src="img/pulsepro-app-bookmarks.jpg" alt="PulsePro bookmarks: saved links and videos per project" width="1920" height="1315" loading="lazy" decoding="async"></button>
-            <figcaption>Bookmarks <span class="gs">pulsepro.work</span></figcaption>
-          </figure>
-        </div>
-          <figure class="gi x">
-            <button class="gb" type="button" aria-label="Open: Web dashboard"><img src="img/pulsepro-app-dashboard.jpg" alt="PulsePro web dashboard: upcoming tasks, project health, calendar" width="2400" height="1644" loading="lazy" decoding="async"></button>
-            <figcaption>Web dashboard <span class="gs">pulsepro.work</span></figcaption>
-          </figure>
-          <figure class="gi x">
-            <button class="gb" type="button" aria-label="Open: Projects + invoices"><img src="img/pulsepro-projects-invoices.jpg" alt="PulsePro projects board and phone invoices" width="2220" height="900" loading="lazy" decoding="async"></button>
-            <figcaption>Projects + invoices <span class="gs">sample data</span></figcaption>
-          </figure>
-        <button class="hl-all" type="button" data-all>View all 6 screens <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-      </div>
-      <div class="diagram">
-        <div class="dhead"><span>Ad Engine · weekly</span><span>Automated</span></div>
-        <svg viewBox="0 0 1240 190" role="img" aria-label="PulsePro Ad Engine: Shopify and Meta Ads data go to Claude, which writes five scripts, HeyGen renders them, and a performance report comes back"><defs><marker id="pm" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah"/></marker><marker id="pma" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="ah acc"/></marker></defs><rect x="20" y="40" width="260" height="100" rx="10" class="dn"/><text x="36" y="70" class="dt">Store data</text><text x="36" y="92" class="ds">Shopify + Meta Ads</text><rect x="340" y="40" width="260" height="100" rx="10" class="dn k"/><text x="356" y="70" class="dt on">Claude</text><text x="356" y="92" class="ds on">writes 5 Instagram</text><text x="356" y="109" class="ds on">video ad scripts</text><rect x="660" y="40" width="260" height="100" rx="10" class="dn"/><text x="676" y="70" class="dt">HeyGen</text><text x="676" y="92" class="ds">renders the videos</text><rect x="980" y="40" width="240" height="100" rx="10" class="dn h"/><text x="996" y="70" class="dt">Report</text><text x="996" y="92" class="ds">performance back</text><text x="996" y="109" class="ds">to the owner</text><path d="M280 90 L336 90" class="da" marker-end="url(#pm)"/><path d="M600 90 L656 90" class="da acc" marker-end="url(#pma)"/><path d="M920 90 L976 90" class="da" marker-end="url(#pm)"/><text x="620" y="175" class="dl" text-anchor="middle">every week · under 30 min of machine time · $50 to $150 a month per client</text></svg>
-      </div>
-      <p style="margin-top:20px"><a class="ext" href="https://pulsepro.work" target="_blank" rel="noopener">pulsepro.work</a></p>
-    </div>
-  </section>
+    
 
   <!-- Supernova -->
-  <section class="reel stack" id="supernova" aria-labelledby="sn-h">
+  <section class="reel case-sec stack" id="supernova" aria-labelledby="sn-h">
     <div class="wrap">
       <div class="reel-head">
         <h2 id="sn-h">Supernova</h2>
         <span class="mono">Black Girls Code × YouTube Playables · Oct 2026</span>
       </div>
-      <div class="reel-body">
-        <div class="copy">
-          <div><h3>The game</h3><p>Nova's band canceled, and the Black Girls Code Block Party is tonight. Players audition musicians on keys, guitar and 808, build her a new band, and unlock the full chorus before showtime.</p></div>
-          <div><h3>What I did</h3><p>Led the product from concept to launch inside YouTube. An AI sidekick, Echo, guides players through how a song comes together. It's free to play in the YouTube app and on the web, with no download.</p></div>
-          <div class="stat" style="border-top:0;padding-top:0"><strong>8K+</strong><span>Plays since launch. Built in partnership with YouTube for its learning Playables lineup, alongside Khan Academy, TED-Ed and Veritasium.</span></div>
+      <div class="case">
+        <dl class="frame4">
+          <div><dt>The problem</dt><dd>YouTube asked Black Girls Code to build a music-learning game for Playables, to bring more diverse creators into the lineup. The rules: no live AI inside the game, an audience of tweens and teens.</dd></div>
+          <div><dt>My role</dt><dd>Product lead. I created the concept, led design, ran QA and managed the project. Make Me Pulse built it, the audio was made in-house, and YouTube funded it.</dd></div>
+          <div><dt>The call</dt><dd>Teach how a song comes together, not trivia about AI. Players audition musicians and build a band, and Echo, the sidekick, is fully scripted, which kept the game inside YouTube's rules and safe for kids.</dd></div>
+        </dl>
+        <div class="result">
+          <p class="result-h">The result</p>
+          <div><strong>8K+</strong><span>plays since the Oct 27 launch</span></div>
+          <div><strong>$0</strong><span>build cost to BGC; YouTube funded it</span></div>
+          <div><strong>1 of 6</strong><span>launch partners, alongside Khan Academy, TED-Ed and Veritasium</span></div>
         </div>
       </div>
+      <div class="case-foot">
+        <a class="ext" href="https://www.youtube.com/playables/UgkxshdYxwEgrbzYxFbYOMIa9uzU3qpzcBKm" target="_blank" rel="noopener">Play Supernova on YouTube</a>
+      </div>
+
       <div class="hl" data-gal style="--ar:9/16;--cols:3">
         <figure class="gi hl-lead">
             <button class="gb" type="button" aria-label="Open: The Supernova band"><img src="img/supernova-cast.jpg" alt="Supernova logo above the four playable musicians: guitar, keytar, DJ and bass" width="2400" height="1250" decoding="async"></button>
@@ -923,44 +961,73 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
           </figure>
         <button class="hl-all" type="button" data-all>View all 16 images <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </div>
-      <p style="margin-top:20px"><a class="ext" href="https://www.youtube.com/playables/UgkxshdYxwEgrbzYxFbYOMIa9uzU3qpzcBKm" target="_blank" rel="noopener">Play Supernova on YouTube</a></p>
     </div>
   </section>
 
-  <!-- Forward Deploy -->
-  <section class="reel stack" id="fde" aria-labelledby="fd-h">
+  
+
+    
+
+  
+
+  
+
+  <!-- Building on my own -->
+  <section class="reel" id="own" aria-labelledby="own-h">
     <div class="wrap">
       <div class="reel-head">
-        <h2 id="fd-h">Forward Deploy</h2>
-        <span class="mono">YouTube channel + FDE training · 2026</span>
+        <h2 id="own-h">Building on my own</h2>
+        <span class="mono">Nights and weekends, all shipped</span>
       </div>
-      <div class="reel-body">
-        <div class="copy">
-          <div><h3>The idea</h3><p>The method, explained in public. Forward Deploy is a channel on how Forward Deployed Engineering actually works: discovery mistakes, the triage judgment, evals, and the trust curve after launch. Long-form breakdowns, plus a short every day.</p></div>
-          <div><h3>Where it lives</h3><p>YouTube, TikTok and Instagram, a free 30-day roadmap at forwarddeploy.fonz.sh, and a Forward Deploy training program for staff, hosted on BCC Academy. Every thumbnail and short is rendered by the GFX1000 pipeline.</p></div>
-          <div class="stat" style="border-top:0;padding-top:0"><strong>24</strong><span>Episodes published and counting, new ones daily.</span></div>
-          <div class="tags full"><span>YouTube</span><span>TikTok</span><span>Instagram</span><span>GFX1000 renders</span><span>BCC Academy course</span></div>
-        </div>
-      </div>
-      <div class="hl" data-gal style="--ar:16/9;--cols:3">
-        <figure class="gi hl-lead">
+      <p class="own-lede">I still build every week. These are products I designed, coded and run myself.</p>
+      <div class="bos">
+        <article class="bo" data-gal>
+          <button class="bo-img" type="button" data-all aria-label="See PulsePro screens"><img src="img/pulsepro-dashboard.jpg" alt="PulsePro" width="2220" height="1024" loading="lazy" decoding="async"><span class="bo-n">6 screens</span></button>
+          <h3>PulsePro</h3><p>Project management and an ad engine for solo operators</p><a class="bo-link" href="https://pulsepro.work" target="_blank" rel="noopener">pulsepro.work</a>
+          <figure class="gi x">
+            <button class="gb" type="button" aria-label="Open: Dashboard · desktop + mobile"><img src="img/pulsepro-dashboard.jpg" alt="PulsePro dashboard on desktop and phone" width="2220" height="1024" decoding="async"></button>
+            <figcaption>Dashboard · desktop + mobile <span class="gs">sample data</span></figcaption>
+          </figure>
+          <figure class="gi x">
+            <button class="gb" type="button" aria-label="Open: All projects"><img src="img/pulsepro-app-projects.jpg" alt="PulsePro projects table with status, priority and due dates" width="2400" height="1644" loading="lazy" decoding="async"></button>
+            <figcaption>All projects <span class="gs">pulsepro.work</span></figcaption>
+          </figure>
+          <figure class="gi x">
+            <button class="gb" type="button" aria-label="Open: Tasks"><img src="img/pulsepro-app-tasks.jpg" alt="PulsePro tasks list with priorities" width="2400" height="1644" loading="lazy" decoding="async"></button>
+            <figcaption>Tasks <span class="gs">pulsepro.work</span></figcaption>
+          </figure>
+          <figure class="gi x">
+            <button class="gb" type="button" aria-label="Open: Bookmarks"><img src="img/pulsepro-app-bookmarks.jpg" alt="PulsePro bookmarks: saved links and videos per project" width="1920" height="1315" loading="lazy" decoding="async"></button>
+            <figcaption>Bookmarks <span class="gs">pulsepro.work</span></figcaption>
+          </figure>
+          <figure class="gi x">
+            <button class="gb" type="button" aria-label="Open: Web dashboard"><img src="img/pulsepro-app-dashboard.jpg" alt="PulsePro web dashboard: upcoming tasks, project health, calendar" width="2400" height="1644" loading="lazy" decoding="async"></button>
+            <figcaption>Web dashboard <span class="gs">pulsepro.work</span></figcaption>
+          </figure>
+          <figure class="gi x">
+            <button class="gb" type="button" aria-label="Open: Projects + invoices"><img src="img/pulsepro-projects-invoices.jpg" alt="PulsePro projects board and phone invoices" width="2220" height="900" loading="lazy" decoding="async"></button>
+            <figcaption>Projects + invoices <span class="gs">sample data</span></figcaption>
+          </figure>
+        </article>
+        <article class="bo" data-gal>
+          <button class="bo-img" type="button" data-all aria-label="See Forward Deploy screens"><img src="img/fd-site.jpg" alt="Forward Deploy" width="2300" height="1870" loading="lazy" decoding="async"><span class="bo-n">12 screens</span></button>
+          <h3>Forward Deploy</h3><p>A YouTube channel and training on deploying AI at work</p><a class="bo-link" href="https://forwarddeploy.fonz.sh" target="_blank" rel="noopener">forwarddeploy.fonz.sh</a>
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: forwarddeploy.fonz.sh"><img src="img/fd-site.jpg" alt="forwarddeploy.fonz.sh: The AI job nobody explains, explained daily" width="2300" height="1870" decoding="async"></button>
             <figcaption>forwarddeploy.fonz.sh <span class="gs">Live site</span></figcaption>
           </figure>
-        <div class="hl-row" data-wide>
-          <figure class="gi">
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Long-form thumbnail"><img src="img/gfx-longform-02.jpg" alt="YouTube thumbnail: 95% of AI pilots fail to reach production" width="1920" height="1080" loading="lazy" decoding="async"></button>
             <figcaption>Long-form thumbnail <span class="gs">FDE Roadmap</span></figcaption>
           </figure>
-          <figure class="gi">
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Long-form thumbnail"><img src="img/gfx-longform-05.jpg" alt="YouTube thumbnail: 1 to 1,000: one happy path, a thousand unhappy ones" width="1920" height="1080" loading="lazy" decoding="async"></button>
             <figcaption>Long-form thumbnail <span class="gs">FDE Roadmap</span></figcaption>
           </figure>
-          <figure class="gi">
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Long-form thumbnail"><img src="img/gfx-longform-07.jpg" alt="YouTube thumbnail: 6 weeks to 4 months: build time vs trust time" width="1920" height="1080" loading="lazy" decoding="async"></button>
             <figcaption>Long-form thumbnail <span class="gs">FDE Roadmap</span></figcaption>
           </figure>
-        </div>
           <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Long-form thumbnail"><img src="img/gfx-longform-10.jpg" alt="YouTube thumbnail: ~40% pass rate on the ambiguous case study" width="1920" height="1080" loading="lazy" decoding="async"></button>
             <figcaption>Long-form thumbnail <span class="gs">FDE Roadmap</span></figcaption>
@@ -993,46 +1060,26 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
             <button class="gb" type="button" aria-label="Open: Daily short · 9:16"><img src="img/gfx-short-p03.jpg" alt="Vertical short frame from The Compass series" width="1080" height="1920" loading="lazy" decoding="async"></button>
             <figcaption>Daily short · 9:16 <span class="gs">The Compass</span></figcaption>
           </figure>
-        <button class="hl-all" type="button" data-all>View all 12 images <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-      </div>
-      <p style="margin-top:20px"><a class="ext" href="https://www.youtube.com/@ForwardDeploy" target="_blank" rel="noopener">youtube.com/@ForwardDeploy</a> &nbsp; <a class="ext" href="https://forwarddeploy.fonz.sh" target="_blank" rel="noopener">forwarddeploy.fonz.sh</a></p>
-    </div>
-  </section>
-
-    <!-- Aero -->
-  <section class="reel stack" id="aero" aria-labelledby="aero-h">
-    <div class="wrap">
-      <div class="reel-head">
-        <h2 id="aero-h">Aero</h2>
-        <span class="mono">Live flight tracker + browser flight sim · personal build</span>
-      </div>
-      <div class="reel-body">
-        <div class="copy">
-          <div><h3>The tracker</h3><p>A live arrivals board for San José, Van Nuys and Teterboro. Every plane in the air on one map, a landing log with flight, origin, airline, aircraft and tail number, and any tail number looked up on demand.</p></div>
-          <div><h3>The flight sim</h3><p>A flight school that runs in the browser, set at SJC. Pick a Cessna 172, an Embraer 175 or a Gulfstream G550, then take a 19-step guided lesson, practice landings or fly free. An instructor and the tower talk you through it out loud.</p></div>
-          <div class="stat" style="border-top:0;padding-top:0"><strong>266</strong><span>Landings logged at SJC on Monday, Nov 2. The log has run every day since Sep 28.</span></div>
-          <div class="tags full"><span>Next.js</span><span>TypeScript</span><span>Leaflet</span><span>ADS-B · adsb.lol + adsbdb</span><span>3D in the browser</span><span>Spoken ATC</span></div>
-        </div>
-      </div>
-      <div class="hl" data-gal style="--ar:16/10;--cols:3">
-        <figure class="gi hl-lead">
+        </article>
+        <article class="bo" data-gal>
+          <button class="bo-img" type="button" data-all aria-label="See Aero screens"><img src="img/aero-tracker.jpg" alt="Aero" width="2644" height="1554" loading="lazy" decoding="async"><span class="bo-n">7 screens</span></button>
+          <h3>Aero</h3><p>Live flight tracker and a browser flight school</p><a class="bo-link" href="https://aero.fonz.sh" target="_blank" rel="noopener">aero.fonz.sh</a>
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: SJC arrivals · map + landing log"><img src="img/aero-tracker.jpg" alt="SJC arrivals: live map and landing log, 266 landed Nov 2" width="2644" height="1554" decoding="async"></button>
             <figcaption>SJC arrivals · map + landing log <span class="gs">aero.fonz.sh</span></figcaption>
           </figure>
-        <div class="hl-row" data-wide>
-          <figure class="gi">
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Any tail number: live state, route, altitude"><img src="img/aero-aircraft.jpg" alt="Aircraft page for N8849Q: live altitude, speed, route map across the US and altitude chart" width="2400" height="1742" loading="lazy" decoding="async"></button>
             <figcaption>Any tail number: live state, route, altitude <span class="gs">aero.fonz.sh/aircraft</span></figcaption>
           </figure>
-          <figure class="gi">
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: G550 landing practice"><img src="img/aero-sim-g550.jpg" alt="Flight sim: Gulfstream G550 on final approach, instructor talking you down" width="1274" height="935" loading="lazy" decoding="async"></button>
             <figcaption>G550 landing practice <span class="gs">aero.fonz.sh/sim</span></figcaption>
           </figure>
-          <figure class="gi">
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Pick a plane, pick a mode"><img src="img/aero-sim-school.jpg" alt="Flight school menu: pick a plane and a mode" width="2644" height="1554" loading="lazy" decoding="async"></button>
             <figcaption>Pick a plane, pick a mode <span class="gs">aero.fonz.sh/sim</span></figcaption>
           </figure>
-        </div>
           <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Live · one on final, 96 tracked"><img src="img/aero-live.jpg" alt="Live map with WN1791 on final into SJC, 96 aircraft tracked" width="2400" height="1174" loading="lazy" decoding="async"></button>
             <figcaption>Live · one on final, 96 tracked <span class="gs">aero.fonz.sh</span></figcaption>
@@ -1045,28 +1092,11 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
             <button class="gb" type="button" aria-label="Open: Cessna 172 · lesson step 14 of 19"><img src="img/aero-sim-flight.jpg" alt="Flight sim: Cessna 172 turning base, lesson step 14 of 19" width="1420" height="840" loading="lazy" decoding="async"></button>
             <figcaption>Cessna 172 · lesson step 14 of 19 <span class="gs">aero.fonz.sh/sim</span></figcaption>
           </figure>
-        <button class="hl-all" type="button" data-all>View all 7 screens <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-      </div>
-      <p style="margin-top:20px"><a class="ext" href="https://aero.fonz.sh" target="_blank" rel="noopener">aero.fonz.sh</a></p>
-    </div>
-  </section>
-
-  <!-- Show Up -->
-  <section class="reel stack" id="showup" aria-labelledby="su-h">
-    <div class="wrap">
-      <div class="reel-head">
-        <h2 id="su-h">Show Up</h2>
-        <span class="mono">Workout habit app · personal build</span>
-      </div>
-      <div class="reel-body">
-        <div class="copy">
-          <div><h3>The idea</h3><p>One rule: show up today. Show Up hands you the plan for the week you're in, keeps the streak, runs a 28-day challenge, times your daily holds and plays a guided stretch with video for every move.</p></div>
-          <div><h3>How it works</h3><p>No account needed. Your data lives on the device, with export and import. Sign in with an emailed code to back it up and pick it up on any device.</p></div>
-          <div class="tags full"><span>Next.js</span><span>TypeScript</span><span>Supabase</span><span>Email-code sign-in</span><span>Offline first</span></div>
-        </div>
-      </div>
-      <div class="hl hl-show" data-gal style="--ar:3/4;--cols:0">
-        <figure class="gi hl-lead">
+        </article>
+        <article class="bo" data-gal>
+          <button class="bo-img" type="button" data-all aria-label="See Show Up screens"><img src="img/showup-hero.jpg" alt="Show Up" width="3000" height="1700" loading="lazy" decoding="async"><span class="bo-n">10 screens</span></button>
+          <h3>Show Up</h3><p>A workout habit app: plans, timers, streaks</p><a class="bo-link" href="https://showup.fonz.sh/classic" target="_blank" rel="noopener">showup.fonz.sh</a>
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Show Up, five screens"><img src="img/showup-hero.jpg" alt="Five Show Up screens: log a workout, bike timer, today&#x27;s pull day, rest countdown and a pull-up set" width="3000" height="1700" decoding="async"></button>
             <figcaption>Show Up, five screens</figcaption>
           </figure>
@@ -1106,76 +1136,58 @@ a[target="_blank"]::after{content:"";display:inline-block;width:.72em;height:.72
             <button class="gb" type="button" aria-label="Open: Walk days count too"><img src="img/showup-today.jpg" alt="Today screen on a walk day" width="840" height="1451" loading="lazy" decoding="async"></button>
             <figcaption>Walk days count too</figcaption>
           </figure>
-        <button class="hl-all" type="button" data-all>View all 10 screens <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-      </div>
-      <p style="margin-top:20px"><a class="ext" href="https://showup.fonz.sh/classic" target="_blank" rel="noopener">showup.fonz.sh</a></p>
-    </div>
-  </section>
-
-  <!-- Cadence -->
-  <section class="reel" id="cadence" aria-labelledby="cd-h">
-    <div class="wrap">
-      <div class="reel-head">
-        <h2 id="cd-h">Cadence</h2>
-        <span class="mono">Speaking tutor · Spanish · Mandarin · Arabic</span>
-      </div>
-      <div class="reel-body">
-        <div class="copy">
-          <div><h3>What it is</h3><p>A private speaking tutor for three languages: Spanish, Mandarin and Arabic, each with its own tutor. You speak out loud every day; the tutor corrects you against this week's grammar and vocabulary, and answers in a real voice.</p></div>
-          <div><h3>The plan</h3><p>Spanish runs on a 52-week curriculum from A1 to B2, in four phases. Each week has a grammar focus, a vocabulary domain, three scenes and a listening assignment. Your mic audio never leaves the device; only the transcript does.</p></div>
-          <div class="stat" style="border-top:0;padding-top:0"><strong>612 hrs</strong><span>What B2 costs an English speaker. 156 of them are speaking in the app.</span></div>
-          <div class="tags"><span>Next.js</span><span>Vercel AI SDK</span><span>ElevenLabs</span><span>Speech recognition</span><span>Simli avatars</span><span>pinyin-pro</span><span>libSQL</span><span>Vercel Blob</span></div>
-        </div>
-        <div class="greet" aria-label="Cadence teaches Spanish, Mandarin and Arabic">
-          <p class="w">cadence</p>
-          <ul class="langs">
-            <li><span class="ln">Spanish</span><span class="hi" lang="es">¡Hola!</span><span class="rm">hello</span></li>
-            <li><span class="ln">Mandarin</span><span class="hi" lang="zh">你好</span><span class="rm">nǐ hǎo · hello</span></li>
-            <li><span class="ln">Arabic</span><span class="hi" lang="ar" dir="rtl">أهلاً</span><span class="rm">ahlan · welcome</span></li>
-          </ul>
-        </div>
-      </div>
-      <div class="hl" data-gal style="--ar:4/3;--cols:3">
-        <p class="hl-label">The tutors</p>
-        <div class="hl-row">
-          <figure class="gi">
+        </article>
+        <article class="bo" data-gal>
+          <button class="bo-img" type="button" data-all aria-label="See Cadence screens"><img src="img/cadence-sofi.jpg" alt="Cadence" width="1000" height="768" loading="lazy" decoding="async"><span class="bo-n">3 screens</span></button>
+          <h3>Cadence</h3><p>A speaking tutor for Spanish, Mandarin and Arabic</p><span class="bo-link">Invite-only</span>
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Sofi · Spanish"><img src="img/cadence-sofi.jpg" alt="Sofi, the Spanish tutor" width="1000" height="768" loading="lazy" decoding="async"></button>
             <figcaption>Sofi · Spanish</figcaption>
           </figure>
-          <figure class="gi">
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Mei · Mandarin"><img src="img/cadence-mei.jpg" alt="Mei, the Mandarin tutor" width="1000" height="768" loading="lazy" decoding="async"></button>
             <figcaption>Mei · Mandarin</figcaption>
           </figure>
-          <figure class="gi">
+          <figure class="gi x">
             <button class="gb" type="button" aria-label="Open: Nour · Arabic"><img src="img/cadence-nour.jpg" alt="Nour, the Arabic tutor" width="1000" height="768" loading="lazy" decoding="async"></button>
             <figcaption>Nour · Arabic</figcaption>
           </figure>
-        </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- More -->
-  <section class="reel" id="more" aria-labelledby="more-h">
+  <!-- How I lead -->
+  <section class="reel" id="lead" aria-labelledby="lead-h">
     <div class="wrap">
       <div class="reel-head">
-        <h2 id="more-h">Before this</h2>
+        <h2 id="lead-h">How I lead</h2>
       </div>
+      <dl class="lead-list">
+        <div><dt>Scope over headcount</dt><dd>At Black Girls Code and Beyond Code Collective I own product end to end across two organizations: strategy, the learning platform, curriculum and marketing operations. I lead through program staff, instructors, agencies and partners like YouTube and five training organizations.</dd></div>
+        <div><dt>I build systems so a small team ships like a big one</dt><dd>GFX1000 and BCC Academy replaced a hand-made design queue and a coordinator's spreadsheet. Output doubled without adding headcount.</dd></div>
+        <div><dt>I take over the messy part</dt><dd>When marketing leadership turned over, I restructured how creative gets requested, reviewed and delivered. When funders asked for outcome data, I built the reporting and wrote the CEO reports from pre, mid and post surveys.</dd></div>
+        <div><dt>I tie design to a number</dt><dd>At Netflix every flow I owned was measured in conversion and revenue. I run product the same way now: completion rates, turnout, plays and cost.</dd></div>
+      </dl>
       <div class="list">
         <div>
-          <h3>Earlier work</h3>
+          <h3>Experience</h3>
           <ul>
-            <li><span>Coursera · Growth Design Lead</span><span>2018 to 2020 · scaled to 20M+ learners</span></li>
-            <li><span>Mychannel · Co-founder, Head of Design</span><span>2016 to 2018 · AI video sentiment</span></li>
+            <li><span>Black Girls Code + Beyond Code Collective · Head of Product</span><span>2025 to now</span></li>
+            <li><span>Netflix · Lead Product Designer, Global Conversion</span><span>2020 to 2025 · $3B+</span></li>
+            <li><span>Coursera · Growth Design Lead</span><span>2018 to 2020 · 20M+ learners</span></li>
+            <li><span>Mychannel · Co-founder, Head of Design</span><span>2016 to 2018</span></li>
             <li><span>FNZMS · Founder</span><span>2019 to now · AI product consulting</span></li>
           </ul>
         </div>
         <div>
-          <h3>Talks</h3>
+          <h3>Beyond the job</h3>
           <ul>
+            <li><span>Girl Scouts of Northern California</span><span>Board member</span></li>
+            <li><span>Black tech + venture community</span><span>Investor, mentor</span></li>
             <li><span>LEAP2025, Riyadh</span><span>Keynote</span></li>
-            <li><span>NUS AIDF</span><span>Talk</span></li>
-            <li><span>Afrotech</span><span>Talk</span></li>
+            <li><span>NUS AIDF · Afrotech</span><span>Talks</span></li>
+            <li><span>Growth Design course · Self Design</span><span>Teacher · author</span></li>
           </ul>
         </div>
       </div>
